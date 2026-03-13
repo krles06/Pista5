@@ -1,121 +1,115 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Toaster } from 'sonner';
+import { AuthProvider } from '@/hooks/useAuth';
+
+// Layouts and Auth
+import AppLayout from '@/components/layout/AppLayout';
+import ProtectedRoute from '@/components/shared/ProtectedRoute';
+
+// Auth Pages
+import LoginPage from '@/features/auth/LoginPage';
+import RegisterPage from '@/features/auth/RegisterPage';
+import ForgotPasswordPage from '@/features/auth/ForgotPasswordPage';
+import ProfilePage from '@/features/auth/ProfilePage';
+
+// Temporadas Pages
+import TemporadasPage from '@/features/temporadas/TemporadasPage';
+import TemporadaForm from '@/features/temporadas/TemporadaForm';
+import TemporadaDetailPage from '@/features/temporadas/TemporadaDetailPage';
+
+// Planificacion Pages
+import PlanificacionPage from '@/features/planificacion/PlanificacionPage';
+
+// Ejercicios Pages
+import EjerciciosPage from '@/features/ejercicios/EjerciciosPage';
+import EjercicioForm from '@/features/ejercicios/EjercicioForm';
+import EjercicioDetailPage from '@/features/ejercicios/EjercicioDetailPage';
+
+// Sesiones Pages
+import SesionesPage from '@/features/sesiones/SesionesPage';
+import SesionForm from '@/features/sesiones/SesionForm';
+import SesionDetailPage from '@/features/sesiones/SesionDetailPage';
+
+// Jugadores Pages
+import JugadoresPage from '@/features/jugadores/JugadoresPage';
+import JugadorForm from '@/features/jugadores/JugadorForm';
+import JugadorDetailPage from '@/features/jugadores/JugadorDetailPage';
+
+// Partidos Pages
+import PartidosPage from '@/features/partidos/PartidosPage';
+import PartidoForm from '@/features/partidos/PartidoForm';
+
+// Optional: Layout components to be implemented soon
+// import AppLayout from './components/layout/AppLayout';
+// import ProtectedRoute from './components/shared/ProtectedRoute';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/registro" element={<RegisterPage />} />
+          <Route path="/recuperar-password" element={<ForgotPasswordPage />} />
 
-      <div className="ticks"></div>
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppLayout><Outlet /></AppLayout>}>
+              <Route path="/" element={<div className="p-8">Dashboard Page (WIP)</div>} />
+              <Route path="/perfil" element={<ProfilePage />} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+              {/* Temporadas Routes */}
+              <Route path="/temporadas" element={<TemporadasPage />} />
+              <Route path="/temporadas/nueva" element={<TemporadaForm />} />
+              <Route path="/temporadas/:id" element={<TemporadaDetailPage />} />
+              <Route path="/temporadas/:id/editar" element={<TemporadaForm />} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+              <Route path="/equipos" element={<div className="p-8">Equipos Page (WIP)</div>} />
+              <Route path="/jugadores" element={<div className="p-8">Jugadores Page (WIP)</div>} />
+
+              {/* Ejercicios Routes */}
+              <Route path="/ejercicios" element={<EjerciciosPage esPorteros={false} />} />
+              <Route path="/ejercicios/nuevo" element={<EjercicioForm esPorteros={false} />} />
+              <Route path="/ejercicios/:id" element={<EjercicioDetailPage />} />
+              <Route path="/ejercicios/:id/editar" element={<EjercicioForm esPorteros={false} />} />
+
+              {/* Porteros Routes */}
+              <Route path="/porteros" element={<EjerciciosPage esPorteros={true} />} />
+              <Route path="/porteros/nuevo" element={<EjercicioForm esPorteros={true} />} />
+              <Route path="/porteros/:id" element={<EjercicioDetailPage />} />
+              <Route path="/porteros/:id/editar" element={<EjercicioForm esPorteros={true} />} />
+
+              {/* Planificación & Sesiones Routes */}
+              <Route path="/planificacion/:id_temp" element={<PlanificacionPage />} />
+              <Route path="/sesiones/:id_microciclo" element={<SesionesPage />} />
+              <Route path="/sesiones/nueva" element={<SesionForm />} />
+              <Route path="/sesiones/:id/ver" element={<SesionDetailPage />} />
+              <Route path="/sesiones/:id/editar" element={<SesionForm />} />
+
+              {/* Jugadores Routes */}
+              <Route path="/jugadores" element={<JugadoresPage />} />
+              <Route path="/jugadores/nuevo" element={<JugadorForm />} />
+              <Route path="/jugadores/:id" element={<JugadorDetailPage />} />
+              <Route path="/jugadores/:id/editar" element={<JugadorForm />} />
+
+              {/* Partidos Routes */}
+              <Route path="/partidos" element={<PartidosPage />} />
+              <Route path="/partidos/nuevo" element={<PartidoForm />} />
+              <Route path="/partidos/:id/editar" element={<PartidoForm />} />
+
+              {/* Fallback internal */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+          </Route>
+
+          {/* Fallback global */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+        <Toaster richColors position="top-right" theme="dark" />
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

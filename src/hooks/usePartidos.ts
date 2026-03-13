@@ -1,0 +1,166 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from './useAuth';
+import type { Partido, PartidoInsert, PartidoUpdate, PartidoWithDetalles, AlineacionUpdate } from '@/lib/types-partidos';
+
+export function usePartidos(id_temporada?: string) {
+    const { coach } = useAuth();
+    return useQuery({
+        queryKey: ['partidos', id_temporada],
+        queryFn: async () => {
+            if (!coach) return [];
+            let query = supabase
+                .from('calendario')
+                .select('*')
+                .eq('coach_id', coach.id)
+                .order('fecha', { ascending: false });
+
+            if (id_temporada) {
+                query = query.eq('id_temporada', id_temporada);
+            }
+
+            const { data, error } = await query;
+            if (error) throw error;
+            return data as Partido[];
+        },
+        enabled: !!coach,
+    });
+}
+
+export function usePartido(id?: string) {
+    const { coach } = useAuth();
+    return useQuery({
+        queryKey: ['partido', id],
+        queryFn: async () => {
+            if (!coach || !id) return null;
+            const { data, error } = await supabase
+                .from('calendario')
+                .select(`
+                    *,
+                    alineacion:partido_jugadores(
+                        *,
+                        jugador:jugadores(nombre, posicion)
+                    )
+                `)
+                .eq('id', id)
+                .eq('coach_id', coach.id)
+                .single();
+
+            if (error) throw error;
+            return data as PartidoWithDetalles;
+        },
+        enabled: !!coach && !!id,
+    });
+}
+
+export function useCreatePartido() {
+    const queryClient = useQueryClient();
+    const { coach } = useAuth();
+
+    return useMutation({
+        mutationFn: async ({ partido, alineacion }: { partido: PartidoInsert, alineacion: AlineacionUpdate[] }) => {
+            if (!coach) throw new Error('No coach found');
+
+            // 1. Insert partido
+            const { data: newPartido, error: pError } = await supabase
+                .from('calendario')
+                .insert([{ ...partido, coach_id: coach.id }])
+                .select()
+                .single();
+
+            if (pError) throw pError;
+
+            // 2. Insert alineacion if any
+            if (alineacion.length > 0) {
+                const alineacionRows = alineacion.map(a => ({
+                    id_partido: newPartido.id,
+                    id_jugador: a.id_jugador,
+                    es_titular: a.es_titular,
+                    minutos_jugados: a.minutos_jugados || 0
+                }));
+
+                const { error: aError } = await supabase
+                    .from('partido_jugadores')
+                    .insert(alineacionRows);
+
+                if (aError) throw aError;
+            }
+
+            return newPartido;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['partidos'] });
+        },
+    });
+}
+
+export function useUpdatePartido() {
+    const queryClient = useQueryClient();
+    const { coach } = useAuth();
+
+    return useMutation({
+        mutationFn: async ({ id, updates, alineacion }: { id: string, updates: PartidoUpdate, alineacion?: AlineacionUpdate[] }) => {
+            if (!coach) throw new Error('No coach found');
+
+            // 1. Update partido
+            const { error: pError } = await supabase
+                .from('calendario')
+                .update(updates)
+                .eq('id', id)
+                .eq('coach_id', coach.id);
+
+            if (pError) throw pError;
+
+            // 2. Update alineacion if provided
+            if (alineacion) {
+                // Delete existing and insert new (simple approach)
+                const { error: dError } = await supabase
+                    .from('partido_jugadores')
+                    .delete()
+                    .eq('id_partido', id);
+
+                if (dError) throw dError;
+
+                if (alineacion.length > 0) {
+                    const alineacionRows = alineacion.map(a => ({
+                        id_partido: id,
+                        id_jugador: a.id_jugador,
+                        es_titular: a.es_titular,
+                        minutos_jugados: a.minutos_jugados || 0
+                    }));
+
+                    const { error: aError } = await supabase
+                        .from('partido_jugadores')
+                        .insert(alineacionRows);
+
+                    if (aError) throw aError;
+                }
+            }
+        },
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['partidos'] });
+            queryClient.invalidateQueries({ queryKey: ['partido', variables.id] });
+        },
+    });
+}
+
+export function useDeletePartido() {
+    const queryClient = useQueryClient();
+    const { coach } = useAuth();
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            if (!coach) throw new Error('No coach found');
+            const { error } = await supabase
+                .from('calendario')
+                .delete()
+                .eq('id', id)
+                .eq('coach_id', coach.id);
+
+            if (error) throw error;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['partidos'] });
+        },
+    });
+}
