@@ -39,9 +39,8 @@ import JugadorDetailPage from '@/features/jugadores/JugadorDetailPage';
 import PartidosPage from '@/features/partidos/PartidosPage';
 import PartidoForm from '@/features/partidos/PartidoForm';
 
-// Optional: Layout components to be implemented soon
-// import AppLayout from './components/layout/AppLayout';
-// import ProtectedRoute from './components/shared/ProtectedRoute';
+// Calendario
+import CalendarioPage from '@/features/calendario/CalendarioPage';
 
 // Dashboard
 import DashboardPage from '@/features/dashboard/DashboardPage';
@@ -98,6 +97,9 @@ function App() {
               <Route path="/partidos" element={<PartidosPage />} />
               <Route path="/partidos/nuevo" element={<PartidoForm />} />
               <Route path="/partidos/:id/editar" element={<PartidoForm />} />
+
+              {/* Calendario Routes */}
+              <Route path="/calendario" element={<CalendarioPage />} />
 
               {/* Fallback internal */}
               <Route path="*" element={<Navigate to="/" replace />} />

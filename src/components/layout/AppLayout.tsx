@@ -11,6 +11,7 @@ import {
     ClipboardList,
     Target,
     Calendar,
+    CalendarDays,
     Trophy
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
@@ -29,6 +30,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
     const navItems = [
         { name: 'Dashboard', href: '/', icon: Home },
+        { name: 'Calendario', href: '/calendario', icon: CalendarDays },
         { name: 'Planificación', href: '/temporadas', icon: Calendar },
         { name: 'Biblioteca', href: '/ejercicios', icon: ClipboardList },
         { name: 'Porteros', href: '/porteros', icon: Target },

@@ -25,6 +25,34 @@ export function useSesiones(microcicloId?: string) {
     });
 }
 
+// Fetch all sessions globally for the coach (optional filter by temporadaId)
+export function useAllSesiones(temporadaId?: string) {
+    const { coach } = useAuth();
+
+    return useQuery({
+        queryKey: ['sesiones-all', temporadaId],
+        queryFn: async () => {
+            if (!coach?.id) return [];
+
+            let query = supabase
+                .from('sesiones')
+                .select('*')
+                .eq('coach_id', coach.id)
+                .order('fecha', { ascending: true });
+
+            if (temporadaId) {
+                query = query.eq('id_temporada', temporadaId);
+            }
+
+            const { data, error } = await query;
+
+            if (error) throw error;
+            return data as Sesion[];
+        },
+        enabled: !!coach?.id,
+    });
+}
+
 // Fetch single session with its exercises
 export function useSesion(id?: string) {
     const { coach } = useAuth();
