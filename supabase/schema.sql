@@ -197,6 +197,28 @@ CREATE TABLE public.calendario (
     created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- Asistencia Sesion (Relación Sesion <-> Jugador)
+CREATE TABLE public.asistencia_sesion (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    id_sesion uuid REFERENCES public.sesiones(id) ON DELETE CASCADE NOT NULL,
+    id_jugador uuid REFERENCES public.jugadores(id) ON DELETE CASCADE NOT NULL,
+    asistio boolean DEFAULT true,
+    rpe integer,
+    observaciones text,
+    created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
+    CONSTRAINT unique_asistencia UNIQUE (id_sesion, id_jugador)
+);
+
+-- Partido Jugadores (Alineación)
+CREATE TABLE public.partido_jugadores (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    id_partido uuid REFERENCES public.calendario(id) ON DELETE CASCADE NOT NULL,
+    id_jugador uuid REFERENCES public.jugadores(id) ON DELETE CASCADE NOT NULL,
+    es_titular boolean DEFAULT false,
+    minutos_jugados integer DEFAULT 0,
+    created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
+    CONSTRAINT unique_alineacion UNIQUE (id_partido, id_jugador)
+);
 
 -- ==============================================================================
 -- 2. Enable Row Level Security (RLS)
@@ -215,6 +237,8 @@ ALTER TABLE public.ejercicios_porteros ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ejercicios_sesion_porteros ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.jugadores ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.calendario ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.asistencia_sesion ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.partido_jugadores ENABLE ROW LEVEL SECURITY;
 
 -- ==============================================================================
 -- 3. Create RLS Policies
@@ -277,6 +301,34 @@ CREATE POLICY "Users can update own data" ON public.ejercicios_sesion_porteros F
 );
 CREATE POLICY "Users can delete own data" ON public.ejercicios_sesion_porteros FOR DELETE TO authenticated USING (
     id_sesion IN (SELECT id FROM public.sesiones WHERE coach_id = auth.uid())
+);
+
+-- asistencia_sesion
+CREATE POLICY "Users can view own data" ON public.asistencia_sesion FOR SELECT TO authenticated USING (
+    id_sesion IN (SELECT id FROM public.sesiones WHERE coach_id = auth.uid())
+);
+CREATE POLICY "Users can insert own data" ON public.asistencia_sesion FOR INSERT TO authenticated WITH CHECK (
+    id_sesion IN (SELECT id FROM public.sesiones WHERE coach_id = auth.uid())
+);
+CREATE POLICY "Users can update own data" ON public.asistencia_sesion FOR UPDATE TO authenticated USING (
+    id_sesion IN (SELECT id FROM public.sesiones WHERE coach_id = auth.uid())
+);
+CREATE POLICY "Users can delete own data" ON public.asistencia_sesion FOR DELETE TO authenticated USING (
+    id_sesion IN (SELECT id FROM public.sesiones WHERE coach_id = auth.uid())
+);
+
+-- partido_jugadores
+CREATE POLICY "Users can view own data" ON public.partido_jugadores FOR SELECT TO authenticated USING (
+    id_partido IN (SELECT id FROM public.calendario WHERE coach_id = auth.uid())
+);
+CREATE POLICY "Users can insert own data" ON public.partido_jugadores FOR INSERT TO authenticated WITH CHECK (
+    id_partido IN (SELECT id FROM public.calendario WHERE coach_id = auth.uid())
+);
+CREATE POLICY "Users can update own data" ON public.partido_jugadores FOR UPDATE TO authenticated USING (
+    id_partido IN (SELECT id FROM public.calendario WHERE coach_id = auth.uid())
+);
+CREATE POLICY "Users can delete own data" ON public.partido_jugadores FOR DELETE TO authenticated USING (
+    id_partido IN (SELECT id FROM public.calendario WHERE coach_id = auth.uid())
 );
 
 
