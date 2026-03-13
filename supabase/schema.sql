@@ -92,10 +92,14 @@ CREATE TABLE public.sesiones (
     fecha date NOT NULL,
     hora_inicio time without time zone,
     hora_fin time without time zone,
+    lugar text,
     objetivos text,
+    material text,
+    observaciones text,
+    feedback_tactico text,
     numero_sesion numeric,
-    notas text,
-    created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+    created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at timestamp with time zone DEFAULT timezone('utc'::text, now())
 );
 
 -- Ejercicios (Biblioteca General)
@@ -154,20 +158,26 @@ CREATE TABLE public.ejercicios_sesion_porteros (
     created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Jugadores (Fase 2, pero creada ahora para compatibilidad FK)
+-- Jugadores (Fase 2)
 CREATE TABLE public.jugadores (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     coach_id uuid REFERENCES public.coaches(id) ON DELETE CASCADE NOT NULL,
-    id_temporada uuid REFERENCES public.temporadas(id) ON DELETE CASCADE NOT NULL,
+    id_temporada uuid REFERENCES public.temporadas(id) ON DELETE CASCADE,
     nombre text NOT NULL,
+    apellidos text,
     nombre_completo text,
     posicion text,
     posicion_alternativa text,
     fecha_nacimiento date,
+    dorsal integer,
     telefono text,
     poblacion text,
     email text,
+    lesionado boolean DEFAULT false,
+    notas text,
+    url_foto text,
     created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
     CONSTRAINT unique_jugador_temporada UNIQUE (id_temporada, nombre)
 );
 
