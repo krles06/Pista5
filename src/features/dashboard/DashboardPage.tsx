@@ -6,7 +6,8 @@ import {
     ClipboardList,
     ArrowRight,
     TrendingUp,
-    Target
+    Target,
+    CalendarDays
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useJugadores } from '@/hooks/useJugadores';
@@ -171,6 +172,12 @@ export default function DashboardPage() {
                         Accesos Rápidos
                     </h2>
                     <div className="grid gap-4">
+                        <QuickAction
+                            title="Calendario"
+                            desc="Agenda global"
+                            icon={CalendarDays}
+                            href="/calendario"
+                        />
                         <QuickAction
                             title="Plantilla"
                             desc="Gestiona tus jugadores"
