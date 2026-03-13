@@ -1,6 +1,7 @@
 export interface Jugador {
     id: string;
     coach_id: string;
+    id_temporada?: string | null;
     nombre: string;
     apellidos: string | null;
     posicion: string | null;

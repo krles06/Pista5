@@ -150,7 +150,7 @@ export default function TemporadaDetailPage() {
                     </Card>
 
                     <Card className="border-zinc-800 bg-zinc-900 shadow-xl hover:border-emerald-500/30 transition-colors cursor-pointer"
-                        onClick={() => navigate(`/jugadores/${temporada.id}`)}
+                        onClick={() => navigate(`/temporadas/${temporada.id}/jugadores`)}
                     >
                         <CardHeader>
                             <Users className="h-8 w-8 text-emerald-500 mb-2" />

@@ -89,6 +89,7 @@ function App() {
 
               {/* Jugadores Routes */}
               <Route path="/jugadores" element={<JugadoresPage />} />
+              <Route path="/temporadas/:id_temporada/jugadores" element={<JugadoresPage />} />
               <Route path="/jugadores/nuevo" element={<JugadorForm />} />
               <Route path="/jugadores/:id" element={<JugadorDetailPage />} />
               <Route path="/jugadores/:id/editar" element={<JugadorForm />} />

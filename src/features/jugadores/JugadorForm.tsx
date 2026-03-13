@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowLeft, Save, Upload, X, User } from 'lucide-react';
 
 import { useJugador, useCreateJugador, useUpdateJugador } from '@/hooks/useJugadores';
+import { useTemporadas } from '@/hooks/useTemporadas';
 import type { JugadorInsert } from '@/lib/types-jugadores';
 
 import { Button } from '@/components/ui/button';
@@ -31,16 +32,20 @@ const POSICIONES = [
 
 export default function JugadorForm() {
     const { id } = useParams<{ id: string }>();
+    const [searchParams] = useSearchParams();
+    const seasonIdParam = searchParams.get('temporada');
     const isEditing = !!id;
     const navigate = useNavigate();
 
     const { data: jugador, isLoading: loadingJugador } = useJugador(id);
+    const { data: temporadas } = useTemporadas();
     const createMutation = useCreateJugador();
     const updateMutation = useUpdateJugador();
 
     const [formData, setFormData] = useState<JugadorInsert>({
         nombre: '',
         apellidos: '',
+        id_temporada: seasonIdParam || undefined,
         posicion: 'Universal',
         fecha_nacimiento: '',
         dorsal: null,
@@ -60,6 +65,7 @@ export default function JugadorForm() {
             setFormData({
                 nombre: jugador.nombre,
                 apellidos: jugador.apellidos || '',
+                id_temporada: (jugador as any).id_temporada || undefined,
                 posicion: jugador.posicion || 'Universal',
                 fecha_nacimiento: jugador.fecha_nacimiento || '',
                 dorsal: jugador.dorsal,
@@ -70,8 +76,10 @@ export default function JugadorForm() {
                 url_foto: jugador.url_foto
             });
             if (jugador.url_foto) setPhotoPreview(jugador.url_foto);
+        } else if (!isEditing && seasonIdParam) {
+            setFormData(prev => ({ ...prev, id_temporada: seasonIdParam }));
         }
-    }, [isEditing, jugador]);
+    }, [isEditing, jugador, seasonIdParam]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -112,7 +120,7 @@ export default function JugadorForm() {
                 await createMutation.mutateAsync({ jugador: formData, photoFile: photoFile || undefined });
                 toast.success('Jugador añadido');
             }
-            navigate('/jugadores');
+            navigate(formData.id_temporada ? `/temporadas/${formData.id_temporada}/jugadores` : '/jugadores');
         } catch (err: any) {
             toast.error('Error al guardar: ' + err.message);
         }
@@ -223,6 +231,26 @@ export default function JugadorForm() {
                                     <Label htmlFor="apellidos" className="text-zinc-300">Apellidos</Label>
                                     <Input id="apellidos" name="apellidos" value={formData.apellidos || ''} onChange={handleChange} className="bg-zinc-950 border-zinc-800" />
                                 </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="temporada" className="text-zinc-300">Temporada</Label>
+                                <Select
+                                    value={formData.id_temporada || 'none'}
+                                    onValueChange={(v) => setFormData(prev => ({ ...prev, id_temporada: v === 'none' ? null : v }))}
+                                >
+                                    <SelectTrigger className="bg-zinc-950 border-zinc-800">
+                                        <SelectValue placeholder="Sin temporada (global)" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                        <SelectItem value="none">Sin temporada (global)</SelectItem>
+                                        {temporadas?.map(t => (
+                                            <SelectItem key={t.id} value={t.id}>
+                                                {t.equipo} - {t.temporada}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -30,20 +30,28 @@ export function useJugadores(temporadaId?: string) {
         queryFn: async () => {
             if (!coach?.id) return [];
 
-            let query = supabase
+            const { data, error } = await supabase
                 .from('jugadores')
                 .select('*')
                 .eq('coach_id', coach.id)
                 .order('nombre', { ascending: true });
 
-            if (temporadaId) {
-                query = query.eq('id_temporada', temporadaId);
+            if (error) throw error;
+
+            const allPlayers = data as Jugador[];
+
+            // If no temporadaId is provided (e.g. initial state or global list), return all
+            if (!temporadaId || temporadaId === 'all') {
+                return allPlayers;
             }
 
-            const { data, error } = await query;
-
-            if (error) throw error;
-            return data as Jugador[];
+            // Filter: show players of that season OR players with no season assigned
+            return allPlayers.filter(j =>
+                j.id_temporada === temporadaId ||
+                j.id_temporada === null ||
+                j.id_temporada === '' ||
+                !(j as any).id_temporada
+            );
         },
         enabled: !!coach?.id,
     });

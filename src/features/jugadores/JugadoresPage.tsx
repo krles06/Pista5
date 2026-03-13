@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
     Plus,
@@ -11,10 +11,12 @@ import {
     Trash2,
     ShieldAlert,
     LayoutGrid,
-    List as ListIcon
+    List as ListIcon,
+    ArrowLeft
 } from 'lucide-react';
 
 import { useJugadores, useDeleteJugador } from '@/hooks/useJugadores';
+import { useTemporada } from '@/hooks/useTemporadas';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -32,8 +34,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function JugadoresPage() {
+    const { id_temporada } = useParams<{ id_temporada: string }>();
     const navigate = useNavigate();
-    const { data: jugadores, isLoading } = useJugadores();
+    const { data: jugadores, isLoading } = useJugadores(id_temporada);
+    const { data: temporada } = useTemporada(id_temporada);
     const deleteMutation = useDeleteJugador();
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -61,12 +65,28 @@ export default function JugadoresPage() {
         <div className="space-y-6 max-w-7xl mx-auto pb-12">
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50">Plantilla de Jugadores</h1>
-                    <p className="text-zinc-400">Gestiona los perfiles, posiciones y estado físico de tus jugadores.</p>
+                <div className="flex items-center gap-4">
+                    {id_temporada && (
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => navigate(`/temporadas/${id_temporada}`)}
+                            className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 shrink-0"
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                        </Button>
+                    )}
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
+                            {temporada ? `Plantilla: ${temporada.equipo}` : 'Plantilla de Jugadores'}
+                        </h1>
+                        <p className="text-zinc-400">
+                            {temporada ? `Temporada ${temporada.temporada}` : 'Gestiona los perfiles, posiciones y estado físico de tus jugadores.'}
+                        </p>
+                    </div>
                 </div>
                 <Button
-                    onClick={() => navigate('/jugadores/nuevo')}
+                    onClick={() => navigate(`/jugadores/nuevo${id_temporada ? `?temporada=${id_temporada}` : ''}`)}
                     className="bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
                     <Plus className="mr-2 h-4 w-4" />
