@@ -138,7 +138,7 @@ export default function TemporadaDetailPage() {
                     </Card>
 
                     <Card className="border-zinc-800 bg-zinc-900 shadow-xl hover:border-emerald-500/30 transition-colors cursor-pointer"
-                        onClick={() => navigate(`/sesiones/${temporada.id}`)}
+                        onClick={() => navigate(`/calendario/${temporada.id}`)}
                     >
                         <CardHeader>
                             <Trophy className="h-8 w-8 text-emerald-500 mb-2" />

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
     format,
     startOfMonth,
@@ -15,10 +15,11 @@ import {
     subWeeks
 } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight, Trophy, CheckCircle, CalendarDays, Calendar as CalendarIcon, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Trophy, CheckCircle, CalendarDays, Calendar as CalendarIcon, Trash2, ArrowLeft } from 'lucide-react';
 
 import { useAllSesiones, useDeleteSesion } from '@/hooks/useSesiones';
 import { usePartidos } from '@/hooks/usePartidos';
+import { useTemporada } from '@/hooks/useTemporadas';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -28,13 +29,15 @@ import { toast } from 'sonner';
 type ViewMode = 'month' | 'week';
 
 export default function CalendarioPage() {
+    const { id_temporada } = useParams<{ id_temporada: string }>();
     const navigate = useNavigate();
     const [currentDate, setCurrentDate] = useState(new Date());
     const [viewMode, setViewMode] = useState<ViewMode>('month');
 
-    // Fetch all global sessions and matches
-    const { data: sesiones, isLoading: loadingSesiones } = useAllSesiones();
-    const { data: partidos, isLoading: loadingPartidos } = usePartidos();
+    // Fetch data
+    const { data: sesiones, isLoading: loadingSesiones } = useAllSesiones(id_temporada);
+    const { data: partidos, isLoading: loadingPartidos } = usePartidos(id_temporada);
+    const { data: temporada } = useTemporada(id_temporada);
 
     const deleteSesion = useDeleteSesion();
 
@@ -112,17 +115,31 @@ export default function CalendarioPage() {
         <div className="space-y-8 max-w-7xl mx-auto pb-12">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <Badge variant="outline" className="text-emerald-500 border-emerald-500/20 bg-emerald-500/10 mb-2 font-black uppercase tracking-widest text-[10px]">
-                        General
-                    </Badge>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50 flex items-center gap-3">
-                        <CalendarDays className="h-8 w-8 text-emerald-500" />
-                        Calendario
-                    </h1>
-                    <p className="text-zinc-400 mt-1">
-                        Visión global de todas las sesiones de entrenamiento y partidos de la temporada.
-                    </p>
+                <div className="flex items-center gap-4">
+                    {id_temporada && (
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => navigate(`/temporadas/${id_temporada}`)}
+                            className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 shrink-0"
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                        </Button>
+                    )}
+                    <div>
+                        <Badge variant="outline" className="text-emerald-500 border-emerald-500/20 bg-emerald-500/10 mb-2 font-black uppercase tracking-widest text-[10px]">
+                            {temporada ? `${temporada.equipo} - ${temporada.temporada}` : 'General'}
+                        </Badge>
+                        <h1 className="text-3xl font-bold tracking-tight text-zinc-50 flex items-center gap-3">
+                            <CalendarDays className="h-8 w-8 text-emerald-500" />
+                            {temporada ? 'Calendario de Temporada' : 'Calendario Global'}
+                        </h1>
+                        <p className="text-zinc-400 mt-1">
+                            {temporada
+                                ? `Sesiones y partidos planificados para la temporada ${temporada.temporada}.`
+                                : 'Visión global de todas las sesiones de entrenamiento y partidos de la temporada.'}
+                        </p>
+                    </div>
                 </div>
 
                 {/* View toggles */}
@@ -181,8 +198,13 @@ export default function CalendarioPage() {
                         const isToday = isSameDay(day, new Date());
 
                         // Find events for this day
-                        const dayPartidos = partidos?.filter(p => isSameDay(new Date(p.fecha), day)) || [];
-                        const daySesiones = sesiones?.filter(s => isSameDay(new Date(s.fecha), day)) || [];
+                        let dayPartidos = partidos?.filter(p => isSameDay(new Date(p.fecha), day)) || [];
+                        let daySesiones = sesiones?.filter(s => isSameDay(new Date(s.fecha), day)) || [];
+
+                        // If filtered by season, filter sessions too (partidos are already filtered by hook if id_temporada exists)
+                        if (id_temporada) {
+                            daySesiones = daySesiones.filter(s => s.id_temporada === id_temporada);
+                        }
 
                         return (
                             <div

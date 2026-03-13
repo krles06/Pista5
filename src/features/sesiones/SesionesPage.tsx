@@ -237,8 +237,10 @@ export default function SesionesPage() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-7 min-h-[400px]">
                         {Array.from({ length: 7 }).map((_, i) => {
+                            if (!microciclo) return <div key={i} className="min-h-[120px] bg-zinc-950/20 border-r border-b border-zinc-800" />;
+
                             // Align to the Monday of the week where the microciclo starts
-                            const monday = startOfWeek(new Date(microciclo!.fecha_inicio), { weekStartsOn: 1 });
+                            const monday = startOfWeek(new Date(microciclo.fecha_inicio), { weekStartsOn: 1 });
                             const dayDate = addDays(monday, i);
 
                             const daySessions = sesiones?.filter(s =>

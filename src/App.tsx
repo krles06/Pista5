@@ -101,6 +101,7 @@ function App() {
 
               {/* Calendario Routes */}
               <Route path="/calendario" element={<CalendarioPage />} />
+              <Route path="/calendario/:id_temporada" element={<CalendarioPage />} />
 
               {/* Fallback internal */}
               <Route path="*" element={<Navigate to="/" replace />} />
