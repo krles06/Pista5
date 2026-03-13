@@ -52,10 +52,10 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex gap-3 shrink-0">
                         <Button
-                            onClick={() => navigate('/sesiones/nueva')}
+                            onClick={() => navigate('/temporadas')}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 px-6 shadow-xl shadow-emerald-900/20"
                         >
-                            NUEVA SESIÓN
+                            PLANIFICACIÓN
                         </Button>
                         <Button
                             variant="outline"
