@@ -69,15 +69,22 @@ export default function SesionForm() {
             });
             setSelectedExercises(sessionData.ejercicios.map(e => e.ejercicio));
         } else if (microcicloId) {
-            // Fetch microciclo to find the temporada_id
+            // Set immediately to avoid validation errors
+            setFormData(prev => ({
+                ...prev,
+                id_microciclo: microcicloId,
+                fecha: dateParam || format(new Date(), 'yyyy-MM-dd')
+            }));
+
+            // Fetch to find the temporada_id
             const fetchMicroData = async () => {
                 const { data, error } = await supabase
                     .from('microciclos')
                     .select(`
                         id,
-                        mesociclos (
+                        mesociclos:id_mesociclo (
                             id,
-                            macrociclos (
+                            macrociclos:id_macrociclo (
                                 id,
                                 id_temporada
                             )
@@ -87,15 +94,15 @@ export default function SesionForm() {
                     .single();
 
                 if (!error && data) {
-                    const tempId = (data as any).mesociclos?.macrociclos?.id_temporada;
+                    const meso = (data as any).mesociclos;
+                    const macro = Array.isArray(meso) ? meso[0]?.macrociclos : meso?.macrociclos;
+                    const tempId = Array.isArray(macro) ? macro[0]?.id_temporada : macro?.id_temporada;
+
                     if (tempId) {
-                        setFormData(prev => ({
-                            ...prev,
-                            id_temporada: tempId,
-                            id_microciclo: microcicloId,
-                            fecha: dateParam || format(new Date(), 'yyyy-MM-dd')
-                        }));
+                        setFormData(prev => ({ ...prev, id_temporada: tempId }));
                     }
+                } else if (error) {
+                    console.error("Error fetching microcycle metadata:", error);
                 }
             };
             fetchMicroData();
@@ -120,28 +127,35 @@ export default function SesionForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.id_microciclo) {
-            toast.error('Falta el ID del microciclo');
+
+        // Final fallback: use ID from URL if state is empty
+        const finalMicroId = formData.id_microciclo || microcicloId;
+
+        if (!finalMicroId) {
+            toast.error('Error: No se ha detectado el Microciclo. Por favor, vuelve atrás e intenta de nuevo.');
             return;
         }
 
         try {
             const exerciseIds = selectedExercises.map(ex => ex.id);
+            // Ensure we use the best available ID
+            const dataToSave = { ...formData, id_microciclo: finalMicroId };
+
             if (isEditing && id) {
                 await updateMutation.mutateAsync({
                     id,
-                    updates: formData as Partial<Sesion>,
+                    updates: dataToSave as Partial<Sesion>,
                     ejerciciosIds: exerciseIds
                 });
                 toast.success('Sesión actualizada');
             } else {
                 await createMutation.mutateAsync({
-                    sesion: formData,
+                    sesion: dataToSave,
                     ejerciciosIds: exerciseIds
                 });
                 toast.success('Sesión creada');
             }
-            navigate(`/sesiones/${formData.id_microciclo}`);
+            navigate(`/sesiones/${finalMicroId}`);
         } catch (err: any) {
             toast.error('Error al guardar: ' + err.message);
         }

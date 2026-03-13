@@ -102,30 +102,28 @@ CREATE TABLE public.sesiones (
 CREATE TABLE public.ejercicios (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     coach_id uuid REFERENCES public.coaches(id) ON DELETE CASCADE NOT NULL,
-    nombre text NOT NULL,
-    trabajo text,
-    tipo_trabajo text,
-    tipo_tarea text,
-    componente_juego text,
-    sistema_juego text,
-    dificultad text,
-    numero_jugadores text,
-    minutos numeric,
+    titulo text NOT NULL,
+    objetivo_principal text,
+    objetivos_secundarios text,
     descripcion text,
-    variantes text,
-    trabajo_fisico_integrado boolean DEFAULT false,
-    fichero_imagen text, -- URL in Storage
-    puntuacion_fisica numeric,
-    minutos_por_puntuacion numeric,
-    created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+    reglas text,
+    dimensiones text,
+    material text,
+    duracion_minutos integer,
+    n_jugadores integer,
+    etapa_sesion text NOT NULL DEFAULT 'Parte Principal',
+    url_imagen text,
+    url_video text,
+    es_portero boolean NOT NULL DEFAULT false,
+    created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Ejercicios_Sesion (Relación M:N)
-CREATE TABLE public.ejercicios_sesion (
+-- Sesiones_Ejercicios (Relación M:N)
+CREATE TABLE public.sesiones_ejercicios (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     id_sesion uuid REFERENCES public.sesiones(id) ON DELETE CASCADE NOT NULL,
     id_ejercicio uuid REFERENCES public.ejercicios(id) ON DELETE CASCADE NOT NULL,
-    minutos numeric NOT NULL,
     orden integer NOT NULL,
     created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -243,17 +241,17 @@ SELECT create_coach_policies('calendario');
 
 -- For mapping tables without coach_id, we need to join to check ownership 
 -- (This is safer than relying on client input)
--- Ejercicios_Sesion
-CREATE POLICY "Users can view own data" ON public.ejercicios_sesion FOR SELECT TO authenticated USING (
+-- sesiones_ejercicios
+CREATE POLICY "Users can view own data" ON public.sesiones_ejercicios FOR SELECT TO authenticated USING (
     id_sesion IN (SELECT id FROM public.sesiones WHERE coach_id = auth.uid())
 );
-CREATE POLICY "Users can insert own data" ON public.ejercicios_sesion FOR INSERT TO authenticated WITH CHECK (
+CREATE POLICY "Users can insert own data" ON public.sesiones_ejercicios FOR INSERT TO authenticated WITH CHECK (
     id_sesion IN (SELECT id FROM public.sesiones WHERE coach_id = auth.uid())
 );
-CREATE POLICY "Users can update own data" ON public.ejercicios_sesion FOR UPDATE TO authenticated USING (
+CREATE POLICY "Users can update own data" ON public.sesiones_ejercicios FOR UPDATE TO authenticated USING (
     id_sesion IN (SELECT id FROM public.sesiones WHERE coach_id = auth.uid())
 );
-CREATE POLICY "Users can delete own data" ON public.ejercicios_sesion FOR DELETE TO authenticated USING (
+CREATE POLICY "Users can delete own data" ON public.sesiones_ejercicios FOR DELETE TO authenticated USING (
     id_sesion IN (SELECT id FROM public.sesiones WHERE coach_id = auth.uid())
 );
 
