@@ -23,6 +23,7 @@ import {
 
 import MesocicloNode from './MesocicloNode';
 import MacrocicloFormModal from './MacrocicloFormModal';
+import MesocicloFormModal from './MesocicloFormModal';
 
 interface Props {
     macrociclo: Macrociclo;

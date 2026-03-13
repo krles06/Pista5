@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { useTemporada } from '@/hooks/useTemporadas';
 import { useMacrociclos } from '@/hooks/usePlanificacion';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { ArrowLeft, MapIcon, ChevronRight, CalendarDays, Plus } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { ArrowLeft, MapIcon, ChevronRight, Plus } from 'lucide-react';
 
 import MacrocicloNode from './components/MacrocicloNode';
 import MacrocicloFormModal from './components/MacrocicloFormModal';

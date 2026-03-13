@@ -7,7 +7,6 @@ import {
     User,
     Phone,
     Mail,
-    Calendar,
     Edit,
     Trash2,
     ShieldAlert,
@@ -18,14 +17,8 @@ import {
 import { useJugadores, useDeleteJugador } from '@/hooks/useJugadores';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
     AlertDialog,
     AlertDialogAction,
