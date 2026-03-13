@@ -43,6 +43,9 @@ import PartidoForm from '@/features/partidos/PartidoForm';
 // import AppLayout from './components/layout/AppLayout';
 // import ProtectedRoute from './components/shared/ProtectedRoute';
 
+// Dashboard
+import DashboardPage from '@/features/dashboard/DashboardPage';
+
 function App() {
   return (
     <AuthProvider>
@@ -56,7 +59,8 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout><Outlet /></AppLayout>}>
-              <Route path="/" element={<div className="p-8">Dashboard Page (WIP)</div>} />
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/perfil" element={<ProfilePage />} />
 
               {/* Temporadas Routes */}
@@ -64,9 +68,6 @@ function App() {
               <Route path="/temporadas/nueva" element={<TemporadaForm />} />
               <Route path="/temporadas/:id" element={<TemporadaDetailPage />} />
               <Route path="/temporadas/:id/editar" element={<TemporadaForm />} />
-
-              <Route path="/equipos" element={<div className="p-8">Equipos Page (WIP)</div>} />
-              <Route path="/jugadores" element={<div className="p-8">Jugadores Page (WIP)</div>} />
 
               {/* Ejercicios Routes */}
               <Route path="/ejercicios" element={<EjerciciosPage esPorteros={false} />} />

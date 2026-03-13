@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Activity, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('');
@@ -41,13 +41,18 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-zinc-950 p-4">
-            <div className="w-full max-w-md space-y-8">
+        <div className="min-h-screen flex items-center justify-center bg-black p-4 relative overflow-hidden">
+            {/* Ambient background glows */}
+            <div className="absolute top-1/4 -left-20 w-96 h-96 bg-emerald-600/10 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-emerald-600/10 rounded-full blur-[120px] pointer-events-none" />
+
+            <div className="w-full max-w-md space-y-8 relative z-10">
                 <div className="flex flex-col items-center justify-center text-center space-y-2">
-                    <div className="bg-emerald-600/20 p-3 rounded-2xl mb-2 flex items-center justify-center">
-                        <Activity className="h-8 w-8 text-emerald-500" />
+                    <div className="bg-emerald-600 h-14 w-14 rounded-2xl flex items-center justify-center font-black text-white italic text-2xl shadow-lg shadow-emerald-900/20 mb-4">
+                        P5
                     </div>
-                    <h1 className="text-2xl font-bold tracking-tight text-zinc-50">Recuperar contraseña</h1>
+                    <h1 className="text-3xl font-black tracking-tighter text-zinc-50 uppercase italic">Pista5</h1>
+                    <p className="text-zinc-500 font-medium">Recuperar contraseña</p>
                 </div>
 
                 <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
