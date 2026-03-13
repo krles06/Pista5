@@ -2,7 +2,7 @@ export interface Partido {
     id: string;
     coach_id: string;
     id_temporada: string;
-    id_microciclo: string;
+    id_microciclo: string | null;
     fecha: string;
     rival: string | null;
     condicion: 'local' | 'visitante';

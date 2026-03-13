@@ -42,7 +42,7 @@ export default function PartidoForm() {
 
     const [formData, setFormData] = useState<PartidoInsert>({
         id_temporada: selectedTemporada,
-        id_microciclo: microcicloId || '',
+        id_microciclo: microcicloId || null,
         fecha: format(new Date(), 'yyyy-MM-dd'),
         rival: '',
         condicion: 'local',

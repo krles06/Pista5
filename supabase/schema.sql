@@ -186,7 +186,7 @@ CREATE TABLE public.calendario (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     coach_id uuid REFERENCES public.coaches(id) ON DELETE CASCADE NOT NULL,
     id_temporada uuid REFERENCES public.temporadas(id) ON DELETE CASCADE NOT NULL,
-    id_microciclo uuid REFERENCES public.microciclos(id) ON DELETE CASCADE NOT NULL,
+    id_microciclo uuid REFERENCES public.microciclos(id) ON DELETE CASCADE,
     fecha timestamp with time zone NOT NULL,
     rival text,
     condicion text, -- local/visitante
