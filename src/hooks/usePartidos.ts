@@ -5,15 +5,15 @@ import { useAuth } from './useAuth';
 import type { Partido, PartidoInsert, PartidoUpdate, PartidoWithDetalles, AlineacionUpdate } from '@/lib/types-partidos';
 
 export function usePartidos(id_temporada?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
     return useQuery({
-        queryKey: ['partidos', id_temporada],
+        queryKey: ['partidos', id_temporada, session?.user?.id],
         queryFn: async () => {
-            if (!coach) return [];
+            const userId = await getAuthenticatedUserId();
             let query = supabase
                 .from('calendario')
                 .select('*')
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .order('fecha', { ascending: false });
 
             if (id_temporada) {
@@ -24,16 +24,17 @@ export function usePartidos(id_temporada?: string) {
             if (error) throw error;
             return data as Partido[];
         },
-        enabled: !!coach,
+        enabled: !!session,
     });
 }
 
 export function usePartido(id?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
     return useQuery({
         queryKey: ['partido', id],
         queryFn: async () => {
-            if (!coach || !id) return null;
+            if (!id) return null;
+            const userId = await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('calendario')
                 .select(`
@@ -44,13 +45,13 @@ export function usePartido(id?: string) {
                     )
                 `)
                 .eq('id', id)
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .single();
 
             if (error) throw error;
             return data as PartidoWithDetalles;
         },
-        enabled: !!coach && !!id,
+        enabled: !!id && !!session,
     });
 }
 

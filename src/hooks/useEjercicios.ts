@@ -6,47 +6,48 @@ import { useAuth } from './useAuth';
 
 // Feth all exercises (filtered by es_portero)
 export function useEjercicios(esPortero: boolean = false) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
 
     return useQuery({
-        queryKey: ['ejercicios', esPortero, coach?.id],
+        queryKey: ['ejercicios', esPortero, session?.user?.id],
         queryFn: async () => {
-            if (!coach?.id) return [];
+            const userId = await getAuthenticatedUserId();
 
             const { data, error } = await supabase
                 .from('ejercicios')
                 .select('*')
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .eq('es_portero', esPortero)
                 .order('titulo', { ascending: true });
 
             if (error) throw error;
             return data as Ejercicio[];
         },
-        enabled: !!coach?.id,
+        enabled: !!session,
     });
 }
 
 // Fetch single exercise
 export function useEjercicio(id?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
 
     return useQuery({
         queryKey: ['ejercicio', id],
         queryFn: async () => {
-            if (!id || !coach?.id) return null;
+            if (!id) return null;
+            const userId = await getAuthenticatedUserId();
 
             const { data, error } = await supabase
                 .from('ejercicios')
                 .select('*')
                 .eq('id', id)
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .single();
 
             if (error) throw error;
             return data as Ejercicio;
         },
-        enabled: !!id && !!coach?.id,
+        enabled: !!id && !!session,
     });
 }
 

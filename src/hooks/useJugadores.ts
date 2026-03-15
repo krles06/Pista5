@@ -24,17 +24,17 @@ const uploadPhoto = async (file: File, coachId: string): Promise<string> => {
 
 // Fetch all players for a coach, optionally filtered by season
 export function useJugadores(temporadaId?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
 
     return useQuery({
-        queryKey: ['jugadores', coach?.id, temporadaId],
+        queryKey: ['jugadores', temporadaId, session?.user?.id],
         queryFn: async () => {
-            if (!coach?.id) return [];
+            const userId = await getAuthenticatedUserId();
 
             const { data, error } = await supabase
                 .from('jugadores')
                 .select('*')
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .order('nombre', { ascending: true });
 
             if (error) throw error;
@@ -54,30 +54,31 @@ export function useJugadores(temporadaId?: string) {
                 !(j as any).id_temporada
             );
         },
-        enabled: !!coach?.id,
+        enabled: !!session,
     });
 }
 
 // Fetch single player
 export function useJugador(id?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
 
     return useQuery({
         queryKey: ['jugador', id],
         queryFn: async () => {
-            if (!id || !coach?.id) return null;
+            if (!id) return null;
+            const userId = await getAuthenticatedUserId();
 
             const { data, error } = await supabase
                 .from('jugadores')
                 .select('*')
                 .eq('id', id)
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .single();
 
             if (error) throw error;
             return data as Jugador;
         },
-        enabled: !!id && !!coach?.id,
+        enabled: !!id && !!session,
     });
 }
 

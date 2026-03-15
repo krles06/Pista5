@@ -6,12 +6,13 @@ import { useAuth } from './useAuth';
 
 // Fetch all sessions for a specific microcycle
 export function useSesiones(microcicloId?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
 
     return useQuery({
-        queryKey: ['sesiones', microcicloId],
+        queryKey: ['sesiones', microcicloId, session?.user?.id],
         queryFn: async () => {
-            if (!microcicloId || !coach?.id) return [];
+            if (!microcicloId) return [];
+            await getAuthenticatedUserId(); // ensure auth
 
             const { data, error } = await supabase
                 .from('sesiones')
@@ -22,23 +23,23 @@ export function useSesiones(microcicloId?: string) {
             if (error) throw error;
             return data as Sesion[];
         },
-        enabled: !!microcicloId && !!coach?.id,
+        enabled: !!microcicloId && !!session,
     });
 }
 
 // Fetch all sessions globally for the coach (optional filter by temporadaId)
 export function useAllSesiones(temporadaId?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
 
     return useQuery({
-        queryKey: ['sesiones-all', temporadaId],
+        queryKey: ['sesiones-all', temporadaId, session?.user?.id],
         queryFn: async () => {
-            if (!coach?.id) return [];
+            const userId = await getAuthenticatedUserId();
 
             let query = supabase
                 .from('sesiones')
                 .select('*')
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .order('fecha', { ascending: true });
 
             if (temporadaId) {
@@ -50,25 +51,26 @@ export function useAllSesiones(temporadaId?: string) {
             if (error) throw error;
             return data as Sesion[];
         },
-        enabled: !!coach?.id,
+        enabled: !!session,
     });
 }
 
 // Fetch single session with its exercises
 export function useSesion(id?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
 
     return useQuery({
         queryKey: ['sesion', id],
         queryFn: async () => {
-            if (!id || !coach?.id) return null;
+            if (!id) return null;
+            const userId = await getAuthenticatedUserId();
 
             // Get session data
             const { data: sessionData, error: sessionError } = await supabase
                 .from('sesiones')
                 .select('*')
                 .eq('id', id)
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .single();
 
             if (sessionError) throw sessionError;
@@ -92,7 +94,7 @@ export function useSesion(id?: string) {
                 ejercicios: exercisesData,
             } as SesionWithEjercicios;
         },
-        enabled: !!id && !!coach?.id,
+        enabled: !!id && !!session,
     });
 }
 

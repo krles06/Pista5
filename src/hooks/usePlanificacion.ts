@@ -7,11 +7,12 @@ import { useAuth } from './useAuth';
 // --- MACROCICLOS ---
 
 export function useMacrociclos(temporadaId?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
     return useQuery({
-        queryKey: ['macrociclos', temporadaId],
+        queryKey: ['macrociclos', temporadaId, session?.user?.id],
         queryFn: async () => {
-            if (!temporadaId || !coach?.id) return [];
+            if (!temporadaId) return [];
+            await getAuthenticatedUserId(); // ensure auth
             const { data, error } = await supabase
                 .from('macrociclos')
                 .select('*')
@@ -20,7 +21,7 @@ export function useMacrociclos(temporadaId?: string) {
             if (error) throw error;
             return data as Macrociclo[];
         },
-        enabled: !!temporadaId && !!coach?.id,
+        enabled: !!temporadaId && !!session,
     });
 }
 
@@ -76,11 +77,12 @@ export function useDeleteMacrociclo() {
 // --- MESOCICLOS ---
 
 export function useMesociclos(macrocicloId?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
     return useQuery({
-        queryKey: ['mesociclos', macrocicloId],
+        queryKey: ['mesociclos', macrocicloId, session?.user?.id],
         queryFn: async () => {
-            if (!macrocicloId || !coach?.id) return [];
+            if (!macrocicloId) return [];
+            await getAuthenticatedUserId(); // ensure auth
             const { data, error } = await supabase
                 .from('mesociclos')
                 .select('*')
@@ -89,7 +91,7 @@ export function useMesociclos(macrocicloId?: string) {
             if (error) throw error;
             return data as Mesociclo[];
         },
-        enabled: !!macrocicloId && !!coach?.id,
+        enabled: !!macrocicloId && !!session,
     });
 }
 
@@ -145,11 +147,12 @@ export function useDeleteMesociclo() {
 // --- MICROCICLOS ---
 
 export function useMicrociclos(mesocicloId?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
     return useQuery({
-        queryKey: ['microciclos', mesocicloId],
+        queryKey: ['microciclos', mesocicloId, session?.user?.id],
         queryFn: async () => {
-            if (!mesocicloId || !coach?.id) return [];
+            if (!mesocicloId) return [];
+            await getAuthenticatedUserId(); // ensure auth
             const { data, error } = await supabase
                 .from('microciclos')
                 .select('*')
@@ -158,7 +161,7 @@ export function useMicrociclos(mesocicloId?: string) {
             if (error) throw error;
             return data as Microciclo[];
         },
-        enabled: !!mesocicloId && !!coach?.id,
+        enabled: !!mesocicloId && !!session,
     });
 }
 

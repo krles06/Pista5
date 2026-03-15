@@ -6,46 +6,47 @@ import { useAuth } from './useAuth';
 
 // Fetch all seasons for the current coach
 export function useTemporadas() {
-    const { coach } = useAuth();
+    const { session } = useAuth();
 
     return useQuery({
-        queryKey: ['temporadas', coach?.id],
+        queryKey: ['temporadas', session?.user?.id],
         queryFn: async () => {
-            if (!coach?.id) return [];
+            const userId = await getAuthenticatedUserId();
 
             const { data, error } = await supabase
                 .from('temporadas')
                 .select('*')
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .order('fecha_inicio', { ascending: false });
 
             if (error) throw error;
             return data as Temporada[];
         },
-        enabled: !!coach?.id,
+        enabled: !!session,
     });
 }
 
 // Fetch a single season by ID
 export function useTemporada(id?: string) {
-    const { coach } = useAuth();
+    const { session } = useAuth();
 
     return useQuery({
-        queryKey: ['temporadas', id],
+        queryKey: ['temporada', id],
         queryFn: async () => {
-            if (!id || !coach?.id) return null;
+            if (!id) return null;
+            const userId = await getAuthenticatedUserId();
 
             const { data, error } = await supabase
                 .from('temporadas')
                 .select('*')
                 .eq('id', id)
-                .eq('coach_id', coach.id)
+                .eq('coach_id', userId)
                 .single();
 
             if (error) throw error;
             return data as Temporada;
         },
-        enabled: !!id && !!coach?.id,
+        enabled: !!id && !!session,
     });
 }
 
