@@ -23,7 +23,7 @@ export function useEjercicios(esPortero: boolean = false) {
             if (error) throw error;
             return data as Ejercicio[];
         },
-        enabled: !!session,
+        enabled: !!session?.user?.id,
     });
 }
 
@@ -47,7 +47,7 @@ export function useEjercicio(id?: string) {
             if (error) throw error;
             return data as Ejercicio;
         },
-        enabled: !!id && !!session,
+        enabled: !!id && !!session?.user?.id,
     });
 }
 

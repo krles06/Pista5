@@ -5,10 +5,9 @@ import { Plus, Calendar, MapPin, ChevronRight, ArrowLeft, MoreVertical, Edit, Tr
 import { toast } from 'sonner';
 
 import { useSesiones, useDeleteSesion } from '@/hooks/useSesiones';
+import { useMicrociclo } from '@/hooks/usePlanificacion';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/lib/supabase';
-import { useEffect, useState } from 'react';
-import type { Microciclo } from '@/lib/types-planificacion';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -33,33 +32,13 @@ import {
 export default function SesionesPage() {
     const { id_microciclo } = useParams<{ id_microciclo: string }>();
     const navigate = useNavigate();
-    const { coach } = useAuth();
+    useAuth();
     const { data: sesiones, isLoading: loadingSessions } = useSesiones(id_microciclo);
+    const { data: microciclo, isLoading: loadingMicro } = useMicrociclo(id_microciclo);
     const deleteMutation = useDeleteSesion();
 
-    const [microciclo, setMicrociclo] = useState<Microciclo | null>(null);
-    const [loadingMicro, setLoadingMicro] = useState(true);
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
-
-    useEffect(() => {
-        async function fetchMicrociclo() {
-            if (!id_microciclo || !coach?.id) return;
-            setLoadingMicro(true);
-            const { data, error } = await supabase
-                .from('microciclos')
-                .select('*')
-                .eq('id', id_microciclo)
-                .eq('coach_id', coach.id)
-                .single();
-
-            if (!error && data) {
-                setMicrociclo(data as Microciclo);
-            }
-            setLoadingMicro(false);
-        }
-        fetchMicrociclo();
-    }, [id_microciclo, coach?.id]);
 
     const handleDelete = async () => {
         if (!deleteId) return;

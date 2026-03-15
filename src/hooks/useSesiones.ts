@@ -32,7 +32,7 @@ export function useSesiones(microcicloId?: string) {
             if (error) throw error;
             return data as SesionWithEjercicios[];
         },
-        enabled: !!microcicloId && !!session,
+        enabled: !!microcicloId && !!session?.user?.id,
     });
 }
 
@@ -68,7 +68,7 @@ export function useAllSesiones(temporadaId?: string) {
             if (error) throw error;
             return data as SesionWithEjercicios[];
         },
-        enabled: !!session,
+        enabled: !!session?.user?.id,
     });
 }
 
@@ -102,7 +102,7 @@ export function useSesion(id?: string) {
 
             return data as SesionWithEjercicios;
         },
-        enabled: !!id && !!session,
+        enabled: !!id && !!session?.user?.id,
     });
 }
 

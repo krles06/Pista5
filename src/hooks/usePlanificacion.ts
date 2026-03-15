@@ -21,7 +21,7 @@ export function useMacrociclos(temporadaId?: string) {
             if (error) throw error;
             return data as Macrociclo[];
         },
-        enabled: !!temporadaId && !!session,
+        enabled: !!temporadaId && !!session?.user?.id,
     });
 }
 
@@ -91,7 +91,7 @@ export function useMesociclos(macrocicloId?: string) {
             if (error) throw error;
             return data as Mesociclo[];
         },
-        enabled: !!macrocicloId && !!session,
+        enabled: !!macrocicloId && !!session?.user?.id,
     });
 }
 
@@ -161,7 +161,7 @@ export function useMicrociclos(mesocicloId?: string) {
             if (error) throw error;
             return data as Microciclo[];
         },
-        enabled: !!mesocicloId && !!session,
+        enabled: !!mesocicloId && !!session?.user?.id,
     });
 }
 
@@ -211,5 +211,24 @@ export function useDeleteMicrociclo() {
         onSuccess: (data) => {
             if (data) queryClient.invalidateQueries({ queryKey: ['microciclos', data.id_mesociclo] });
         },
+    });
+}
+export function useMicrociclo(id?: string) {
+    const { session } = useAuth();
+    return useQuery({
+        queryKey: ['microciclo', id],
+        queryFn: async () => {
+            if (!id) return null;
+            const userId = await getAuthenticatedUserId();
+            const { data, error } = await supabase
+                .from('microciclos')
+                .select('*')
+                .eq('id', id)
+                .eq('coach_id', userId)
+                .single();
+            if (error) throw error;
+            return data as Microciclo;
+        },
+        enabled: !!id && !!session?.user?.id,
     });
 }

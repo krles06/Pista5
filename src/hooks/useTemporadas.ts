@@ -22,7 +22,7 @@ export function useTemporadas() {
             if (error) throw error;
             return data as Temporada[];
         },
-        enabled: !!session,
+        enabled: !!session?.user?.id,
     });
 }
 
@@ -46,7 +46,7 @@ export function useTemporada(id?: string) {
             if (error) throw error;
             return data as Temporada;
         },
-        enabled: !!id && !!session,
+        enabled: !!id && !!session?.user?.id,
     });
 }
 

@@ -24,7 +24,7 @@ export function usePartidos(id_temporada?: string) {
             if (error) throw error;
             return data as Partido[];
         },
-        enabled: !!session,
+        enabled: !!session?.user?.id,
     });
 }
 
@@ -51,7 +51,7 @@ export function usePartido(id?: string) {
             if (error) throw error;
             return data as PartidoWithDetalles;
         },
-        enabled: !!id && !!session,
+        enabled: !!id && !!session?.user?.id,
     });
 }
 

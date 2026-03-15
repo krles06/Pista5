@@ -40,16 +40,6 @@ export default function RegisterPage() {
 
             if (signUpError) throw signUpError;
 
-            // Manual fallback to ensure profile creation if trigger fails
-            if (data.user) {
-                await supabase.from('coaches').upsert({
-                    id: data.user.id,
-                    nombre: name,
-                    email: email,
-                    equipo: team || null
-                }, { onConflict: 'id' });
-            }
-
             if (data.session || data.user) {
                 toast.success('Registro completado con éxito');
                 navigate('/');

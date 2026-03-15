@@ -54,7 +54,7 @@ export function useJugadores(temporadaId?: string) {
                 !(j as any).id_temporada
             );
         },
-        enabled: !!session,
+        enabled: !!session?.user?.id,
     });
 }
 
@@ -78,7 +78,7 @@ export function useJugador(id?: string) {
             if (error) throw error;
             return data as Jugador;
         },
-        enabled: !!id && !!session,
+        enabled: !!id && !!session?.user?.id,
     });
 }
 

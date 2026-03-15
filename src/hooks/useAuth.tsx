@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
@@ -28,34 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [session, setSession] = useState<Session | null>(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        // Check active session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                fetchCoachProfile(session.user.id);
-            } else {
-                setLoading(false);
-            }
-        });
-
-        // Listen to auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                fetchCoachProfile(session.user.id);
-            } else {
-                setCoach(null);
-                setLoading(false);
-            }
-        });
-
-        return () => subscription.unsubscribe();
-    }, []);
-
-    const fetchCoachProfile = async (userId: string, isRetry = false) => {
+    const fetchCoachProfile = useCallback(async (userId: string, isRetry = false) => {
         try {
             const { data, error } = await supabase
                 .from('coaches')
@@ -76,13 +49,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } catch (e) {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const signOut = async () => {
+    useEffect(() => {
+        // Init: get initial session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                setSession(session);
+                setUser(session.user);
+                fetchCoachProfile(session.user.id);
+            } else {
+                setLoading(false);
+            }
+        });
+
+        // Listen: handle auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+            const newUser = session?.user ?? null;
+            setUser(newUser);
+
+            if (newUser) {
+                // Only fetch if user ID changed or coach is not loaded
+                fetchCoachProfile(newUser.id);
+            } else {
+                setCoach(null);
+                setLoading(false);
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, [fetchCoachProfile]);
+
+    const signOut = useCallback(async () => {
         await supabase.auth.signOut();
-    };
+    }, []);
 
-    const updateProfile = async (updates: Partial<Coach>) => {
+    const updateProfile = useCallback(async (updates: Partial<Coach>) => {
         if (!user) return;
         const { data, error } = await supabase
             .from('coaches')
@@ -93,10 +96,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (error) throw error;
         if (data) setCoach(data);
-    };
+    }, [user]);
+
+    const value = useMemo(() => ({
+        user,
+        coach,
+        session,
+        loading,
+        signOut,
+        updateProfile
+    }), [user, coach, session, loading, signOut, updateProfile]);
 
     return (
-        <AuthContext.Provider value={{ user, coach, session, loading, signOut, updateProfile }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
