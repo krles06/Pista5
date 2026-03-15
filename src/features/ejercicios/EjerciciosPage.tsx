@@ -17,6 +17,18 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    TIPO_TAREA,
+    TRABAJO,
+    DIFICULTAD,
+} from '@/lib/constants';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -38,6 +50,9 @@ export default function EjerciciosPage({ esPorteros = false }: EjerciciosPagePro
 
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [searchTerm, setSearchTerm] = useState('');
+    const [filterTipoTarea, setFilterTipoTarea] = useState('all');
+    const [filterTrabajo, setFilterTrabajo] = useState('all');
+    const [filterDificultad, setFilterDificultad] = useState('all');
     const [deleteId, setDeleteId] = useState<string | null>(null);
 
     const handleDelete = async () => {
@@ -52,10 +67,16 @@ export default function EjerciciosPage({ esPorteros = false }: EjerciciosPagePro
         }
     };
 
-    const filteredEjercicios = ejercicios?.filter(ej =>
-        ej.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ej.objetivo_principal?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredEjercicios = ejercicios?.filter(ej => {
+        const matchesSearch = ej.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            ej.objetivo_principal?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const matchesTipoTarea = filterTipoTarea === 'all' || ej.tipo_tarea === filterTipoTarea;
+        const matchesTrabajo = filterTrabajo === 'all' || ej.trabajo === filterTrabajo;
+        const matchesDificultad = filterDificultad === 'all' || ej.dificultad === filterDificultad;
+
+        return matchesSearch && matchesTipoTarea && matchesTrabajo && matchesDificultad;
+    });
 
     const getBaseRoute = () => esPorteros ? '/porteros' : '/ejercicios';
 
@@ -82,20 +103,59 @@ export default function EjerciciosPage({ esPorteros = false }: EjerciciosPagePro
 
             {/* Toolbar */}
             <div className="flex flex-col sm:flex-row justify-between gap-4">
-                <div className="relative w-full sm:max-w-md">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
-                    <Input
-                        placeholder="Buscar por título u objetivo..."
-                        className="pl-9 bg-zinc-900 border-zinc-800 text-zinc-100 placeholder:text-zinc-500 w-full"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="relative w-full sm:max-w-[300px]">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                        <Input
+                            placeholder="Buscar título..."
+                            className="pl-9 bg-zinc-900 border-zinc-800 text-zinc-100 placeholder:text-zinc-500 w-full h-10"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+
+                    <Select value={filterTipoTarea} onValueChange={setFilterTipoTarea}>
+                        <SelectTrigger className="w-full sm:w-[160px] bg-zinc-900 border-zinc-800 text-zinc-300 h-10">
+                            <SelectValue placeholder="Tipo Tarea" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                            <SelectItem value="all">Todas las tareas</SelectItem>
+                            {TIPO_TAREA.map((item) => (
+                                <SelectItem key={item} value={item}>{item}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={filterTrabajo} onValueChange={setFilterTrabajo}>
+                        <SelectTrigger className="w-full sm:w-[160px] bg-zinc-900 border-zinc-800 text-zinc-300 h-10">
+                            <SelectValue placeholder="Trabajo" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                            <SelectItem value="all">Todo el trabajo</SelectItem>
+                            {TRABAJO.map((item) => (
+                                <SelectItem key={item} value={item}>{item}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={filterDificultad} onValueChange={setFilterDificultad}>
+                        <SelectTrigger className="w-full sm:w-[140px] bg-zinc-900 border-zinc-800 text-zinc-300 h-10">
+                            <SelectValue placeholder="Dificultad" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                            <SelectItem value="all">Dificultad</SelectItem>
+                            {DIFICULTAD.map((item) => (
+                                <SelectItem key={item} value={item}>{item}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
-                <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 p-1 rounded-lg">
+
+                <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 p-1 rounded-lg h-10">
                     <Button
                         variant="ghost"
                         size="sm"
-                        className={`px-3 py-1.5 h-auto ${viewMode === 'grid' ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400 hover:text-zinc-300'}`}
+                        className={`px-3 h-full ${viewMode === 'grid' ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400 hover:text-zinc-300'}`}
                         onClick={() => setViewMode('grid')}
                     >
                         <LayoutGrid className="h-4 w-4" />
@@ -103,7 +163,7 @@ export default function EjerciciosPage({ esPorteros = false }: EjerciciosPagePro
                     <Button
                         variant="ghost"
                         size="sm"
-                        className={`px-3 py-1.5 h-auto ${viewMode === 'list' ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400 hover:text-zinc-300'}`}
+                        className={`px-3 h-full ${viewMode === 'list' ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400 hover:text-zinc-300'}`}
                         onClick={() => setViewMode('list')}
                     >
                         <ListIcon className="h-4 w-4" />
@@ -155,6 +215,7 @@ export default function EjerciciosPage({ esPorteros = false }: EjerciciosPagePro
                                             <th className="px-6 py-4 font-medium">Ejercicio</th>
                                             <th className="px-6 py-4 font-medium">Etapa</th>
                                             <th className="px-6 py-4 font-medium">Duración / Jugadores</th>
+                                            <th className="px-6 py-4 font-medium">Categoría</th>
                                             <th className="px-6 py-4 font-medium text-right">Acciones</th>
                                         </tr>
                                     </thead>
@@ -170,9 +231,17 @@ export default function EjerciciosPage({ esPorteros = false }: EjerciciosPagePro
                                                         {ej.etapa_sesion}
                                                     </Badge>
                                                 </td>
-                                                <td className="px-6 py-4 text-zinc-400 text-xs flex flex-col gap-1">
-                                                    {ej.duracion_minutos && <span>{ej.duracion_minutos} min</span>}
-                                                    {ej.n_jugadores && <span>{ej.n_jugadores} jug.</span>}
+                                                <td className="px-6 py-4 text-zinc-400 text-xs">
+                                                    <div className="flex flex-col gap-1">
+                                                        {ej.duracion_minutos && <span>⏱️ {ej.duracion_minutos} min</span>}
+                                                        {ej.n_jugadores && <span>👥 {ej.n_jugadores} jug.</span>}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {ej.tipo_tarea && <Badge variant="secondary" className="bg-zinc-800 text-zinc-400 border-none text-[10px]">{ej.tipo_tarea}</Badge>}
+                                                        {ej.trabajo && <Badge variant="secondary" className="bg-zinc-800 text-zinc-400 border-none text-[10px]">{ej.trabajo}</Badge>}
+                                                    </div>
                                                 </td>
                                                 <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
                                                     <div className="flex justify-end gap-2">
@@ -277,14 +346,28 @@ function EjercicioCard({
                 )}
             </CardHeader>
 
-            <CardContent className="p-4 pt-0 text-xs text-zinc-500 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    {ejercicio.n_jugadores && (
-                        <span>👥 {ejercicio.n_jugadores}</span>
+            <CardContent className="p-4 pt-0 text-xs text-zinc-500 flex flex-col gap-3">
+                <div className="flex flex-wrap gap-1">
+                    {ejercicio.tipo_tarea && (
+                        <Badge variant="secondary" className="bg-zinc-950 text-zinc-500 border-zinc-800 font-normal py-0">
+                            {ejercicio.tipo_tarea}
+                        </Badge>
                     )}
-                    {ejercicio.duracion_minutos && (
-                        <span>⏱️ {ejercicio.duracion_minutos}'</span>
+                    {ejercicio.trabajo && (
+                        <Badge variant="secondary" className="bg-zinc-950 text-zinc-500 border-zinc-800 font-normal py-0">
+                            {ejercicio.trabajo}
+                        </Badge>
                     )}
+                </div>
+                <div className="flex items-center justify-between border-t border-zinc-800/50 pt-3">
+                    <div className="flex items-center gap-3">
+                        {ejercicio.n_jugadores && (
+                            <span>👥 {ejercicio.n_jugadores}</span>
+                        )}
+                        {ejercicio.duracion_minutos && (
+                            <span>⏱️ {ejercicio.duracion_minutos}'</span>
+                        )}
+                    </div>
                 </div>
             </CardContent>
         </Card>

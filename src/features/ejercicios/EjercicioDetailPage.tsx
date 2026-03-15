@@ -159,6 +159,23 @@ export default function EjercicioDetailPage() {
                         </div>
                     </Card>
 
+                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden rounded-2xl">
+                        <CardHeader className="pb-3 border-b border-zinc-800/50">
+                            <CardTitle className="text-lg text-zinc-100">Categorización y Análisis</CardTitle>
+                        </CardHeader>
+                        <CardContent className="pt-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <DetailItem label="Tipo de Tarea" value={ejercicio.tipo_tarea} />
+                                <DetailItem label="Tipo de Trabajo" value={ejercicio.tipo_trabajo} />
+                                <DetailItem label="Trabajo Específico" value={ejercicio.trabajo} />
+                                <DetailItem label="Componente" value={ejercicio.componente_juego} />
+                                <DetailItem label="Sistema" value={ejercicio.sistema_juego} />
+                                <DetailItem label="Dificultad" value={ejercicio.dificultad} />
+                                <DetailItem label="Físico Integrado" value={ejercicio.trabajo_fisico_integrado} />
+                            </div>
+                        </CardContent>
+                    </Card>
+
                 </div>
 
                 {/* Right Column (Text descriptions) */}
@@ -228,6 +245,17 @@ export default function EjercicioDetailPage() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+        </div>
+    );
+}
+
+function DetailItem({ label, value }: { label: string; value?: string | number | null }) {
+    return (
+        <div className="flex flex-col gap-1">
+            <span className="text-xs text-zinc-500 uppercase font-medium tracking-wider">{label}</span>
+            <span className="text-sm font-semibold text-zinc-200">
+                {value || <span className="text-zinc-700 font-normal italic">No especificado</span>}
+            </span>
         </div>
     );
 }

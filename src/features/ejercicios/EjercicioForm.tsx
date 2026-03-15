@@ -18,6 +18,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import {
+    TIPO_TAREA,
+    TIPO_TRABAJO,
+    TRABAJO,
+    COMPONENTE_JUEGO,
+    SISTEMA_JUEGO,
+    DIFICULTAD,
+    TRABAJO_FISICO_INTEGRADO,
+    NUMERO_JUGADORES
+} from '@/lib/constants';
 
 const ETAPAS_SESION = [
     'Calentamiento',
@@ -54,6 +64,13 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
         duracion_minutos: '',
         n_jugadores: '',
         etapa_sesion: 'Parte Principal',
+        tipo_tarea: '',
+        tipo_trabajo: '',
+        trabajo: '',
+        componente_juego: '',
+        sistema_juego: '',
+        dificultad: '',
+        trabajo_fisico_integrado: '',
         url_video: '',
         es_portero: esPorteros,
     });
@@ -71,6 +88,13 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                 duracion_minutos: ejercicio.duracion_minutos ? String(ejercicio.duracion_minutos) : '',
                 n_jugadores: ejercicio.n_jugadores ? String(ejercicio.n_jugadores) : '',
                 etapa_sesion: ejercicio.etapa_sesion || 'Parte Principal',
+                tipo_tarea: ejercicio.tipo_tarea || '',
+                tipo_trabajo: ejercicio.tipo_trabajo || '',
+                trabajo: ejercicio.trabajo || '',
+                componente_juego: ejercicio.componente_juego || '',
+                sistema_juego: ejercicio.sistema_juego || '',
+                dificultad: ejercicio.dificultad || '',
+                trabajo_fisico_integrado: ejercicio.trabajo_fisico_integrado || '',
                 url_video: ejercicio.url_video || '',
                 es_portero: ejercicio.es_portero,
             });
@@ -225,15 +249,31 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="objetivo_principal" className="text-zinc-300">Objetivo Principal</Label>
-                                    <Input
-                                        id="objetivo_principal" name="objetivo_principal"
-                                        placeholder="Ej: Mejora del pase de seguridad"
-                                        value={formData.objetivo_principal}
-                                        onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
-                                    />
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="objetivo_principal" className="text-zinc-300">Objetivo Principal</Label>
+                                        <Input
+                                            id="objetivo_principal" name="objetivo_principal"
+                                            placeholder="Ej: Mejora del pase de seguridad"
+                                            value={formData.objetivo_principal}
+                                            onChange={handleChange}
+                                            className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="tipo_tarea" className="text-zinc-300">Tipo de Tarea</Label>
+                                        <Select value={formData.tipo_tarea} onValueChange={(v) => handleSelectChange('tipo_tarea', v)}>
+                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                                <SelectValue placeholder="Selecciona tipo" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                {TIPO_TAREA.map((item) => (
+                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
                                 </div>
 
                                 <div className="space-y-2">
@@ -260,46 +300,144 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                             </CardContent>
                         </Card>
 
-                        <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
-                            <CardHeader>
-                                <CardTitle className="text-xl text-zinc-50">Parámetros</CardTitle>
-                                <CardDescription className="text-zinc-400">Configuración física y organizativa.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="duracion_minutos" className="text-zinc-300">Duración (min)</Label>
-                                    <Input
-                                        type="number" id="duracion_minutos" name="duracion_minutos"
-                                        placeholder="Ej: 15"
-                                        value={formData.duracion_minutos}
-                                        onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
-                                        min="1"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="n_jugadores" className="text-zinc-300">Nº Jugadores</Label>
-                                    <Input
-                                        type="number" id="n_jugadores" name="n_jugadores"
-                                        placeholder="Ej: 8"
-                                        value={formData.n_jugadores}
-                                        onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
-                                        min="1"
-                                    />
-                                </div>
-                                <div className="space-y-2 col-span-2">
-                                    <Label htmlFor="dimensiones" className="text-zinc-300">Dimensiones</Label>
-                                    <Input
-                                        id="dimensiones" name="dimensiones"
-                                        placeholder="Ej: 20x20m"
-                                        value={formData.dimensiones}
-                                        onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
-                                    />
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <Card className="border-zinc-800 bg-zinc-900 shadow-xl lg:col-span-2">
+                                <CardHeader>
+                                    <CardTitle className="text-xl text-zinc-50">Categorización</CardTitle>
+                                    <CardDescription className="text-zinc-400">Define los aspectos técnicos y tácticos de la tarea.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    <div className="space-y-2">
+                                        <Label className="text-zinc-300">Tipo de Trabajo</Label>
+                                        <Select value={formData.tipo_trabajo} onValueChange={(v) => handleSelectChange('tipo_trabajo', v)}>
+                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                                <SelectValue placeholder="Selecciona trabajo" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                {TIPO_TRABAJO.map((item) => (
+                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-zinc-300">Trabajo Específico</Label>
+                                        <Select value={formData.trabajo} onValueChange={(v) => handleSelectChange('trabajo', v)}>
+                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                                <SelectValue placeholder="Selecciona fase" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                {TRABAJO.map((item) => (
+                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-zinc-300">Componente del Juego</Label>
+                                        <Select value={formData.componente_juego} onValueChange={(v) => handleSelectChange('componente_juego', v)}>
+                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                                <SelectValue placeholder="Selecciona componente" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                {COMPONENTE_JUEGO.map((item) => (
+                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-zinc-300">Sistema de Juego</Label>
+                                        <Select value={formData.sistema_juego} onValueChange={(v) => handleSelectChange('sistema_juego', v)}>
+                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                                <SelectValue placeholder="Selecciona sistema" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                {SISTEMA_JUEGO.map((item) => (
+                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-zinc-300">Dificultad</Label>
+                                        <Select value={formData.dificultad} onValueChange={(v) => handleSelectChange('dificultad', v)}>
+                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                                <SelectValue placeholder="Selecciona dificultad" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                {DIFICULTAD.map((item) => (
+                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-zinc-300">Trabajo Físico Integrado</Label>
+                                        <Select value={formData.trabajo_fisico_integrado} onValueChange={(v) => handleSelectChange('trabajo_fisico_integrado', v)}>
+                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                                <SelectValue placeholder="Selecciona físico" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                {TRABAJO_FISICO_INTEGRADO.map((item) => (
+                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <div className="space-y-6 lg:col-span-1">
+                                <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                                    <CardHeader>
+                                        <CardTitle className="text-xl text-zinc-50">Parámetros</CardTitle>
+                                        <CardDescription className="text-zinc-400">Organización y tiempos.</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-5">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="duracion_minutos" className="text-zinc-300">Duración (min)</Label>
+                                            <Input
+                                                type="number" id="duracion_minutos" name="duracion_minutos"
+                                                placeholder="Ej: 15"
+                                                value={formData.duracion_minutos}
+                                                onChange={handleChange}
+                                                className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
+                                                min="1"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="n_jugadores" className="text-zinc-300">Nº Jugadores</Label>
+                                            <Select value={formData.n_jugadores} onValueChange={(v) => handleSelectChange('n_jugadores', v)}>
+                                                <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                                    <SelectValue placeholder="Nº Jug." />
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                    {NUMERO_JUGADORES.map((num) => (
+                                                        <SelectItem key={num} value={String(num)}>{num}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="dimensiones" className="text-zinc-300">Dimensiones</Label>
+                                            <Input
+                                                id="dimensiones" name="dimensiones"
+                                                placeholder="Ej: 20x20m"
+                                                value={formData.dimensiones}
+                                                onChange={handleChange}
+                                                className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
+                                            />
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Sidebar */}
