@@ -3,6 +3,19 @@ import { supabase } from '@/lib/supabase';
 import type { Macrociclo, Mesociclo, Microciclo } from '@/lib/types-planificacion';
 import { useAuth } from './useAuth';
 
+/**
+ * Helper: get the current authenticated user ID directly from Supabase session.
+ * This avoids stale closures where coach from useAuth() context is still null
+ * when the mutationFn runs.
+ */
+async function getAuthenticatedUserId(): Promise<string> {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user?.id) {
+        throw new Error('Usuario no autenticado');
+    }
+    return session.user.id;
+}
+
 // --- MACROCICLOS ---
 
 export function useMacrociclos(temporadaId?: string) {
@@ -25,13 +38,12 @@ export function useMacrociclos(temporadaId?: string) {
 
 export function useCreateMacrociclo() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
     return useMutation({
         mutationFn: async (nuevo: Omit<Macrociclo, 'id' | 'coach_id' | 'created_at'>) => {
-            if (!coach?.id) throw new Error('Usuario no autenticado');
+            const userId = await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('macrociclos')
-                .insert([{ ...nuevo, coach_id: coach.id }])
+                .insert([{ ...nuevo, coach_id: userId }])
                 .select()
                 .single();
             if (error) throw error;
@@ -93,13 +105,12 @@ export function useMesociclos(macrocicloId?: string) {
 
 export function useCreateMesociclo() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
     return useMutation({
         mutationFn: async (nuevo: Omit<Mesociclo, 'id' | 'coach_id' | 'created_at'>) => {
-            if (!coach?.id) throw new Error('Usurio no autenticado');
+            const userId = await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('mesociclos')
-                .insert([{ ...nuevo, coach_id: coach.id }])
+                .insert([{ ...nuevo, coach_id: userId }])
                 .select()
                 .single();
             if (error) throw error;
@@ -161,13 +172,12 @@ export function useMicrociclos(mesocicloId?: string) {
 
 export function useCreateMicrociclo() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
     return useMutation({
         mutationFn: async (nuevo: Omit<Microciclo, 'id' | 'coach_id' | 'created_at'>) => {
-            if (!coach?.id) throw new Error('Usuario no autenticado');
+            const userId = await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('microciclos')
-                .insert([{ ...nuevo, coach_id: coach.id }])
+                .insert([{ ...nuevo, coach_id: userId }])
                 .select()
                 .single();
             if (error) throw error;
