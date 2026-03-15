@@ -40,8 +40,16 @@ export default function RegisterPage() {
 
             if (signUpError) throw signUpError;
 
-            // If a session exists, the user is signed in (confirmation disabled)
-            // If no session, they need to confirm email (confirmation enabled)
+            // Manual fallback to ensure profile creation if trigger fails
+            if (data.user) {
+                await supabase.from('coaches').upsert({
+                    id: data.user.id,
+                    nombre: name,
+                    email: email,
+                    equipo: team || null
+                }, { onConflict: 'id' });
+            }
+
             if (data.session || data.user) {
                 toast.success('Registro completado con éxito');
                 navigate('/');

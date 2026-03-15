@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return () => subscription.unsubscribe();
     }, []);
 
-    const fetchCoachProfile = async (userId: string) => {
+    const fetchCoachProfile = async (userId: string, isRetry = false) => {
         try {
             const { data, error } = await supabase
                 .from('coaches')
@@ -65,10 +65,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
             if (error) {
                 console.error('Error fetching coach profile:', error);
+                setLoading(false);
+            } else if (!data && !isRetry) {
+                // Retry once after 1.5s if profile not found (race condition with trigger)
+                setTimeout(() => fetchCoachProfile(userId, true), 1500);
             } else {
                 setCoach(data);
+                setLoading(false);
             }
-        } finally {
+        } catch (e) {
             setLoading(false);
         }
     };
