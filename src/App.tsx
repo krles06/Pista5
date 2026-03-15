@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { Toaster } from 'sonner';
 import { AuthProvider } from '@/hooks/useAuth';
 
@@ -38,6 +39,7 @@ import JugadorDetailPage from '@/features/jugadores/JugadorDetailPage';
 // Partidos Pages
 import PartidosPage from '@/features/partidos/PartidosPage';
 import PartidoForm from '@/features/partidos/PartidoForm';
+import PartidoDetailPage from '@/features/partidos/PartidoDetailPage';
 
 // Calendario
 import CalendarioPage from '@/features/calendario/CalendarioPage';
@@ -47,73 +49,76 @@ import DashboardPage from '@/features/dashboard/DashboardPage';
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/registro" element={<RegisterPage />} />
-          <Route path="/recuperar-password" element={<ForgotPasswordPage />} />
+    <ErrorBoundary>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/registro" element={<RegisterPage />} />
+            <Route path="/recuperar-password" element={<ForgotPasswordPage />} />
 
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route element={<AppLayout><Outlet /></AppLayout>}>
-              <Route path="/" element={<DashboardPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/perfil" element={<ProfilePage />} />
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route element={<AppLayout><Outlet /></AppLayout>}>
+                <Route path="/" element={<DashboardPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/perfil" element={<ProfilePage />} />
 
-              {/* Temporadas Routes */}
-              <Route path="/temporadas" element={<TemporadasPage />} />
-              <Route path="/temporadas/nueva" element={<TemporadaForm />} />
-              <Route path="/temporadas/:id" element={<TemporadaDetailPage />} />
-              <Route path="/temporadas/:id/editar" element={<TemporadaForm />} />
+                {/* Temporadas Routes */}
+                <Route path="/temporadas" element={<TemporadasPage />} />
+                <Route path="/temporadas/nueva" element={<TemporadaForm />} />
+                <Route path="/temporadas/:id" element={<TemporadaDetailPage />} />
+                <Route path="/temporadas/:id/editar" element={<TemporadaForm />} />
 
-              {/* Ejercicios Routes */}
-              <Route path="/ejercicios" element={<EjerciciosPage esPorteros={false} />} />
-              <Route path="/ejercicios/nuevo" element={<EjercicioForm esPorteros={false} />} />
-              <Route path="/ejercicios/:id" element={<EjercicioDetailPage />} />
-              <Route path="/ejercicios/:id/editar" element={<EjercicioForm esPorteros={false} />} />
+                {/* Ejercicios Routes */}
+                <Route path="/ejercicios" element={<EjerciciosPage esPorteros={false} />} />
+                <Route path="/ejercicios/nuevo" element={<EjercicioForm esPorteros={false} />} />
+                <Route path="/ejercicios/:id" element={<EjercicioDetailPage />} />
+                <Route path="/ejercicios/:id/editar" element={<EjercicioForm esPorteros={false} />} />
 
-              {/* Porteros Routes */}
-              <Route path="/porteros" element={<EjerciciosPage esPorteros={true} />} />
-              <Route path="/porteros/nuevo" element={<EjercicioForm esPorteros={true} />} />
-              <Route path="/porteros/:id" element={<EjercicioDetailPage />} />
-              <Route path="/porteros/:id/editar" element={<EjercicioForm esPorteros={true} />} />
+                {/* Porteros Routes */}
+                <Route path="/porteros" element={<EjerciciosPage esPorteros={true} />} />
+                <Route path="/porteros/nuevo" element={<EjercicioForm esPorteros={true} />} />
+                <Route path="/porteros/:id" element={<EjercicioDetailPage />} />
+                <Route path="/porteros/:id/editar" element={<EjercicioForm esPorteros={true} />} />
 
-              {/* Planificación & Sesiones Routes */}
-              <Route path="/planificacion/:id_temp" element={<PlanificacionPage />} />
-              <Route path="/sesiones/:id_microciclo" element={<SesionesPage />} />
-              <Route path="/sesiones/nueva" element={<SesionForm />} />
-              <Route path="/sesiones/:id/ver" element={<SesionDetailPage />} />
-              <Route path="/sesiones/:id/editar" element={<SesionForm />} />
+                {/* Planificación & Sesiones Routes */}
+                <Route path="/planificacion/:id_temp" element={<PlanificacionPage />} />
+                <Route path="/sesiones/:id_microciclo" element={<SesionesPage />} />
+                <Route path="/sesiones/nueva" element={<SesionForm />} />
+                <Route path="/sesiones/:id/ver" element={<SesionDetailPage />} />
+                <Route path="/sesiones/:id/editar" element={<SesionForm />} />
 
-              {/* Jugadores Routes */}
-              <Route path="/jugadores" element={<JugadoresPage />} />
-              <Route path="/temporadas/:id_temporada/jugadores" element={<JugadoresPage />} />
-              <Route path="/jugadores/nuevo" element={<JugadorForm />} />
-              <Route path="/jugadores/:id" element={<JugadorDetailPage />} />
-              <Route path="/jugadores/:id/editar" element={<JugadorForm />} />
+                {/* Jugadores Routes */}
+                <Route path="/jugadores" element={<JugadoresPage />} />
+                <Route path="/temporadas/:id_temporada/jugadores" element={<JugadoresPage />} />
+                <Route path="/jugadores/nuevo" element={<JugadorForm />} />
+                <Route path="/jugadores/:id" element={<JugadorDetailPage />} />
+                <Route path="/jugadores/:id/editar" element={<JugadorForm />} />
 
-              {/* Partidos Routes */}
-              <Route path="/partidos" element={<PartidosPage />} />
-              <Route path="/partidos/nuevo" element={<PartidoForm />} />
-              <Route path="/partidos/:id/editar" element={<PartidoForm />} />
+                {/* Partidos Routes */}
+                <Route path="/partidos" element={<PartidosPage />} />
+                <Route path="/partidos/nuevo" element={<PartidoForm />} />
+                <Route path="/partidos/:id" element={<PartidoDetailPage />} />
+                <Route path="/partidos/:id/editar" element={<PartidoForm />} />
 
-              {/* Calendario Routes */}
-              <Route path="/calendario" element={<CalendarioPage />} />
-              <Route path="/calendario/:id_temporada" element={<CalendarioPage />} />
+                {/* Calendario Routes */}
+                <Route path="/calendario" element={<CalendarioPage />} />
+                <Route path="/calendario/:id_temporada" element={<CalendarioPage />} />
 
-              {/* Fallback internal */}
-              <Route path="*" element={<Navigate to="/" replace />} />
+                {/* Fallback internal */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Route>
             </Route>
-          </Route>
 
-          {/* Fallback global */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-        <Toaster richColors position="top-right" theme="dark" />
-      </BrowserRouter>
-    </AuthProvider>
+            {/* Fallback global */}
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+          <Toaster richColors position="top-right" theme="dark" />
+        </BrowserRouter>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
