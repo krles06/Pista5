@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { getAuthenticatedUserId } from '@/lib/utils';
 import type { Temporada } from '@/lib/types';
 import { useAuth } from './useAuth';
 
@@ -51,15 +52,14 @@ export function useTemporada(id?: string) {
 // Create new season
 export function useCreateTemporada() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async (newTemporada: Omit<Temporada, 'id' | 'coach_id' | 'created_at'>) => {
-            if (!coach?.id) throw new Error('Usuario no autenticado');
+            const userId = await getAuthenticatedUserId();
 
             const { data, error } = await supabase
                 .from('temporadas')
-                .insert([{ ...newTemporada, coach_id: coach.id }])
+                .insert([{ ...newTemporada, coach_id: userId }])
                 .select()
                 .single();
 
@@ -78,6 +78,7 @@ export function useUpdateTemporada() {
 
     return useMutation({
         mutationFn: async ({ id, updates }: { id: string; updates: Partial<Temporada> }) => {
+            await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('temporadas')
                 .update(updates)
@@ -101,6 +102,7 @@ export function useDeleteTemporada() {
 
     return useMutation({
         mutationFn: async (id: string) => {
+            await getAuthenticatedUserId();
             const { error } = await supabase
                 .from('temporadas')
                 .delete()

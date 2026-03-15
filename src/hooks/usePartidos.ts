@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { getAuthenticatedUserId } from '@/lib/utils';
 import { useAuth } from './useAuth';
 import type { Partido, PartidoInsert, PartidoUpdate, PartidoWithDetalles, AlineacionUpdate } from '@/lib/types-partidos';
 
@@ -55,16 +56,15 @@ export function usePartido(id?: string) {
 
 export function useCreatePartido() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async ({ partido, alineacion }: { partido: PartidoInsert, alineacion: AlineacionUpdate[] }) => {
-            if (!coach) throw new Error('No coach found');
+            const userId = await getAuthenticatedUserId();
 
             // 1. Insert partido
             const { data: newPartido, error: pError } = await supabase
                 .from('calendario')
-                .insert([{ ...partido, coach_id: coach.id }])
+                .insert([{ ...partido, coach_id: userId }])
                 .select()
                 .single();
 
@@ -96,18 +96,17 @@ export function useCreatePartido() {
 
 export function useUpdatePartido() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async ({ id, updates, alineacion }: { id: string, updates: PartidoUpdate, alineacion?: AlineacionUpdate[] }) => {
-            if (!coach) throw new Error('No coach found');
+            const userId = await getAuthenticatedUserId();
 
             // 1. Update partido
             const { error: pError } = await supabase
                 .from('calendario')
                 .update(updates)
                 .eq('id', id)
-                .eq('coach_id', coach.id);
+                .eq('coach_id', userId);
 
             if (pError) throw pError;
 
@@ -146,16 +145,15 @@ export function useUpdatePartido() {
 
 export function useDeletePartido() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async (id: string) => {
-            if (!coach) throw new Error('No coach found');
+            const userId = await getAuthenticatedUserId();
             const { error } = await supabase
                 .from('calendario')
                 .delete()
                 .eq('id', id)
-                .eq('coach_id', coach.id);
+                .eq('coach_id', userId);
 
             if (error) throw error;
         },

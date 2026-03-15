@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { getAuthenticatedUserId } from '@/lib/utils';
 import type { Jugador, JugadorInsert, JugadorUpdate } from '@/lib/types-jugadores';
 import { useAuth } from './useAuth';
 
@@ -83,7 +84,6 @@ export function useJugador(id?: string) {
 // Create player
 export function useCreateJugador() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async ({
@@ -93,16 +93,16 @@ export function useCreateJugador() {
             jugador: JugadorInsert;
             photoFile?: File
         }) => {
-            if (!coach?.id) throw new Error('Usuario no autenticado');
+            const userId = await getAuthenticatedUserId();
 
             let url_foto = null;
             if (photoFile) {
-                url_foto = await uploadPhoto(photoFile, coach.id);
+                url_foto = await uploadPhoto(photoFile, userId);
             }
 
             const { data, error } = await supabase
                 .from('jugadores')
-                .insert([{ ...jugador, coach_id: coach.id, url_foto }])
+                .insert([{ ...jugador, coach_id: userId, url_foto }])
                 .select()
                 .single();
 
@@ -118,7 +118,6 @@ export function useCreateJugador() {
 // Update player
 export function useUpdateJugador() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async ({
@@ -130,12 +129,12 @@ export function useUpdateJugador() {
             updates: JugadorUpdate;
             photoFile?: File
         }) => {
-            if (!coach?.id) throw new Error('Usuario no autenticado');
+            const userId = await getAuthenticatedUserId();
 
             let url_foto = (updates as any).url_foto;
 
             if (photoFile) {
-                url_foto = await uploadPhoto(photoFile, coach.id);
+                url_foto = await uploadPhoto(photoFile, userId);
             }
 
             const { data, error } = await supabase
@@ -161,6 +160,7 @@ export function useDeleteJugador() {
 
     return useMutation({
         mutationFn: async (id: string) => {
+            await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('jugadores')
                 .delete()

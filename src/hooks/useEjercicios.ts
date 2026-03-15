@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { getAuthenticatedUserId } from '@/lib/utils';
 import type { Ejercicio } from '@/lib/types-ejercicios';
 import { useAuth } from './useAuth';
 
@@ -70,7 +71,6 @@ const uploadImage = async (file: File, coachId: string): Promise<string> => {
 // Create exercise
 export function useCreateEjercicio() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async ({
@@ -80,17 +80,17 @@ export function useCreateEjercicio() {
             ejercicio: Omit<Ejercicio, 'id' | 'coach_id' | 'created_at' | 'updated_at'>;
             imageFile?: File
         }) => {
-            if (!coach?.id) throw new Error('Usuario no autenticado');
+            const userId = await getAuthenticatedUserId();
 
             let url_imagen = ejercicio.url_imagen;
 
             if (imageFile) {
-                url_imagen = await uploadImage(imageFile, coach.id);
+                url_imagen = await uploadImage(imageFile, userId);
             }
 
             const { data, error } = await supabase
                 .from('ejercicios')
-                .insert([{ ...ejercicio, coach_id: coach.id, url_imagen }])
+                .insert([{ ...ejercicio, coach_id: userId, url_imagen }])
                 .select()
                 .single();
 
@@ -106,7 +106,6 @@ export function useCreateEjercicio() {
 // Update exercise
 export function useUpdateEjercicio() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async ({
@@ -118,12 +117,12 @@ export function useUpdateEjercicio() {
             updates: Partial<Ejercicio>;
             imageFile?: File
         }) => {
-            if (!coach?.id) throw new Error('Usuario no autenticado');
+            const userId = await getAuthenticatedUserId();
 
             let url_imagen = updates.url_imagen;
 
             if (imageFile) {
-                url_imagen = await uploadImage(imageFile, coach.id);
+                url_imagen = await uploadImage(imageFile, userId);
             }
 
             const { data, error } = await supabase
@@ -149,6 +148,7 @@ export function useDeleteEjercicio() {
 
     return useMutation({
         mutationFn: async (id: string) => {
+            await getAuthenticatedUserId();
             // Opcional: Eliminar la imagen del storage si existe (requiere extraer el path de la URL pública)
             const { data, error } = await supabase
                 .from('ejercicios')

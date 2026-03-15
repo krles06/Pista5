@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { getAuthenticatedUserId } from '@/lib/utils';
 import type { Sesion, SesionWithEjercicios, SesionEjercicioInsert } from '@/lib/types-sesiones';
 import { useAuth } from './useAuth';
 
@@ -98,7 +99,6 @@ export function useSesion(id?: string) {
 // Create session and optionally its exercises
 export function useCreateSesion() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async ({
@@ -108,12 +108,12 @@ export function useCreateSesion() {
             sesion: Omit<Sesion, 'id' | 'coach_id' | 'created_at' | 'updated_at'>;
             ejerciciosIds?: string[]
         }) => {
-            if (!coach?.id) throw new Error('Usuario no autenticado');
+            const userId = await getAuthenticatedUserId();
 
             // 1. Insert session
             const { data: newSession, error: sessionError } = await supabase
                 .from('sesiones')
-                .insert([{ ...sesion, coach_id: coach.id }])
+                .insert([{ ...sesion, coach_id: userId }])
                 .select()
                 .single();
 
@@ -145,7 +145,6 @@ export function useCreateSesion() {
 // Update session and its set of exercises
 export function useUpdateSesion() {
     const queryClient = useQueryClient();
-    const { coach } = useAuth();
 
     return useMutation({
         mutationFn: async ({
@@ -157,7 +156,7 @@ export function useUpdateSesion() {
             updates: Partial<Sesion>;
             ejerciciosIds?: string[]
         }) => {
-            if (!coach?.id) throw new Error('Usuario no autenticado');
+            await getAuthenticatedUserId(); // ensure user is authenticated
 
             // 1. Update session basic data
             const { data: updatedSession, error: sessionError } = await supabase
@@ -210,6 +209,7 @@ export function useDeleteSesion() {
 
     return useMutation({
         mutationFn: async (id: string) => {
+            await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('sesiones')
                 .delete()
