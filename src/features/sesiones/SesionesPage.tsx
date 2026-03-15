@@ -75,8 +75,29 @@ export default function SesionesPage() {
 
     if (loadingSessions || loadingMicro) {
         return (
-            <div className="flex items-center justify-center p-12">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent"></div>
+            <div className="space-y-6 max-w-5xl mx-auto pb-12 animate-pulse">
+                <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 rounded-lg bg-zinc-800 shrink-0" />
+                    <div className="flex-1 space-y-2">
+                        <div className="h-4 w-24 bg-zinc-800 rounded" />
+                        <div className="h-8 w-64 bg-zinc-800 rounded" />
+                    </div>
+                    <div className="h-10 w-32 bg-zinc-800 rounded-lg" />
+                </div>
+
+                <div className="h-16 w-full bg-zinc-900/50 border border-zinc-800 rounded-xl" />
+
+                <div className="grid gap-4">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="h-20 w-full bg-zinc-900 border border-zinc-800 rounded-xl flex items-center p-4">
+                            <div className="h-12 w-12 rounded-xl bg-zinc-800 shrink-0" />
+                            <div className="ml-4 flex-1 space-y-2">
+                                <div className="h-3 w-20 bg-zinc-800 rounded" />
+                                <div className="h-5 w-48 bg-zinc-800 rounded" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }

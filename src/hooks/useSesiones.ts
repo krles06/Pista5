@@ -4,7 +4,7 @@ import { getAuthenticatedUserId } from '@/lib/utils';
 import type { Sesion, SesionWithEjercicios, SesionEjercicioInsert } from '@/lib/types-sesiones';
 import { useAuth } from './useAuth';
 
-// Fetch all sessions for a specific microcycle
+// Fetch all sessions for a specific microcycle with their exercises
 export function useSesiones(microcicloId?: string) {
     const { session } = useAuth();
 
@@ -12,16 +12,25 @@ export function useSesiones(microcicloId?: string) {
         queryKey: ['sesiones', microcicloId, session?.user?.id],
         queryFn: async () => {
             if (!microcicloId) return [];
-            await getAuthenticatedUserId(); // ensure auth
+            const userId = await getAuthenticatedUserId();
 
             const { data, error } = await supabase
                 .from('sesiones')
-                .select('*')
+                .select(`
+                    *,
+                    ejercicios:sesiones_ejercicios (
+                        id,
+                        id_ejercicio,
+                        orden,
+                        ejercicio:ejercicios (*)
+                    )
+                `)
                 .eq('id_microciclo', microcicloId)
+                .eq('coach_id', userId)
                 .order('fecha', { ascending: true });
 
             if (error) throw error;
-            return data as Sesion[];
+            return data as SesionWithEjercicios[];
         },
         enabled: !!microcicloId && !!session,
     });
@@ -38,7 +47,15 @@ export function useAllSesiones(temporadaId?: string) {
 
             let query = supabase
                 .from('sesiones')
-                .select('*')
+                .select(`
+                    *,
+                    ejercicios:sesiones_ejercicios (
+                        id,
+                        id_ejercicio,
+                        orden,
+                        ejercicio:ejercicios (*)
+                    )
+                `)
                 .eq('coach_id', userId)
                 .order('fecha', { ascending: true });
 
@@ -49,7 +66,7 @@ export function useAllSesiones(temporadaId?: string) {
             const { data, error } = await query;
 
             if (error) throw error;
-            return data as Sesion[];
+            return data as SesionWithEjercicios[];
         },
         enabled: !!session,
     });
@@ -65,34 +82,25 @@ export function useSesion(id?: string) {
             if (!id) return null;
             const userId = await getAuthenticatedUserId();
 
-            // Get session data
-            const { data: sessionData, error: sessionError } = await supabase
+            // Get session data with joined exercises in ONE query
+            const { data, error } = await supabase
                 .from('sesiones')
-                .select('*')
+                .select(`
+                    *,
+                    ejercicios:sesiones_ejercicios (
+                        id,
+                        id_ejercicio,
+                        orden,
+                        ejercicio:ejercicios (*)
+                    )
+                `)
                 .eq('id', id)
                 .eq('coach_id', userId)
                 .single();
 
-            if (sessionError) throw sessionError;
+            if (error) throw error;
 
-            // Get exercises associated with this session
-            const { data: exercisesData, error: exercisesError } = await supabase
-                .from('sesiones_ejercicios')
-                .select(`
-          id,
-          id_ejercicio,
-          orden,
-          ejercicio:ejercicios(*)
-        `)
-                .eq('id_sesion', id)
-                .order('orden', { ascending: true });
-
-            if (exercisesError) throw exercisesError;
-
-            return {
-                ...sessionData,
-                ejercicios: exercisesData,
-            } as SesionWithEjercicios;
+            return data as SesionWithEjercicios;
         },
         enabled: !!id && !!session,
     });
@@ -140,6 +148,7 @@ export function useCreateSesion() {
         },
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: ['sesiones', variables.sesion.id_microciclo] });
+            queryClient.invalidateQueries({ queryKey: ['sesiones-all'] });
         },
     });
 }
@@ -201,6 +210,7 @@ export function useUpdateSesion() {
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['sesiones', data.id_microciclo] });
             queryClient.invalidateQueries({ queryKey: ['sesion', data.id] });
+            queryClient.invalidateQueries({ queryKey: ['sesiones-all'] });
         },
     });
 }
@@ -225,6 +235,7 @@ export function useDeleteSesion() {
         onSuccess: (data) => {
             if (data) {
                 queryClient.invalidateQueries({ queryKey: ['sesiones', data.id_microciclo] });
+                queryClient.invalidateQueries({ queryKey: ['sesiones-all'] });
             }
         },
     });
