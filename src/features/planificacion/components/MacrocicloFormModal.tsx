@@ -80,7 +80,7 @@ export default function MacrocicloFormModal({ isOpen, onClose, temporada, macroc
             }
             onClose();
         } catch (e: any) {
-            toast.error('Error al guardar: ' + e.message);
+            toast.error('Error al guardar: ' + (e?.message || JSON.stringify(e)));
         }
     };
 

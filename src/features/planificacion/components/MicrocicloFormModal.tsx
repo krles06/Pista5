@@ -77,7 +77,7 @@ export default function MicrocicloFormModal({ isOpen, onClose, mesociclo, microc
             }
             onClose();
         } catch (e: any) {
-            toast.error('Error al guardar: ' + e.message);
+            toast.error('Error al guardar: ' + (e?.message || JSON.stringify(e)));
         }
     };
 

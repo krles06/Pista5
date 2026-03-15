@@ -73,7 +73,7 @@ export default function MesocicloFormModal({ isOpen, onClose, macrociclo, mesoci
             }
             onClose();
         } catch (e: any) {
-            toast.error('Error al guardar: ' + e.message);
+            toast.error('Error al guardar: ' + (e?.message || JSON.stringify(e)));
         }
     };
 
