@@ -232,3 +232,24 @@ export function useMicrociclo(id?: string) {
         enabled: !!id && !!session?.user?.id,
     });
 }
+export function useActiveMicrociclo() {
+    const { session } = useAuth();
+    return useQuery({
+        queryKey: ['activeMicrociclo', session?.user?.id],
+        queryFn: async () => {
+            const userId = await getAuthenticatedUserId();
+            const today = new Date().toISOString().split('T')[0];
+            const { data, error } = await supabase
+                .from('microciclos')
+                .select('*')
+                .eq('coach_id', userId)
+                .lte('fecha_inicio', today)
+                .gte('fecha_fin', today)
+                .maybeSingle();
+
+            if (error) throw error;
+            return data as Microciclo | null;
+        },
+        enabled: !!session?.user?.id,
+    });
+}

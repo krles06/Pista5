@@ -13,11 +13,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { useJugadores } from '@/hooks/useJugadores';
 import { usePartidos } from '@/hooks/usePartidos';
 import { useEjercicios } from '@/hooks/useEjercicios';
+import { useActiveMicrociclo } from '@/hooks/usePlanificacion';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Plus } from 'lucide-react';
 
 export default function DashboardPage() {
     const { coach } = useAuth();
@@ -27,12 +30,21 @@ export default function DashboardPage() {
     const { data: jugadores } = useJugadores();
     const { data: partidos } = usePartidos();
     const { data: ejercicios } = useEjercicios();
+    const { data: activeMicro, isLoading: loadingActiveMicro } = useActiveMicrociclo();
     // We don't have a global sessions hook yet, usually they are by microciclo.
     // For now we'll just show what we have.
 
     const lastPartido = partidos?.[0];
     const nJugadores = jugadores?.length || 0;
     const nEjercicios = ejercicios?.length || 0;
+
+    const handleNewSession = () => {
+        if (!activeMicro) {
+            toast.error('No hay ningún microciclo activo para hoy. Crea uno primero en Planificación.');
+            return;
+        }
+        navigate(`/sesiones/nueva?microciclo=${activeMicro.id}`);
+    };
 
     return (
         <div className="space-y-10 max-w-7xl mx-auto pb-12">
@@ -172,6 +184,20 @@ export default function DashboardPage() {
                         Accesos Rápidos
                     </h2>
                     <div className="grid gap-4">
+                        <button
+                            onClick={handleNewSession}
+                            disabled={loadingActiveMicro}
+                            className="flex items-center gap-4 p-4 rounded-2xl bg-emerald-600 border border-emerald-500 hover:bg-emerald-700 transition-all text-left group shadow-lg shadow-emerald-900/20"
+                        >
+                            <div className="h-10 w-10 bg-white/20 rounded-xl flex items-center justify-center border border-white/20 group-hover:bg-white/30 transition-all shrink-0">
+                                <Plus className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="min-w-0">
+                                <p className="font-bold text-white text-sm italic underline-offset-4 decoration-white/30 group-hover:underline">NUEVA SESIÓN</p>
+                                <p className="text-[10px] text-emerald-100 font-bold uppercase tracking-tight truncate">Crea tu entrenamiento</p>
+                            </div>
+                            <ArrowRight className="h-4 w-4 ml-auto text-white/50 group-hover:text-white transition-colors" />
+                        </button>
                         <QuickAction
                             title="Calendario"
                             desc="Agenda global"
