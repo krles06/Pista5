@@ -82,16 +82,25 @@ export function useCreateEjercicio() {
             imageFile?: File
         }) => {
             const userId = await getAuthenticatedUserId();
-
             let url_imagen = ejercicio.url_imagen;
 
             if (imageFile) {
                 url_imagen = await uploadImage(imageFile, userId);
             }
 
+            const dataToInsert = {
+                ...ejercicio,
+                coach_id: userId,
+            };
+
+            if (url_imagen) {
+                dataToInsert.url_imagen = url_imagen;
+                (dataToInsert as any).fichero_imagen = url_imagen;
+            }
+
             const { data, error } = await supabase
                 .from('ejercicios')
-                .insert([{ ...ejercicio, coach_id: userId, url_imagen }])
+                .insert([dataToInsert])
                 .select()
                 .single();
 
@@ -119,16 +128,25 @@ export function useUpdateEjercicio() {
             imageFile?: File
         }) => {
             const userId = await getAuthenticatedUserId();
-
             let url_imagen = updates.url_imagen;
 
             if (imageFile) {
                 url_imagen = await uploadImage(imageFile, userId);
             }
 
+            const dataToUpdate: any = {
+                ...updates,
+                updated_at: new Date().toISOString()
+            };
+
+            if (url_imagen !== undefined) {
+                dataToUpdate.url_imagen = url_imagen;
+                dataToUpdate.fichero_imagen = url_imagen;
+            }
+
             const { data, error } = await supabase
                 .from('ejercicios')
-                .update({ ...updates, url_imagen, updated_at: new Date().toISOString() })
+                .update(dataToUpdate)
                 .eq('id', id)
                 .select()
                 .single();

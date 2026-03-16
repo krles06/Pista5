@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import { ArrowLeft, Upload, Image as ImageIcon, Save, X } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
+import { ImageUpload } from '@/components/shared/ImageUpload';
 
 import { useCreateEjercicio, useUpdateEjercicio, useEjercicio } from '@/hooks/useEjercicios';
 
@@ -44,8 +45,6 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
     const { id } = useParams<{ id: string }>();
     const isEditing = !!id;
     const navigate = useNavigate();
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
     const { data: ejercicio, isLoading: isFetching } = useEjercicio(id);
     const createMutation = useCreateEjercicio();
     const updateMutation = useUpdateEjercicio();
@@ -98,8 +97,8 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                 url_video: ejercicio.url_video || '',
                 es_portero: ejercicio.es_portero,
             });
-            if (ejercicio.url_imagen) {
-                setImagePreview(ejercicio.url_imagen);
+            if (ejercicio.url_imagen || ejercicio.fichero_imagen) {
+                setImagePreview(ejercicio.url_imagen || ejercicio.fichero_imagen);
             }
         }
     }, [isEditing, ejercicio]);
@@ -113,24 +112,16 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
         setFormData((prev: any) => ({ ...prev, [name]: value }));
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setImagePreview(e.target?.result as string);
-            };
-            reader.readAsDataURL(file);
+    const handleImageChange = (file: File | null) => {
+        setImageFile(file);
+        if (!file) {
+            setImagePreview(null);
         }
     };
 
     const clearImage = () => {
         setImageFile(null);
         setImagePreview(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -443,43 +434,12 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                     {/* Sidebar */}
                     <div className="space-y-6">
                         <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden">
-                            <CardHeader className="bg-zinc-950/50 border-b border-zinc-800">
-                                <CardTitle className="text-lg text-zinc-50 flex items-center gap-2">
-                                    <ImageIcon className="h-5 w-5 text-emerald-500" />
-                                    Imagen Referencia
-                                </CardTitle>
-                            </CardHeader>
                             <CardContent className="p-4 space-y-4">
-                                <div className="relative group rounded-xl overflow-hidden border-2 border-dashed border-zinc-800 bg-zinc-950 aspect-[4/3] flex items-center justify-center transition-colors hover:border-emerald-500/50">
-                                    {imagePreview ? (
-                                        <>
-                                            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm">
-                                                <Button type="button" size="sm" variant="secondary" onClick={() => fileInputRef.current?.click()} className="bg-zinc-200 text-zinc-900 hover:bg-white text-xs">
-                                                    Cambiar
-                                                </Button>
-                                                <Button type="button" size="icon" variant="destructive" onClick={clearImage} className="h-8 w-8">
-                                                    <X className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <div className="text-center p-4 cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                                            <div className="mx-auto w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center mb-3 group-hover:bg-emerald-500/10 group-hover:text-emerald-500 transition-colors">
-                                                <Upload className="h-5 w-5 text-zinc-500 group-hover:text-emerald-500" />
-                                            </div>
-                                            <p className="text-sm font-medium text-zinc-300">Subir imagen</p>
-                                            <p className="text-xs text-zinc-500 mt-1 px-4">Arrastra o haz clic. JPG, PNG (Max 5MB)</p>
-                                        </div>
-                                    )}
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        onChange={handleImageChange}
-                                        accept="image/*"
-                                        className="hidden"
-                                    />
-                                </div>
+                                <ImageUpload
+                                    value={imagePreview}
+                                    onChange={handleImageChange}
+                                    onRemove={clearImage}
+                                />
 
                                 <div className="space-y-2 pt-2 border-t border-zinc-800">
                                     <Label htmlFor="url_video" className="text-zinc-300 text-sm">URL Vídeo / Animación</Label>

@@ -118,9 +118,9 @@ export default function EjercicioDetailPage() {
                 <div className="lg:col-span-2 space-y-6 shrink-0">
 
                     <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden rounded-2xl">
-                        {ejercicio.url_imagen ? (
+                        {ejercicio.url_imagen || ejercicio.fichero_imagen ? (
                             <img
-                                src={ejercicio.url_imagen}
+                                src={ejercicio.url_imagen || ejercicio.fichero_imagen || ''}
                                 alt={ejercicio.titulo}
                                 className="w-full aspect-video object-contain bg-zinc-950"
                             />

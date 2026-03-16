@@ -19,6 +19,7 @@ export interface Ejercicio {
     dificultad: string | null;
     trabajo_fisico_integrado: string | null;
     url_imagen: string | null;
+    fichero_imagen: string | null;
     url_video: string | null;
     es_portero: boolean;
     created_at: string;

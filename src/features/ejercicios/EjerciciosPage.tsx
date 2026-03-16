@@ -301,9 +301,9 @@ function EjercicioCard({
             onClick={onClick}
         >
             <div className="aspect-video w-full bg-zinc-950 relative overflow-hidden border-b border-zinc-800">
-                {ejercicio.url_imagen ? (
+                {ejercicio.url_imagen || ejercicio.fichero_imagen ? (
                     <img
-                        src={ejercicio.url_imagen}
+                        src={ejercicio.url_imagen || ejercicio.fichero_imagen || ''}
                         alt={ejercicio.titulo}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />

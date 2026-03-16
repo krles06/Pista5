@@ -113,11 +113,20 @@ export default function JugadorForm() {
         }
 
         try {
+            const payload = {
+                ...formData,
+                fecha_nacimiento: formData.fecha_nacimiento || null,
+                apellidos: formData.apellidos || null,
+                telefono: formData.telefono || null,
+                email: formData.email || null,
+                notas: formData.notas || null,
+            };
+
             if (isEditing && id) {
-                await updateMutation.mutateAsync({ id, updates: formData, photoFile: photoFile || undefined });
+                await updateMutation.mutateAsync({ id, updates: payload, photoFile: photoFile || undefined });
                 toast.success('Perfil actualizado');
             } else {
-                await createMutation.mutateAsync({ jugador: formData, photoFile: photoFile || undefined });
+                await createMutation.mutateAsync({ jugador: payload, photoFile: photoFile || undefined });
                 toast.success('Jugador añadido');
             }
             navigate(formData.id_temporada ? `/temporadas/${formData.id_temporada}/jugadores` : '/jugadores');
