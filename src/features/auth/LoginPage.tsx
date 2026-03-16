@@ -118,9 +118,15 @@ export default function LoginPage() {
                     </form>
                 </Card>
 
-                <p className="text-center text-[10px] text-zinc-600 uppercase tracking-[0.2em] font-bold">
-                    © {new Date().getFullYear()} Pista5 Performance System
-                </p>
+                <div className="flex flex-col items-center gap-4">
+                    <p className="text-center text-[10px] text-zinc-600 uppercase tracking-[0.2em] font-bold">
+                        © {new Date().getFullYear()} Pista5 Performance System
+                    </p>
+                    <div className="flex items-center gap-6 text-[10px] text-zinc-500 uppercase tracking-widest font-bold">
+                        <Link to="/contacto" className="hover:text-emerald-500 transition-colors">Contacto</Link>
+                        <Link to="/terminos" className="hover:text-emerald-500 transition-colors">Términos</Link>
+                    </div>
+                </div>
             </div>
         </div>
     );

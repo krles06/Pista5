@@ -47,6 +47,10 @@ import CalendarioPage from '@/features/calendario/CalendarioPage';
 // Dashboard
 import DashboardPage from '@/features/dashboard/DashboardPage';
 
+// Static Pages
+import ContactoPage from '@/features/contacto/ContactoPage';
+import TerminosPage from '@/features/terminos/TerminosPage';
+
 function App() {
   return (
     <ErrorBoundary>
@@ -57,6 +61,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/registro" element={<RegisterPage />} />
             <Route path="/recuperar-password" element={<ForgotPasswordPage />} />
+            <Route path="/contacto" element={<ContactoPage />} />
+            <Route path="/terminos" element={<TerminosPage />} />
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>

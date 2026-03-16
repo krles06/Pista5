@@ -12,7 +12,9 @@ import {
     Target,
     Calendar,
     CalendarDays,
-    Trophy
+    Trophy,
+    Phone,
+    FileText
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -37,6 +39,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
         { name: 'Partidos', href: '/partidos', icon: Trophy },
         { name: 'Jugadores', href: '/jugadores', icon: Users },
         { name: 'Ajustes', href: '/profile', icon: Settings },
+    ];
+
+    const footerItems = [
+        { name: 'Contacto', href: '/contacto', icon: Phone },
+        { name: 'Términos', href: '/terminos', icon: FileText },
     ];
 
     const handleSignOut = async () => {
@@ -92,6 +99,25 @@ export default function AppLayout({ children }: AppLayoutProps) {
                             );
                         })}
                     </nav>
+
+                    <nav className="mt-8 pt-8 border-t border-zinc-900/50 space-y-1">
+                        {footerItems.map((item) => {
+                            const isActive = location.pathname === item.href;
+                            return (
+                                <Link
+                                    key={item.href}
+                                    to={item.href}
+                                    className={`flex items-center gap-3 px-4 py-2 rounded-xl transition-all duration-200 group ${isActive
+                                        ? 'text-emerald-500'
+                                        : 'text-zinc-500 hover:text-zinc-300'
+                                        }`}
+                                >
+                                    <item.icon className="h-4 w-4" />
+                                    <span className="text-sm font-medium">{item.name}</span>
+                                </Link>
+                            );
+                        })}
+                    </nav>
                 </div>
 
                 <div className="mt-auto p-6">
@@ -133,7 +159,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                         </Button>
                     </div>
 
-                    <nav className="space-y-2 mb-auto">
+                    <nav className="space-y-2 mb-8">
                         {navItems.map((item) => (
                             <Link
                                 key={item.href}
@@ -144,6 +170,19 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                     }`}
                             >
                                 <item.icon className="h-6 w-6" />
+                                {item.name}
+                            </Link>
+                        ))}
+                    </nav>
+
+                    <nav className="space-y-2 mb-auto border-t border-zinc-900/50 pt-4">
+                        {footerItems.map((item) => (
+                            <Link
+                                key={item.href}
+                                to={item.href}
+                                className={`flex items-center gap-4 px-6 py-3 rounded-2xl text-zinc-500 hover:text-zinc-300 ${location.pathname === item.href ? 'text-emerald-500' : ''}`}
+                            >
+                                <item.icon className="h-5 w-5" />
                                 {item.name}
                             </Link>
                         ))}
