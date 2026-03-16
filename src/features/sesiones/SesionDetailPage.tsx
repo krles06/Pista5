@@ -35,6 +35,9 @@ export default function SesionDetailPage() {
         try {
             setExportingPDF(true);
             const { data: { session } } = await supabase.auth.getSession();
+            // Refresh session first to ensure token is valid
+            const { data: { session: refreshed } } = await supabase.auth.refreshSession();
+            const token = refreshed?.access_token ?? session?.access_token;
 
             const response = await fetch(
                 `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generar-pdf-sesion`,
@@ -42,7 +45,8 @@ export default function SesionDetailPage() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${session?.access_token}`,
+                        'Authorization': `Bearer ${token}`,
+                        'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
                     },
                     body: JSON.stringify({ sesion_id: sesion.id }),
                 }
