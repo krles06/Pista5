@@ -17,7 +17,6 @@ import { useEjercicios } from '@/hooks/useEjercicios';
 import { useActiveMicrociclo, useMacrociclos, useMesociclos, useMicrociclos } from '@/hooks/usePlanificacion';
 import { useTemporadas } from '@/hooks/useTemporadas';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
