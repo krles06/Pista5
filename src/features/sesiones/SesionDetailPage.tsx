@@ -49,7 +49,8 @@ export default function SesionDetailPage() {
             );
 
             if (!response.ok) {
-                throw new Error('Error al generar el PDF');
+                const errorText = await response.text();
+                throw new Error(`Error ${response.status}: ${errorText}`);
             }
 
             const html = await response.text();
@@ -58,7 +59,7 @@ export default function SesionDetailPage() {
             window.open(url, '_blank');
         } catch (error: any) {
             console.error(error);
-            toast.error('No se pudo generar el PDF. Inténtalo de nuevo.');
+            toast.error(error.message || 'No se pudo generar el PDF. Inténtalo de nuevo.');
         } finally {
             setExportingPDF(false);
         }
