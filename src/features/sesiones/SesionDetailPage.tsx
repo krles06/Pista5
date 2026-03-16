@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { toast } from 'sonner';
+import { supabase } from '@/lib/supabase';
 import {
     ArrowLeft,
     Clock,
@@ -14,7 +17,6 @@ import {
 } from 'lucide-react';
 
 import { useSesion } from '@/hooks/useSesiones';
-import { generateSessionPDF } from '@/lib/pdf-utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -25,6 +27,42 @@ export default function SesionDetailPage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { data: sesion, isLoading } = useSesion(id);
+    const [exportingPDF, setExportingPDF] = useState(false);
+
+    const handleExportPDF = async () => {
+        if (!sesion) return;
+
+        try {
+            setExportingPDF(true);
+            const { data: { session } } = await supabase.auth.getSession();
+
+            const response = await fetch(
+                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generar-pdf-sesion`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session?.access_token}`,
+                    },
+                    body: JSON.stringify({ sesion_id: sesion.id }),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Error al generar el PDF');
+            }
+
+            const html = await response.text();
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        } catch (error: any) {
+            console.error(error);
+            toast.error('No se pudo generar el PDF. Inténtalo de nuevo.');
+        } finally {
+            setExportingPDF(false);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -83,9 +121,15 @@ export default function SesionDetailPage() {
                     </Button>
                     <Button
                         className="bg-zinc-100 text-zinc-900 hover:bg-white font-medium"
-                        onClick={() => generateSessionPDF(sesion)}
+                        onClick={handleExportPDF}
+                        disabled={exportingPDF}
                     >
-                        <FileText className="h-4 w-4 mr-2" /> Exportar PDF
+                        {exportingPDF ? (
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-900 border-t-transparent mr-2" />
+                        ) : (
+                            <FileText className="h-4 w-4 mr-2" />
+                        )}
+                        {exportingPDF ? 'Generando...' : 'Exportar PDF'}
                     </Button>
                 </div>
             </div>
