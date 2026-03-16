@@ -241,14 +241,23 @@ export function useActiveMicrociclo() {
             const today = new Date().toISOString().split('T')[0];
             const { data, error } = await supabase
                 .from('microciclos')
-                .select('*')
+                .select(`
+                    *,
+                    mesociclos!inner (
+                        *,
+                        macrociclos!inner (
+                            *,
+                            id_temporada
+                        )
+                    )
+                `)
                 .eq('coach_id', userId)
                 .lte('fecha_inicio', today)
                 .gte('fecha_fin', today)
                 .maybeSingle();
 
             if (error) throw error;
-            return data as Microciclo | null;
+            return data as any;
         },
         enabled: !!session?.user?.id,
     });

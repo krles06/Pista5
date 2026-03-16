@@ -7,20 +7,37 @@ import {
     ArrowRight,
     TrendingUp,
     Target,
-    CalendarDays
+    CalendarDays,
+    Plus
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useJugadores } from '@/hooks/useJugadores';
 import { usePartidos } from '@/hooks/usePartidos';
 import { useEjercicios } from '@/hooks/useEjercicios';
-import { useActiveMicrociclo } from '@/hooks/usePlanificacion';
+import { useActiveMicrociclo, useMacrociclos, useMesociclos, useMicrociclos } from '@/hooks/usePlanificacion';
+import { useTemporadas } from '@/hooks/useTemporadas';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from '@/components/ui/dialog';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Plus } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function DashboardPage() {
     const { coach } = useAuth();
@@ -31,19 +48,43 @@ export default function DashboardPage() {
     const { data: partidos } = usePartidos();
     const { data: ejercicios } = useEjercicios();
     const { data: activeMicro, isLoading: loadingActiveMicro } = useActiveMicrociclo();
-    // We don't have a global sessions hook yet, usually they are by microciclo.
-    // For now we'll just show what we have.
+
+    // Modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selTemporada, setSelTemporada] = useState<string | null>(null);
+    const [selMacrociclo, setSelMacrociclo] = useState<string | null>(null);
+    const [selMesociclo, setSelMesociclo] = useState<string | null>(null);
+    const [selMicrociclo, setSelMicrociclo] = useState<string | null>(null);
+
+    // Filtered data for selectors
+    const { data: temporadas } = useTemporadas();
+    const { data: macrociclos } = useMacrociclos(selTemporada || undefined);
+    const { data: mesociclos } = useMesociclos(selMacrociclo || undefined);
+    const { data: microciclos } = useMicrociclos(selMesociclo || undefined);
+
+    // Auto-select active microcycle if exists
+    useEffect(() => {
+        if (activeMicro && isModalOpen) {
+            const tempId = activeMicro.mesociclos?.macrociclos?.id_temporada;
+            const macroId = activeMicro.mesociclos?.id_macrociclo;
+            const mesoId = activeMicro.id_mesociclo;
+            const microId = activeMicro.id;
+
+            if (tempId) setSelTemporada(tempId);
+            if (macroId) setSelMacrociclo(macroId);
+            if (mesoId) setSelMesociclo(mesoId);
+            if (microId) setSelMicrociclo(microId);
+        }
+    }, [activeMicro, isModalOpen]);
 
     const lastPartido = partidos?.[0];
     const nJugadores = jugadores?.length || 0;
     const nEjercicios = ejercicios?.length || 0;
 
-    const handleNewSession = () => {
-        if (!activeMicro) {
-            toast.error('No hay ningún microciclo activo para hoy. Crea uno primero en Planificación.');
-            return;
-        }
-        navigate(`/sesiones/nueva?microciclo=${activeMicro.id}`);
+    const handleCreateSession = () => {
+        if (!selMicrociclo) return;
+        navigate(`/sesiones/nueva?microciclo=${selMicrociclo}`);
+        setIsModalOpen(false);
     };
 
     return (
@@ -185,7 +226,7 @@ export default function DashboardPage() {
                     </h2>
                     <div className="grid gap-4">
                         <button
-                            onClick={handleNewSession}
+                            onClick={() => setIsModalOpen(true)}
                             disabled={loadingActiveMicro}
                             className="flex items-center gap-4 p-4 rounded-2xl bg-emerald-600 border border-emerald-500 hover:bg-emerald-700 transition-all text-left group shadow-lg shadow-emerald-900/20"
                         >
@@ -231,6 +272,104 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Session Selector Modal */}
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="bg-zinc-950 border-zinc-800 text-zinc-50 sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-black italic tracking-tight flex items-center gap-2">
+                            <div className="h-8 w-8 bg-emerald-600 rounded flex items-center justify-center">
+                                <Plus className="h-5 w-5 text-white" />
+                            </div>
+                            NUEVA SESIÓN
+                        </DialogTitle>
+                    </DialogHeader>
+
+                    <div className="space-y-4 py-4">
+                        {/* Temporada */}
+                        <div className="space-y-2">
+                            <Label className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">Temporada</Label>
+                            <Select value={selTemporada || ''} onValueChange={(v) => { setSelTemporada(v); setSelMacrociclo(null); setSelMesociclo(null); setSelMicrociclo(null); }}>
+                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-200 h-10">
+                                    <SelectValue placeholder="Selecciona temporada" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                    {temporadas?.map(t => (
+                                        <SelectItem key={t.id} value={t.id}>{t.equipo} - {t.temporada}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Macrociclo */}
+                        <div className="space-y-2">
+                            <Label className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">Macrociclo</Label>
+                            <Select
+                                value={selMacrociclo || ''}
+                                onValueChange={(v) => { setSelMacrociclo(v); setSelMesociclo(null); setSelMicrociclo(null); }}
+                                disabled={!selTemporada}
+                            >
+                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-200 h-10 disabled:opacity-30">
+                                    <SelectValue placeholder="Selecciona macrociclo" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                    {macrociclos?.map(m => (
+                                        <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Mesociclo */}
+                        <div className="space-y-2">
+                            <Label className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">Mesociclo</Label>
+                            <Select
+                                value={selMesociclo || ''}
+                                onValueChange={(v) => { setSelMesociclo(v); setSelMicrociclo(null); }}
+                                disabled={!selMacrociclo}
+                            >
+                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-200 h-10 disabled:opacity-30">
+                                    <SelectValue placeholder="Selecciona mesociclo" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                    {mesociclos?.map(m => (
+                                        <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Microciclo */}
+                        <div className="space-y-2">
+                            <Label className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">Microciclo</Label>
+                            <Select
+                                value={selMicrociclo || ''}
+                                onValueChange={setSelMicrociclo}
+                                disabled={!selMesociclo}
+                            >
+                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-200 h-10 disabled:opacity-30">
+                                    <SelectValue placeholder="Selecciona microciclo" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                    {microciclos?.map(m => (
+                                        <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    <DialogFooter className="mt-2">
+                        <Button
+                            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black italic tracking-tighter"
+                            onClick={handleCreateSession}
+                            disabled={!selMicrociclo}
+                        >
+                            CREAR SESIÓN
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
