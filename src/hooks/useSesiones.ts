@@ -22,12 +22,17 @@ export function useSesiones(microcicloId?: string) {
                         id,
                         id_ejercicio,
                         orden,
+                        minutos,
+                        numero_jugadores,
+                        series,
+                        notas_sesion,
                         ejercicio:ejercicios (*)
                     )
                 `)
                 .eq('id_microciclo', microcicloId)
                 .eq('coach_id', userId)
-                .order('fecha', { ascending: true });
+                .order('fecha', { ascending: true })
+                .order('orden', { foreignTable: 'sesiones_ejercicios', ascending: true });
 
             if (error) throw error;
             return data as SesionWithEjercicios[];
@@ -53,11 +58,16 @@ export function useAllSesiones(temporadaId?: string) {
                         id,
                         id_ejercicio,
                         orden,
+                        minutos,
+                        numero_jugadores,
+                        series,
+                        notas_sesion,
                         ejercicio:ejercicios (*)
                     )
                 `)
                 .eq('coach_id', userId)
-                .order('fecha', { ascending: true });
+                .order('fecha', { ascending: true })
+                .order('orden', { foreignTable: 'sesiones_ejercicios', ascending: true });
 
             if (temporadaId) {
                 query = query.eq('id_temporada', temporadaId);
@@ -91,11 +101,16 @@ export function useSesion(id?: string) {
                         id,
                         id_ejercicio,
                         orden,
+                        minutos,
+                        numero_jugadores,
+                        series,
+                        notas_sesion,
                         ejercicio:ejercicios (*)
                     )
                 `)
                 .eq('id', id)
                 .eq('coach_id', userId)
+                .order('orden', { foreignTable: 'sesiones_ejercicios', ascending: true })
                 .single();
 
             if (error) throw error;
@@ -113,10 +128,16 @@ export function useCreateSesion() {
     return useMutation({
         mutationFn: async ({
             sesion,
-            ejerciciosIds
+            ejercicios
         }: {
             sesion: Omit<Sesion, 'id' | 'coach_id' | 'created_at' | 'updated_at'>;
-            ejerciciosIds?: string[]
+            ejercicios?: Array<{
+                id_ejercicio: string;
+                minutos?: number;
+                numero_jugadores?: number;
+                series?: number;
+                notas_sesion?: string;
+            }>
         }) => {
             const userId = await getAuthenticatedUserId();
 
@@ -130,11 +151,15 @@ export function useCreateSesion() {
             if (sessionError) throw sessionError;
 
             // 2. Insert associated exercises if any
-            if (ejerciciosIds && ejerciciosIds.length > 0) {
-                const sessionExercises: SesionEjercicioInsert[] = ejerciciosIds.map((id_ejercicio, index) => ({
+            if (ejercicios && ejercicios.length > 0) {
+                const sessionExercises: SesionEjercicioInsert[] = ejercicios.map((ex, index) => ({
                     id_sesion: newSession.id,
-                    id_ejercicio,
-                    orden: index + 1
+                    id_ejercicio: ex.id_ejercicio,
+                    orden: index + 1,
+                    minutos: ex.minutos,
+                    numero_jugadores: ex.numero_jugadores,
+                    series: ex.series,
+                    notas_sesion: ex.notas_sesion
                 }));
 
                 const { error: junctionError } = await supabase
@@ -161,11 +186,17 @@ export function useUpdateSesion() {
         mutationFn: async ({
             id,
             updates,
-            ejerciciosIds
+            ejercicios
         }: {
             id: string;
             updates: Partial<Sesion>;
-            ejerciciosIds?: string[]
+            ejercicios?: Array<{
+                id_ejercicio: string;
+                minutos?: number;
+                numero_jugadores?: number;
+                series?: number;
+                notas_sesion?: string;
+            }>
         }) => {
             await getAuthenticatedUserId(); // ensure user is authenticated
 
@@ -180,7 +211,7 @@ export function useUpdateSesion() {
             if (sessionError) throw sessionError;
 
             // 2. Update exercises association if provided
-            if (ejerciciosIds !== undefined) {
+            if (ejercicios !== undefined) {
                 // Delete previous associations
                 const { error: deleteError } = await supabase
                     .from('sesiones_ejercicios')
@@ -190,11 +221,15 @@ export function useUpdateSesion() {
                 if (deleteError) throw deleteError;
 
                 // Insert new ones
-                if (ejerciciosIds.length > 0) {
-                    const sessionExercises: SesionEjercicioInsert[] = ejerciciosIds.map((id_ejercicio, index) => ({
+                if (ejercicios.length > 0) {
+                    const sessionExercises: SesionEjercicioInsert[] = ejercicios.map((ex, index) => ({
                         id_sesion: id,
-                        id_ejercicio,
-                        orden: index + 1
+                        id_ejercicio: ex.id_ejercicio,
+                        orden: index + 1,
+                        minutos: ex.minutos,
+                        numero_jugadores: ex.numero_jugadores,
+                        series: ex.series,
+                        notas_sesion: ex.notas_sesion
                     }));
 
                     const { error: insertError } = await supabase

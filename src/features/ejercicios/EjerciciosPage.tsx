@@ -86,7 +86,7 @@ export default function EjerciciosPage({ esPorteros = false }: EjerciciosPagePro
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
-                        {esPorteros ? 'Biblioteca de Porteros' : 'Biblioteca de Ejercicios'}
+                        {esPorteros ? 'Ejercicios de Porteros' : 'Mis Ejercicios'}
                     </h1>
                     <p className="text-zinc-400">
                         Gestiona tus ejercicios, diseña tareas y asigmálas a las sesiones.
@@ -269,7 +269,7 @@ export default function EjerciciosPage({ esPorteros = false }: EjerciciosPagePro
                     <AlertDialogHeader>
                         <AlertDialogTitle>¿Eliminar Ejercicio?</AlertDialogTitle>
                         <AlertDialogDescription className="text-zinc-400">
-                            Esta acción no se puede deshacer. El ejercicio se eliminará permanentemente de tu biblioteca.
+                            Esta acción no se puede deshacer. El ejercicio se eliminará permanentemente.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

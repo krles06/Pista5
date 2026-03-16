@@ -21,6 +21,10 @@ export interface SesionWithEjercicios extends Sesion {
         id_ejercicio: string;
         orden: number;
         ejercicio: Ejercicio;
+        minutos?: number;
+        numero_jugadores?: number;
+        series?: number;
+        notas_sesion?: string;
     }[];
 }
 
@@ -28,6 +32,10 @@ export interface SesionEjercicioInsert {
     id_sesion: string;
     id_ejercicio: string;
     orden: number;
+    minutos?: number;
+    numero_jugadores?: number;
+    series?: number;
+    notas_sesion?: string | null;
 }
 
 export interface AsistenciaSesion {

@@ -34,7 +34,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         { name: 'Dashboard', href: '/', icon: Home },
         { name: 'Calendario', href: '/calendario', icon: CalendarDays },
         { name: 'Planificación', href: '/temporadas', icon: Calendar },
-        { name: 'Biblioteca', href: '/ejercicios', icon: ClipboardList },
+        { name: 'Ejercicios', href: '/ejercicios', icon: ClipboardList },
         { name: 'Porteros', href: '/porteros', icon: Target },
         { name: 'Partidos', href: '/partidos', icon: Trophy },
         { name: 'Jugadores', href: '/jugadores', icon: Users },

@@ -115,7 +115,7 @@ export default function DashboardPage() {
                             onClick={() => navigate('/ejercicios')}
                             className="border-zinc-700 bg-zinc-800 text-zinc-300 hover:text-zinc-50 h-12"
                         >
-                            BIBLIOTECA
+                            EJERCICIOS
                         </Button>
                     </div>
                 </div>
@@ -257,7 +257,7 @@ export default function DashboardPage() {
                             href="/temporadas"
                         />
                         <QuickAction
-                            title="Biblioteca"
+                            title="Ejercicios"
                             desc="Explora ejercicios"
                             icon={ClipboardList}
                             href="/ejercicios"

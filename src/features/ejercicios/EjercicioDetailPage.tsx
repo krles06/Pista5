@@ -39,7 +39,7 @@ export default function EjercicioDetailPage() {
             <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg">
                 Error al cargar el ejercicio. Puede que no exista o no tengas permisos.
                 <Button onClick={() => navigate('/ejercicios')} variant="link" className="ml-4 text-emerald-500">
-                    Volver a la biblioteca
+                    Volver a Ejercicios
                 </Button>
             </div>
         );
@@ -236,7 +236,7 @@ export default function EjercicioDetailPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>¿Eliminar Ejercicio?</AlertDialogTitle>
                         <AlertDialogDescription className="text-zinc-400">
-                            Esta acción no se puede deshacer. El ejercicio se eliminará permanentemente de tu biblioteca.
+                            Esta acción no se puede deshacer. El ejercicio se eliminará permanentemente.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
