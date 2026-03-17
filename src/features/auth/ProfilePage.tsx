@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, Mail, Shield } from 'lucide-react';
+import { getAuthenticatedUserId } from '@/lib/utils';
 
 export default function ProfilePage() {
     const { user, coach, loading, updateProfile } = useAuth();
@@ -31,7 +32,9 @@ export default function ProfilePage() {
 
         try {
             setUpdating(true);
+            const userId = await getAuthenticatedUserId();
             await updateProfile({
+                id: userId,
                 nombre: name,
                 equipo: team,
             });
@@ -51,19 +54,27 @@ export default function ProfilePage() {
         );
     }
 
-    if (!user || !coach) {
+    if (!user) {
         return (
             <div className="text-center p-12 text-muted-foreground font-black italic uppercase tracking-widest">
-                No se pudo cargar el perfil
+                Debes iniciar sesión para ver esta página
             </div>
         );
     }
 
+    const isMissingProfile = !coach;
+
     return (
         <div className="max-w-3xl mx-auto space-y-6">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">Mi Perfil</h1>
-                <p className="text-muted-foreground">Gestiona tu información personal y configuración de cuenta.</p>
+                <h1 className="text-3xl font-bold tracking-tight text-foreground">
+                    {isMissingProfile ? 'Completar Perfil' : 'Mi Perfil'}
+                </h1>
+                <p className="text-muted-foreground">
+                    {isMissingProfile 
+                        ? 'Parece que aún no has completado tu información de entrenador.' 
+                        : 'Gestiona tu información personal y configuración de cuenta.'}
+                </p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -110,11 +121,11 @@ export default function ProfilePage() {
                                     Email de acceso (Solo lectura)
                                 </Label>
                                 <Input
-                                    value={user.email}
+                                    value={user?.email || ''}
                                     className="bg-background/50 border-border text-muted-foreground cursor-not-allowed"
                                     disabled
                                 />
-                                <p className="text-xs text-muted-foreground">Para cambiar tu email debes contactar con soporte.</p>
+                                <p className="text-xs text-muted-foreground font-medium uppercase tracking-tight">Para cambiar tu email debes contactar con soporte.</p>
                             </div>
                         </CardContent>
                         <CardFooter className="flex justify-end border-t border-border pt-6">

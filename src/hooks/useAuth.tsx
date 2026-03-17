@@ -89,8 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!user) return;
         const { data, error } = await supabase
             .from('coaches')
-            .update(updates)
-            .eq('id', user.id)
+            .upsert({ id: user.id, ...updates })
             .select()
             .single();
 

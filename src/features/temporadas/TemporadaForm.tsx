@@ -9,6 +9,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Save } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { getAuthenticatedUserId } from '@/lib/utils';
 
 export default function TemporadaForm() {
     const { id } = useParams<{ id: string }>();
@@ -72,12 +74,31 @@ export default function TemporadaForm() {
                 await updateMutation.mutateAsync({ id, updates: formData });
                 toast.success('Temporada actualizada correctamente');
             } else {
+                // Check if user already has an active season
+                const userId = await getAuthenticatedUserId();
+                const today = new Date().toISOString().split('T')[0];
+                
+                const { data: activeSeason, error: seasonError } = await supabase
+                    .from('temporadas')
+                    .select('id, temporada')
+                    .eq('coach_id', userId)
+                    .lte('fecha_inicio', today)
+                    .gte('fecha_fin', today)
+                    .maybeSingle();
+
+                if (seasonError) throw seasonError;
+
+                if (activeSeason) {
+                    toast.error(`Ya tienes una temporada activa: "${activeSeason.temporada}". Finalízala antes de crear una nueva.`);
+                    return;
+                }
+
                 await createMutation.mutateAsync(formData);
                 toast.success('Temporada creada correctamente');
             }
             navigate('/temporadas');
         } catch (error: any) {
-            toast.error('Error al guardar: ' + error.message);
+            toast.error('Error al guardar: ' + (error.message || 'Error desconocido'));
         }
     };
 
