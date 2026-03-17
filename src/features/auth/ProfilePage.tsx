@@ -8,11 +8,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { User, Mail, Shield } from 'lucide-react';
 
 export default function ProfilePage() {
-    const { user, coach, updateProfile } = useAuth();
+    const { user, coach, loading, updateProfile } = useAuth();
 
     const [name, setName] = useState('');
     const [team, setTeam] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         if (coach) {
@@ -30,7 +30,7 @@ export default function ProfilePage() {
         }
 
         try {
-            setLoading(true);
+            setUpdating(true);
             await updateProfile({
                 nombre: name,
                 equipo: team,
@@ -39,11 +39,25 @@ export default function ProfilePage() {
         } catch (error: any) {
             toast.error(error.message || 'Error al actualizar el perfil');
         } finally {
-            setLoading(false);
+            setUpdating(false);
         }
     };
 
-    if (!user || !coach) return null;
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center p-12">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent"></div>
+            </div>
+        );
+    }
+
+    if (!user || !coach) {
+        return (
+            <div className="text-center p-12 text-muted-foreground font-black italic uppercase tracking-widest">
+                No se pudo cargar el perfil
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-3xl mx-auto space-y-6">
@@ -73,7 +87,7 @@ export default function ProfilePage() {
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         className="bg-background border-border focus-visible:ring-emerald-500"
-                                        disabled={loading}
+                                        disabled={updating}
                                         required
                                     />
                                 </div>
@@ -85,7 +99,7 @@ export default function ProfilePage() {
                                         onChange={(e) => setTeam(e.target.value)}
                                         className="bg-background border-border focus-visible:ring-emerald-500"
                                         placeholder="Ej: Sala 5 Martorell"
-                                        disabled={loading}
+                                        disabled={updating}
                                     />
                                 </div>
                             </div>
@@ -107,9 +121,9 @@ export default function ProfilePage() {
                             <Button
                                 type="submit"
                                 className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                                disabled={loading}
+                                disabled={updating}
                             >
-                                {loading ? 'Guardando...' : 'Guardar cambios'}
+                                {updating ? 'Guardando...' : 'Guardar cambios'}
                             </Button>
                         </CardFooter>
                     </form>
