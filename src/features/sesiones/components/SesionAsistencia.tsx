@@ -73,14 +73,14 @@ export default function SesionAsistencia({ sesion }: SesionAsistenciaProps) {
         }
     };
 
-    if (isLoading) return <div className="p-8 text-center text-zinc-500">Cargando asistencia...</div>;
+    if (isLoading) return <div className="p-8 text-center text-muted-foreground">Cargando asistencia...</div>;
 
     return (
-        <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden flex flex-col h-[600px]">
-            <CardHeader className="border-b border-zinc-800/50 bg-zinc-900/50 shrink-0">
+        <Card className="border-border bg-card shadow-xl overflow-hidden flex flex-col h-[600px]">
+            <CardHeader className="border-b border-border/50 bg-card/50 shrink-0">
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle className="text-lg text-zinc-50 flex items-center gap-2">
+                        <CardTitle className="text-lg text-foreground flex items-center gap-2">
                             <Users className="h-5 w-5 text-emerald-500" />
                             Control de Asistencia y RPE
                         </CardTitle>
@@ -101,7 +101,7 @@ export default function SesionAsistencia({ sesion }: SesionAsistenciaProps) {
                         return (
                             <div
                                 key={jugador.id}
-                                className={`p-3 rounded-xl border transition-all ${asistencia.asistio ? 'bg-zinc-950/30 border-zinc-800' : 'bg-red-500/5 border-red-500/10 opacity-60'}`}
+                                className={`p-3 rounded-xl border transition-all ${asistencia.asistio ? 'bg-background/30 border-border' : 'bg-red-500/5 border-red-500/10 opacity-60'}`}
                             >
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                                     <div className="flex items-center gap-3 flex-1">
@@ -112,14 +112,14 @@ export default function SesionAsistencia({ sesion }: SesionAsistenciaProps) {
                                             {asistencia.asistio ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
                                         </div>
                                         <div className="flex flex-col min-w-0">
-                                            <span className="text-sm font-bold text-zinc-100 truncate">{jugador.nombre}</span>
-                                            <span className="text-[10px] text-zinc-600 font-black uppercase tracking-tight">{jugador.posicion || 'JUGADOR'}</span>
+                                            <span className="text-sm font-bold text-foreground truncate">{jugador.nombre}</span>
+                                            <span className="text-[10px] text-muted-foreground font-black uppercase tracking-tight">{jugador.posicion || 'JUGADOR'}</span>
                                         </div>
                                     </div>
 
                                     <div className="flex items-center gap-4 shrink-0">
                                         <div className="flex flex-col gap-1 items-center">
-                                            <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">ASISTIÓ</Label>
+                                            <Label className="text-[9px] uppercase font-black text-muted-foreground tracking-widest">ASISTIÓ</Label>
                                             <Switch
                                                 checked={asistencia.asistio}
                                                 onCheckedChange={(val) => handleAsistenciaChange(jugador.id, val)}
@@ -128,7 +128,7 @@ export default function SesionAsistencia({ sesion }: SesionAsistenciaProps) {
                                         </div>
 
                                         <div className="flex flex-col gap-1 items-center">
-                                            <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">RPE (1-10)</Label>
+                                            <Label className="text-[9px] uppercase font-black text-muted-foreground tracking-widest">RPE (1-10)</Label>
                                             <div className="relative">
                                                 <Input
                                                     type="number"
@@ -137,7 +137,7 @@ export default function SesionAsistencia({ sesion }: SesionAsistenciaProps) {
                                                     disabled={!asistencia.asistio}
                                                     value={asistencia.rpe || ''}
                                                     onChange={(e) => handleRPEChange(jugador.id, e.target.value)}
-                                                    className={`h-9 w-14 text-center font-black bg-zinc-900 border-zinc-800 text-zinc-100 rounded-lg ${!asistencia.asistio && 'opacity-30'}`}
+                                                    className={`h-9 w-14 text-center font-black bg-card border-border text-foreground rounded-lg ${!asistencia.asistio && 'opacity-30'}`}
                                                 />
                                                 {asistencia.asistio && asistencia.rpe && (
                                                     <Star className="h-2.5 w-2.5 text-amber-500 absolute -top-1 -right-1 fill-amber-500" />
@@ -146,12 +146,12 @@ export default function SesionAsistencia({ sesion }: SesionAsistenciaProps) {
                                         </div>
 
                                         <div className="flex flex-col gap-1 hidden sm:flex">
-                                            <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">NOTAS</Label>
+                                            <Label className="text-[9px] uppercase font-black text-muted-foreground tracking-widest">NOTAS</Label>
                                             <Input
                                                 placeholder="Molestias, actitud..."
                                                 value={asistencia.observaciones || ''}
                                                 onChange={(e) => handleNotesChange(jugador.id, e.target.value)}
-                                                className="h-9 w-40 text-xs bg-zinc-900 border-zinc-800 text-zinc-300 placeholder:text-zinc-700 rounded-lg"
+                                                className="h-9 w-40 text-xs bg-card border-border text-foreground placeholder:text-muted-foreground rounded-lg"
                                             />
                                         </div>
                                     </div>
@@ -162,7 +162,7 @@ export default function SesionAsistencia({ sesion }: SesionAsistenciaProps) {
                 </div>
             </ScrollArea>
 
-            <div className="p-4 bg-zinc-950/50 border-t border-zinc-800/50">
+            <div className="p-4 bg-background/50 border-t border-border/50">
                 <Button
                     onClick={handleSave}
                     disabled={updateMutation.isPending}

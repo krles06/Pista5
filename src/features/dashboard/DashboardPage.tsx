@@ -89,16 +89,16 @@ export default function DashboardPage() {
     return (
         <div className="space-y-10 max-w-7xl mx-auto pb-12">
             {/* Welcome Section */}
-            <div className="relative overflow-hidden rounded-3xl bg-zinc-900 border border-zinc-800 p-8 lg:p-12">
+            <div className="relative overflow-hidden rounded-3xl bg-card border border-border p-8 lg:p-12">
                 <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                     <div className="space-y-2">
                         <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 px-3 py-1 font-black text-[10px] tracking-widest uppercase">
                             Panel de Control
                         </Badge>
-                        <h1 className="text-4xl lg:text-5xl font-black tracking-tighter text-zinc-50 italic">
+                        <h1 className="text-4xl lg:text-5xl font-black tracking-tighter text-foreground italic">
                             HOLA, {coach?.nombre?.split(' ')[0].toUpperCase() || 'COACH'}!
                         </h1>
-                        <p className="text-zinc-400 max-w-lg font-medium">
+                        <p className="text-muted-foreground max-w-lg font-medium">
                             Bienvenido de nuevo a <span className="text-emerald-500 font-bold italic">Pista5</span>.
                             Tienes todo listo para planificar la semana y analizar el rendimiento de tu equipo.
                         </p>
@@ -113,7 +113,7 @@ export default function DashboardPage() {
                         <Button
                             variant="outline"
                             onClick={() => navigate('/ejercicios')}
-                            className="border-zinc-700 bg-zinc-800 text-zinc-300 hover:text-zinc-50 h-12"
+                            className="border-border bg-muted text-foreground hover:text-foreground h-12"
                         >
                             EJERCICIOS
                         </Button>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
                 {/* Recent Result */}
                 <div className="lg:col-span-2 space-y-4">
                     <div className="flex items-center justify-between px-2">
-                        <h2 className="text-lg font-black tracking-widest text-zinc-500 uppercase flex items-center gap-2">
+                        <h2 className="text-lg font-black tracking-widest text-muted-foreground uppercase flex items-center gap-2">
                             <Trophy className="h-5 w-5 text-emerald-500" />
                             Último Resultado
                         </h2>
@@ -173,37 +173,37 @@ export default function DashboardPage() {
                     </div>
 
                     {lastPartido ? (
-                        <Card className="border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 transition-colors cursor-pointer group rounded-3xl overflow-hidden" onClick={() => navigate('/partidos')}>
+                        <Card className="border-border bg-card/50 hover:bg-card transition-colors cursor-pointer group rounded-3xl overflow-hidden" onClick={() => navigate('/partidos')}>
                             <CardContent className="p-8">
                                 <div className="flex flex-col md:flex-row items-center justify-between gap-10">
                                     <div className="flex flex-col items-center gap-3 flex-1 text-center">
-                                        <div className="h-20 w-20 bg-zinc-950 rounded-2xl flex items-center justify-center border border-zinc-800 group-hover:border-emerald-500/50 transition-all font-black text-2xl mb-1 italic">
+                                        <div className="h-20 w-20 bg-background rounded-2xl flex items-center justify-center border border-border group-hover:border-emerald-500/50 transition-all font-black text-2xl mb-1 italic">
                                             {lastPartido.condicion === 'local' ? 'P5' : lastPartido.rival?.substring(0, 2).toUpperCase()}
                                         </div>
-                                        <span className="font-black text-zinc-100 uppercase tracking-tighter">
+                                        <span className="font-black text-foreground uppercase tracking-tighter">
                                             {lastPartido.condicion === 'local' ? 'Nosotros' : lastPartido.rival}
                                         </span>
                                     </div>
 
                                     <div className="flex flex-col items-center gap-2">
-                                        <Badge className="bg-zinc-800 text-zinc-500 border-zinc-700 uppercase p-0.5 px-3 mb-2 font-black text-[9px] tracking-widest">
+                                        <Badge className="bg-muted text-muted-foreground border-border uppercase p-0.5 px-3 mb-2 font-black text-[9px] tracking-widest">
                                             {lastPartido.tipo_partido}
                                         </Badge>
                                         <div className="flex items-center gap-6">
-                                            <span className="text-6xl font-black text-zinc-50 italic">{lastPartido.goles_local}</span>
-                                            <span className="text-2xl font-black text-zinc-800">-</span>
-                                            <span className="text-6xl font-black text-zinc-50 italic">{lastPartido.goles_visitante}</span>
+                                            <span className="text-6xl font-black text-foreground italic">{lastPartido.goles_local}</span>
+                                            <span className="text-2xl font-black text-muted-foreground">-</span>
+                                            <span className="text-6xl font-black text-foreground italic">{lastPartido.goles_visitante}</span>
                                         </div>
-                                        <span className="text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-2">
+                                        <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest mt-2">
                                             {format(new Date(lastPartido.fecha), "PPP", { locale: es })}
                                         </span>
                                     </div>
 
                                     <div className="flex flex-col items-center gap-3 flex-1 text-center">
-                                        <div className="h-20 w-20 bg-zinc-950 rounded-2xl flex items-center justify-center border border-zinc-800 group-hover:border-emerald-500/50 transition-all font-black text-2xl mb-1 italic">
+                                        <div className="h-20 w-20 bg-background rounded-2xl flex items-center justify-center border border-border group-hover:border-emerald-500/50 transition-all font-black text-2xl mb-1 italic">
                                             {lastPartido.condicion === 'visitante' ? 'P5' : lastPartido.rival?.substring(0, 2).toUpperCase()}
                                         </div>
-                                        <span className="font-black text-zinc-100 uppercase tracking-tighter">
+                                        <span className="font-black text-foreground uppercase tracking-tighter">
                                             {lastPartido.condicion === 'visitante' ? 'Nosotros' : lastPartido.rival}
                                         </span>
                                     </div>
@@ -211,7 +211,7 @@ export default function DashboardPage() {
                             </CardContent>
                         </Card>
                     ) : (
-                        <div className="p-12 text-center border-2 border-dashed border-zinc-800 rounded-3xl bg-zinc-900/20 text-zinc-600">
+                        <div className="p-12 text-center border-2 border-dashed border-border rounded-3xl bg-card/20 text-muted-foreground">
                             No hay partidos registrados todavía.
                         </div>
                     )}
@@ -219,7 +219,7 @@ export default function DashboardPage() {
 
                 {/* Next Steps / Quick Actions */}
                 <div className="space-y-4">
-                    <h2 className="text-lg font-black tracking-widest text-zinc-500 uppercase flex items-center gap-2 px-2">
+                    <h2 className="text-lg font-black tracking-widest text-muted-foreground uppercase flex items-center gap-2 px-2">
                         <Target className="h-5 w-5 text-emerald-500" />
                         Accesos Rápidos
                     </h2>
@@ -274,7 +274,7 @@ export default function DashboardPage() {
 
             {/* Session Selector Modal */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="bg-zinc-950 border-zinc-800 text-zinc-50 sm:max-w-[425px]">
+                <DialogContent className="bg-background border-border text-foreground sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle className="text-xl font-black italic tracking-tight flex items-center gap-2">
                             <div className="h-8 w-8 bg-emerald-600 rounded flex items-center justify-center">
@@ -287,12 +287,12 @@ export default function DashboardPage() {
                     <div className="space-y-4 py-4">
                         {/* Temporada */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">Temporada</Label>
+                            <Label className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">Temporada</Label>
                             <Select value={selTemporada || ''} onValueChange={(v) => { setSelTemporada(v); setSelMacrociclo(null); setSelMesociclo(null); setSelMicrociclo(null); }}>
-                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-200 h-10">
+                                <SelectTrigger className="bg-card border-border text-foreground h-10">
                                     <SelectValue placeholder="Selecciona temporada" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                <SelectContent className="bg-card border-border text-foreground">
                                     {temporadas?.map(t => (
                                         <SelectItem key={t.id} value={t.id}>{t.equipo} - {t.temporada}</SelectItem>
                                     ))}
@@ -302,16 +302,16 @@ export default function DashboardPage() {
 
                         {/* Macrociclo */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">Macrociclo</Label>
+                            <Label className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">Macrociclo</Label>
                             <Select
                                 value={selMacrociclo || ''}
                                 onValueChange={(v) => { setSelMacrociclo(v); setSelMesociclo(null); setSelMicrociclo(null); }}
                                 disabled={!selTemporada}
                             >
-                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-200 h-10 disabled:opacity-30">
+                                <SelectTrigger className="bg-card border-border text-foreground h-10 disabled:opacity-30">
                                     <SelectValue placeholder="Selecciona macrociclo" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                <SelectContent className="bg-card border-border text-foreground">
                                     {macrociclos?.map(m => (
                                         <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
                                     ))}
@@ -321,16 +321,16 @@ export default function DashboardPage() {
 
                         {/* Mesociclo */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">Mesociclo</Label>
+                            <Label className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">Mesociclo</Label>
                             <Select
                                 value={selMesociclo || ''}
                                 onValueChange={(v) => { setSelMesociclo(v); setSelMicrociclo(null); }}
                                 disabled={!selMacrociclo}
                             >
-                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-200 h-10 disabled:opacity-30">
+                                <SelectTrigger className="bg-card border-border text-foreground h-10 disabled:opacity-30">
                                     <SelectValue placeholder="Selecciona mesociclo" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                <SelectContent className="bg-card border-border text-foreground">
                                     {mesociclos?.map(m => (
                                         <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
                                     ))}
@@ -340,16 +340,16 @@ export default function DashboardPage() {
 
                         {/* Microciclo */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">Microciclo</Label>
+                            <Label className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">Microciclo</Label>
                             <Select
                                 value={selMicrociclo || ''}
                                 onValueChange={setSelMicrociclo}
                                 disabled={!selMesociclo}
                             >
-                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-200 h-10 disabled:opacity-30">
+                                <SelectTrigger className="bg-card border-border text-foreground h-10 disabled:opacity-30">
                                     <SelectValue placeholder="Selecciona microciclo" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                <SelectContent className="bg-card border-border text-foreground">
                                     {microciclos?.map(m => (
                                         <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
                                     ))}
@@ -375,15 +375,15 @@ export default function DashboardPage() {
 
 function StatCard({ title, value, icon: Icon, color, bg }: any) {
     return (
-        <Card className="border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 transition-all group overflow-hidden rounded-3xl">
+        <Card className="border-border bg-card/50 hover:bg-card transition-all group overflow-hidden rounded-3xl">
             <CardContent className="p-6">
                 <div className="flex flex-col gap-4">
                     <div className={`h-12 w-12 ${bg} rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 duration-300`}>
                         <Icon className={`h-6 w-6 ${color}`} />
                     </div>
                     <div>
-                        <p className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">{title}</p>
-                        <p className="text-3xl font-black text-zinc-100 tracking-tight mt-1 italic">{value}</p>
+                        <p className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">{title}</p>
+                        <p className="text-3xl font-black text-foreground tracking-tight mt-1 italic">{value}</p>
                     </div>
                 </div>
             </CardContent>
@@ -396,16 +396,16 @@ function QuickAction({ title, desc, icon: Icon, href }: any) {
     return (
         <button
             onClick={() => navigate(href)}
-            className="flex items-center gap-4 p-4 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-emerald-500/50 hover:bg-zinc-900/80 transition-all text-left group"
+            className="flex items-center gap-4 p-4 rounded-2xl bg-card border border-border hover:border-emerald-500/50 hover:bg-card/80 transition-all text-left group"
         >
-            <div className="h-10 w-10 bg-zinc-950 rounded-xl flex items-center justify-center border border-zinc-800 group-hover:bg-emerald-600 group-hover:border-emerald-600 transition-all shrink-0">
-                <Icon className="h-5 w-5 text-zinc-500 group-hover:text-white" />
+            <div className="h-10 w-10 bg-background rounded-xl flex items-center justify-center border border-border group-hover:bg-emerald-600 group-hover:border-emerald-600 transition-all shrink-0">
+                <Icon className="h-5 w-5 text-muted-foreground group-hover:text-white" />
             </div>
             <div className="min-w-0">
-                <p className="font-bold text-zinc-100 text-sm italic">{title.toUpperCase()}</p>
-                <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-tight truncate">{desc}</p>
+                <p className="font-bold text-foreground text-sm italic">{title.toUpperCase()}</p>
+                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-tight truncate">{desc}</p>
             </div>
-            <ArrowRight className="h-4 w-4 ml-auto text-zinc-800 group-hover:text-emerald-500 transition-colors" />
+            <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground group-hover:text-emerald-500 transition-colors" />
         </button>
     );
 }

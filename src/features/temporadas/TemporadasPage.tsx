@@ -64,8 +64,8 @@ export default function TemporadasPage() {
         <div className="space-y-6 max-w-6xl mx-auto">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50">Temporadas</h1>
-                    <p className="text-zinc-400">Gestiona tus temporadas y equipos.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-foreground">Temporadas</h1>
+                    <p className="text-muted-foreground">Gestiona tus temporadas y equipos.</p>
                 </div>
                 <Button
                     onClick={() => navigate('/temporadas/nueva')}
@@ -77,12 +77,12 @@ export default function TemporadasPage() {
             </div>
 
             {!temporadas || temporadas.length === 0 ? (
-                <Card className="border-zinc-800 bg-zinc-900 shadow-xl border-dashed">
+                <Card className="border-border bg-card shadow-xl border-dashed">
                     <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                        <CalendarIcon className="h-12 w-12 text-zinc-600 mb-4" />
-                        <h3 className="text-lg font-medium text-zinc-200">Ninguna temporada creada</h3>
-                        <p className="text-zinc-400 mt-1 mb-4">Empieza creando tu primera temporada para planificar entrenamientos.</p>
-                        <Button onClick={() => navigate('/temporadas/nueva')} variant="outline" className="border-zinc-700 text-zinc-300">
+                        <CalendarIcon className="h-12 w-12 text-muted-foreground mb-4" />
+                        <h3 className="text-lg font-medium text-foreground">Ninguna temporada creada</h3>
+                        <p className="text-muted-foreground mt-1 mb-4">Empieza creando tu primera temporada para planificar entrenamientos.</p>
+                        <Button onClick={() => navigate('/temporadas/nueva')} variant="outline" className="border-border text-foreground">
                             Crear temporada
                         </Button>
                     </CardContent>
@@ -97,25 +97,25 @@ export default function TemporadasPage() {
                         return (
                             <Card
                                 key={temp.id}
-                                className={`border-zinc-800 bg-zinc-900 shadow-xl hover:border-emerald-500/50 transition-colors flex flex-col ${isActive ? 'ring-1 ring-emerald-500/50' : ''
+                                className={`border-border bg-card shadow-xl hover:border-emerald-500/50 transition-colors flex flex-col ${isActive ? 'ring-1 ring-emerald-500/50' : ''
                                     }`}
                             >
                                 <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0">
                                     <div className="space-y-1">
-                                        <CardTitle className="text-xl text-zinc-50 leading-tight">
+                                        <CardTitle className="text-xl text-foreground leading-tight">
                                             {temp.temporada}
                                         </CardTitle>
-                                        <CardDescription className="text-zinc-400">
+                                        <CardDescription className="text-muted-foreground">
                                             {temp.equipo} {temp.categoria && `- ${temp.categoria}`}
                                         </CardDescription>
                                     </div>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 -mt-2 -mr-2 text-zinc-400 hover:text-zinc-100">
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 -mt-2 -mr-2 text-muted-foreground hover:text-foreground">
                                                 <MoreVertical className="h-4 w-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                        <DropdownMenuContent align="end" className="bg-card border-border text-foreground">
                                             <DropdownMenuItem onClick={() => navigate(`/temporadas/${temp.id}/editar`)}>
                                                 <Edit className="mr-2 h-4 w-4" />
                                                 <span>Editar</span>
@@ -130,8 +130,8 @@ export default function TemporadasPage() {
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </CardHeader>
-                                <CardContent className="pb-4 flex-1 text-sm text-zinc-300 space-y-2">
-                                    <div className="flex items-center text-zinc-400">
+                                <CardContent className="pb-4 flex-1 text-sm text-foreground space-y-2">
+                                    <div className="flex items-center text-muted-foreground">
                                         <CalendarIcon className="mr-2 h-4 w-4" />
                                         <span>
                                             {format(startDate, "d MMM yyyy", { locale: es })} - {format(endDate, "d MMM yyyy", { locale: es })}
@@ -143,14 +143,14 @@ export default function TemporadasPage() {
                                         </div>
                                     )}
                                     {temp.objetivos && (
-                                        <p className="text-zinc-500 line-clamp-2 mt-2 text-xs">
+                                        <p className="text-muted-foreground line-clamp-2 mt-2 text-xs">
                                             {temp.objetivos}
                                         </p>
                                     )}
                                 </CardContent>
-                                <CardFooter className="pt-4 border-t border-zinc-800/50">
+                                <CardFooter className="pt-4 border-t border-border/50">
                                     <Button
-                                        className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-100"
+                                        className="w-full bg-muted hover:bg-muted text-foreground"
                                         variant="secondary"
                                         onClick={() => navigate(`/temporadas/${temp.id}`)}
                                     >
@@ -164,17 +164,17 @@ export default function TemporadasPage() {
             )}
 
             <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
-                <AlertDialogContent className="bg-zinc-900 border-zinc-800 text-zinc-50">
+                <AlertDialogContent className="bg-card border-border text-foreground">
                     <AlertDialogHeader>
                         <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-                        <AlertDialogDescription className="text-zinc-400">
+                        <AlertDialogDescription className="text-muted-foreground">
                             Esta acción no se puede deshacer. Se eliminará esta temporada y
                             <strong className="text-red-400"> todas las planificaciones, sesiones y datos de jugadores </strong>
                             vinculados a ella.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-zinc-800 text-zinc-300 border-zinc-700 hover:bg-zinc-700 hover:text-zinc-50">Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel className="bg-muted text-foreground border-border hover:bg-muted hover:text-foreground">Cancelar</AlertDialogCancel>
                         <AlertDialogAction
                             onClick={handleDelete}
                             className="bg-red-600 hover:bg-red-700 text-white"

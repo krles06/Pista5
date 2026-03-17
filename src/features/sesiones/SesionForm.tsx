@@ -205,15 +205,15 @@ export default function SesionForm() {
                     size="icon"
                     type="button"
                     onClick={() => navigate(-1)}
-                    className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50"
+                    className="border-border bg-card text-muted-foreground hover:text-foreground"
                 >
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
+                    <h1 className="text-3xl font-bold tracking-tight text-foreground">
                         {isEditing ? 'Editar Sesión' : 'Nueva Sesión'}
                     </h1>
-                    <p className="text-zinc-400">Planifica los contenidos y ejercicios del entrenamiento.</p>
+                    <p className="text-muted-foreground">Planifica los contenidos y ejercicios del entrenamiento.</p>
                 </div>
             </div>
 
@@ -221,73 +221,73 @@ export default function SesionForm() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                     <div className="md:col-span-2 space-y-6">
-                        <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                        <Card className="border-border bg-card shadow-xl">
                             <CardHeader>
-                                <CardTitle className="text-xl text-zinc-50">Datos Generales</CardTitle>
+                                <CardTitle className="text-xl text-foreground">Datos Generales</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label htmlFor="fecha" className="text-zinc-300">Fecha *</Label>
+                                        <Label htmlFor="fecha" className="text-foreground">Fecha *</Label>
                                         <Input
                                             type="date" id="fecha" name="fecha"
                                             value={formData.fecha}
                                             onChange={handleChange}
-                                            className="bg-zinc-950 border-zinc-800 text-zinc-100 [color-scheme:dark]"
+                                            className="bg-background border-border text-foreground [color-scheme:dark]"
                                             required
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="lugar" className="text-zinc-300">Lugar / Pabellón</Label>
+                                        <Label htmlFor="lugar" className="text-foreground">Lugar / Pabellón</Label>
                                         <Input
                                             id="lugar" name="lugar"
                                             placeholder="Ej: Pabellón Municipal"
                                             value={formData.lugar || ''}
                                             onChange={handleChange}
-                                            className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                                            className="bg-background border-border text-foreground"
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="objetivos" className="text-zinc-300">Objetivos Principales</Label>
+                                    <Label htmlFor="objetivos" className="text-foreground">Objetivos Principales</Label>
                                     <Input
                                         id="objetivos" name="objetivos"
                                         placeholder="Ej: Salida de presión, Transiciones..."
                                         value={formData.objetivos || ''}
                                         onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                                        className="bg-background border-border text-foreground"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="material" className="text-zinc-300">Material necesario</Label>
+                                    <Label htmlFor="material" className="text-foreground">Material necesario</Label>
                                     <Input
                                         id="material" name="material"
                                         placeholder="Ej: 12 balones, 10 petos rojos..."
                                         value={formData.material || ''}
                                         onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                                        className="bg-background border-border text-foreground"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="observaciones" className="text-zinc-300">Observaciones</Label>
+                                    <Label htmlFor="observaciones" className="text-foreground">Observaciones</Label>
                                     <Textarea
                                         id="observaciones" name="observaciones"
                                         placeholder="Notas adicionales..."
                                         value={formData.observaciones || ''}
                                         onChange={handleChange}
-                                        className="min-h-[80px] bg-zinc-950 border-zinc-800 text-zinc-100"
+                                        className="min-h-[80px] bg-background border-border text-foreground"
                                     />
                                 </div>
                             </CardContent>
                         </Card>
 
-                        <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden">
+                        <Card className="border-border bg-card shadow-xl overflow-hidden">
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
-                                    <CardTitle className="text-xl text-zinc-50">Contenidos / Tareas</CardTitle>
+                                    <CardTitle className="text-xl text-foreground">Contenidos / Tareas</CardTitle>
                                     <CardDescription>Configura los ejercicios de la sesión.</CardDescription>
                                 </div>
                                 <Dialog open={isSelectorOpen} onOpenChange={setIsSelectorOpen}>
@@ -296,7 +296,7 @@ export default function SesionForm() {
                                             <Plus className="h-4 w-4 mr-2" /> Añadir Ejercicio
                                         </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="sm:max-w-2xl bg-zinc-950 border-zinc-800 text-zinc-50 p-0 overflow-hidden">
+                                    <DialogContent className="sm:max-w-2xl bg-background border-border text-foreground p-0 overflow-hidden">
                                         <DialogHeader className="p-6 pb-0">
                                             <DialogTitle>Ejercicios</DialogTitle>
                                         </DialogHeader>
@@ -319,7 +319,7 @@ export default function SesionForm() {
                             </CardHeader>
                             <CardContent className="p-0">
                                 {selectedExercises.length === 0 ? (
-                                    <div className="p-12 text-center text-zinc-500 border-t border-zinc-800 border-dashed bg-zinc-900/20">
+                                    <div className="p-12 text-center text-muted-foreground border-t border-border border-dashed bg-card/20">
                                         No has añadido ningún ejercicio todavía.
                                     </div>
                                 ) : (
@@ -330,25 +330,25 @@ export default function SesionForm() {
                                                     {selectedExercises.map((ex, index) => (
                                                         <Draggable key={`${ex.id}-${index}`} draggableId={`${ex.id}-${index}`} index={index}>
                                                             {(provided: DraggableProvided) => (
-                                                                <div ref={provided.innerRef} {...provided.draggableProps} className="bg-zinc-900/50 hover:bg-zinc-900/80 transition-colors group">
+                                                                <div ref={provided.innerRef} {...provided.draggableProps} className="bg-card/50 hover:bg-card/80 transition-colors group">
                                                                     <div className="flex items-center p-4">
-                                                                        <div {...provided.dragHandleProps} className="mr-4 text-zinc-600 group-hover:text-zinc-400">
+                                                                        <div {...provided.dragHandleProps} className="mr-4 text-muted-foreground group-hover:text-muted-foreground">
                                                                             <GripVertical className="h-5 w-5" />
                                                                         </div>
-                                                                        <div className="h-12 w-12 bg-zinc-950 rounded-lg border border-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
+                                                                        <div className="h-12 w-12 bg-background rounded-lg border border-border flex items-center justify-center overflow-hidden shrink-0">
                                                                             {ex.url_imagen ? (
                                                                                 <img src={ex.url_imagen} alt="" className="w-full h-full object-cover" />
                                                                             ) : (
-                                                                                <ImageIcon className="h-5 w-5 text-zinc-800" />
+                                                                                <ImageIcon className="h-5 w-5 text-muted-foreground" />
                                                                             )}
                                                                         </div>
                                                                         <div className="ml-4 flex-1 min-w-0">
-                                                                            <p className="text-sm font-bold text-zinc-100 truncate">{ex.titulo}</p>
+                                                                            <p className="text-sm font-bold text-foreground truncate">{ex.titulo}</p>
                                                                             <div className="flex items-center gap-2 mt-1">
                                                                                 <Badge variant="outline" className="text-[10px] uppercase font-black tracking-widest border-emerald-500/20 text-emerald-500 bg-emerald-500/5">
                                                                                     {ex.etapa_sesion}
                                                                                 </Badge>
-                                                                                <span className="text-xs text-zinc-500 font-medium">
+                                                                                <span className="text-xs text-muted-foreground font-medium">
                                                                                     {ex.minutos_sesion} min • {ex.series_sesion} {ex.series_sesion === 1 ? 'serie' : 'series'}
                                                                                 </span>
                                                                             </div>
@@ -359,7 +359,7 @@ export default function SesionForm() {
                                                                                 type="button"
                                                                                 variant="ghost"
                                                                                 size="icon"
-                                                                                className="text-zinc-500 hover:text-zinc-200"
+                                                                                className="text-muted-foreground hover:text-foreground"
                                                                                 onClick={() => updateExerciseField(index, 'isEditingFields', !ex.isEditingFields)}
                                                                             >
                                                                                 {ex.isEditingFields ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -368,7 +368,7 @@ export default function SesionForm() {
                                                                                 type="button"
                                                                                 variant="ghost"
                                                                                 size="icon"
-                                                                                className="text-zinc-500 hover:text-red-400"
+                                                                                className="text-muted-foreground hover:text-red-400"
                                                                                 onClick={() => removeExercise(index)}
                                                                             >
                                                                                 <Trash2 className="h-4 w-4" />
@@ -380,48 +380,48 @@ export default function SesionForm() {
                                                                         <div className="px-14 pb-6 pt-2 space-y-4 animate-in slide-in-from-top-1 duration-200">
                                                                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                                                                 <div className="space-y-1.5">
-                                                                                    <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 flex items-center gap-1.5">
+                                                                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
                                                                                         <Clock className="h-3 w-3" /> Minutos
                                                                                     </Label>
                                                                                     <Input
                                                                                         type="number"
                                                                                         value={ex.minutos_sesion}
                                                                                         onChange={(e) => updateExerciseField(index, 'minutos_sesion', parseInt(e.target.value) || 0)}
-                                                                                        className="bg-zinc-950 border-zinc-800 h-9 text-sm"
+                                                                                        className="bg-background border-border h-9 text-sm"
                                                                                     />
                                                                                 </div>
                                                                                 <div className="space-y-1.5">
-                                                                                    <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 flex items-center gap-1.5">
+                                                                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
                                                                                         <UsersIcon className="h-3 w-3" /> Jugadores
                                                                                     </Label>
                                                                                     <Input
                                                                                         type="number"
                                                                                         value={ex.numero_jugadores_sesion}
                                                                                         onChange={(e) => updateExerciseField(index, 'numero_jugadores_sesion', parseInt(e.target.value) || 0)}
-                                                                                        className="bg-zinc-950 border-zinc-800 h-9 text-sm"
+                                                                                        className="bg-background border-border h-9 text-sm"
                                                                                     />
                                                                                 </div>
                                                                                 <div className="space-y-1.5">
-                                                                                    <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 flex items-center gap-1.5">
+                                                                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
                                                                                         <Repeat className="h-3 w-3" /> Series
                                                                                     </Label>
                                                                                     <Input
                                                                                         type="number"
                                                                                         value={ex.series_sesion}
                                                                                         onChange={(e) => updateExerciseField(index, 'series_sesion', parseInt(e.target.value) || 1)}
-                                                                                        className="bg-zinc-950 border-zinc-800 h-9 text-sm"
+                                                                                        className="bg-background border-border h-9 text-sm"
                                                                                     />
                                                                                 </div>
                                                                             </div>
                                                                             <div className="space-y-1.5">
-                                                                                <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 flex items-center gap-1.5">
+                                                                                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
                                                                                     <FileText className="h-3 w-3" /> Notas específicas
                                                                                 </Label>
                                                                                 <Input
                                                                                     value={ex.notas_sesion}
                                                                                     onChange={(e) => updateExerciseField(index, 'notas_sesion', e.target.value)}
                                                                                     placeholder="Correcciones, variaciones para hoy..."
-                                                                                    className="bg-zinc-950 border-zinc-800 h-9 text-sm"
+                                                                                    className="bg-background border-border h-9 text-sm"
                                                                                 />
                                                                             </div>
                                                                         </div>
@@ -458,7 +458,7 @@ export default function SesionForm() {
                                 type="button"
                                 variant="outline"
                                 onClick={() => navigate(-1)}
-                                className="w-full mt-3 border-zinc-800 text-zinc-500 hover:text-zinc-50"
+                                className="w-full mt-3 border-border text-muted-foreground hover:text-foreground"
                             >
                                 Descartar cambios
                             </Button>
@@ -466,11 +466,11 @@ export default function SesionForm() {
                             <div className="mt-8 p-6 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl">
                                 <h4 className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-4 italic">Resumen de Carga</h4>
                                 <div className="space-y-3 text-sm">
-                                    <div className="flex justify-between items-center text-zinc-400">
+                                    <div className="flex justify-between items-center text-muted-foreground">
                                         <span className="font-medium">Total Tareas:</span>
-                                        <span className="text-zinc-100 font-bold">{selectedExercises.length}</span>
+                                        <span className="text-foreground font-bold">{selectedExercises.length}</span>
                                     </div>
-                                    <div className="flex justify-between items-center text-zinc-400">
+                                    <div className="flex justify-between items-center text-muted-foreground">
                                         <span className="font-medium">Tiempo total:</span>
                                         <span className="text-emerald-500 font-black italic text-lg">
                                             {selectedExercises.reduce((acc, curr) => acc + (curr.minutos_sesion || 0), 0)} min
@@ -501,10 +501,10 @@ function EjercicioSelector({ onSelect }: { onSelect: (ex: Ejercicio) => void }) 
     return (
         <div className="space-y-4">
             <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                     placeholder="Buscar ejercicio por nombre u objetivo..."
-                    className="pl-9 bg-zinc-900 border-zinc-800"
+                    className="pl-9 bg-card border-border"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     autoFocus
@@ -515,16 +515,16 @@ function EjercicioSelector({ onSelect }: { onSelect: (ex: Ejercicio) => void }) 
                     {filtered.map((ex) => (
                         <div
                             key={ex.id}
-                            className="flex items-center p-3 rounded-xl border border-zinc-800 hover:bg-zinc-900 hover:border-emerald-500/50 cursor-pointer transition-all active:scale-[0.98]"
+                            className="flex items-center p-3 rounded-xl border border-border hover:bg-card hover:border-emerald-500/50 cursor-pointer transition-all active:scale-[0.98]"
                             onClick={() => onSelect(ex)}
                         >
-                            <div className="h-10 w-10 bg-zinc-950 rounded-lg flex items-center justify-center overflow-hidden shrink-0 border border-zinc-800">
-                                {ex.url_imagen ? <img src={ex.url_imagen} alt="" className="w-full h-full object-cover" /> : <ImageIcon className="h-4 w-4 text-zinc-800" />}
+                            <div className="h-10 w-10 bg-background rounded-lg flex items-center justify-center overflow-hidden shrink-0 border border-border">
+                                {ex.url_imagen ? <img src={ex.url_imagen} alt="" className="w-full h-full object-cover" /> : <ImageIcon className="h-4 w-4 text-muted-foreground" />}
                             </div>
                             <div className="ml-3 flex-1 min-w-0">
-                                <p className="text-sm font-bold text-zinc-200 truncate leading-none mb-1">{ex.titulo}</p>
+                                <p className="text-sm font-bold text-foreground truncate leading-none mb-1">{ex.titulo}</p>
                                 <div className="flex items-center gap-2 mt-0.5">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                                         {ex.etapa_sesion}
                                     </span>
                                     {ex.es_portero && <Badge className="text-[9px] h-3.5 py-0 bg-amber-500/10 text-amber-500 border-none font-bold uppercase tracking-tighter">Porteros</Badge>}
@@ -534,7 +534,7 @@ function EjercicioSelector({ onSelect }: { onSelect: (ex: Ejercicio) => void }) 
                         </div>
                     ))}
                     {filtered.length === 0 && (
-                        <div className="p-8 text-center text-zinc-600 text-sm italic">
+                        <div className="p-8 text-center text-muted-foreground text-sm italic">
                             No se encontraron ejercicios con ese nombre.
                         </div>
                     )}

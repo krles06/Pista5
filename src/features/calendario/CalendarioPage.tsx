@@ -121,7 +121,7 @@ export default function CalendarioPage() {
                             variant="outline"
                             size="icon"
                             onClick={() => navigate(`/temporadas/${id_temporada}`)}
-                            className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 shrink-0"
+                            className="border-border bg-card text-muted-foreground hover:text-foreground shrink-0"
                         >
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
@@ -130,11 +130,11 @@ export default function CalendarioPage() {
                         <Badge variant="outline" className="text-emerald-500 border-emerald-500/20 bg-emerald-500/10 mb-2 font-black uppercase tracking-widest text-[10px]">
                             {temporada ? `${temporada.equipo} - ${temporada.temporada}` : 'General'}
                         </Badge>
-                        <h1 className="text-3xl font-bold tracking-tight text-zinc-50 flex items-center gap-3">
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
                             <CalendarDays className="h-8 w-8 text-emerald-500" />
                             {temporada ? 'Calendario de Temporada' : 'Calendario Global'}
                         </h1>
-                        <p className="text-zinc-400 mt-1">
+                        <p className="text-muted-foreground mt-1">
                             {temporada
                                 ? `Sesiones y partidos planificados para la temporada ${temporada.temporada}.`
                                 : 'Visión global de todas las sesiones de entrenamiento y partidos de la temporada.'}
@@ -143,17 +143,17 @@ export default function CalendarioPage() {
                 </div>
 
                 {/* View toggles */}
-                <div className="flex items-center rounded-lg bg-zinc-900 border border-zinc-800 p-1 w-fit">
+                <div className="flex items-center rounded-lg bg-card border border-border p-1 w-fit">
                     <button
                         onClick={() => setViewMode('month')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold transition-all ${viewMode === 'month' ? 'bg-zinc-800 text-zinc-100 shadow-sm' : 'text-zinc-500 hover:text-zinc-300'}`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold transition-all ${viewMode === 'month' ? 'bg-muted text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
                     >
                         <CalendarIcon className="h-4 w-4" />
                         Mes
                     </button>
                     <button
                         onClick={() => setViewMode('week')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold transition-all ${viewMode === 'week' ? 'bg-zinc-800 text-zinc-100 shadow-sm' : 'text-zinc-500 hover:text-zinc-300'}`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold transition-all ${viewMode === 'week' ? 'bg-muted text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
                     >
                         <CalendarDays className="h-4 w-4" />
                         Semana
@@ -162,36 +162,36 @@ export default function CalendarioPage() {
             </div>
 
             {/* Calendar View */}
-            <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden">
+            <Card className="border-border bg-card shadow-xl overflow-hidden">
                 {/* Calendar Controls */}
-                <div className="flex items-center justify-between p-4 border-b border-zinc-800 bg-zinc-950/50">
-                    <h2 className="text-xl font-bold text-zinc-100 capitalize">
+                <div className="flex items-center justify-between p-4 border-b border-border bg-background/50">
+                    <h2 className="text-xl font-bold text-foreground capitalize">
                         {periodTitle}
                     </h2>
                     <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" onClick={prevPeriod} className="h-8 w-8 border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-300">
+                        <Button variant="outline" size="icon" onClick={prevPeriod} className="h-8 w-8 border-border bg-card hover:bg-muted text-foreground">
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm" onClick={handleToday} className="h-8 text-xs font-bold border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-300">
+                        <Button variant="outline" size="sm" onClick={handleToday} className="h-8 text-xs font-bold border-border bg-card hover:bg-muted text-foreground">
                             HOY
                         </Button>
-                        <Button variant="outline" size="icon" onClick={nextPeriod} className="h-8 w-8 border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-300">
+                        <Button variant="outline" size="icon" onClick={nextPeriod} className="h-8 w-8 border-border bg-card hover:bg-muted text-foreground">
                             <ChevronRight className="h-4 w-4" />
                         </Button>
                     </div>
                 </div>
 
                 {/* Days of week */}
-                <div className="grid grid-cols-7 border-b border-zinc-800 bg-zinc-900/80">
+                <div className="grid grid-cols-7 border-b border-border bg-card/80">
                     {['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'].map((day) => (
-                        <div key={day} className="py-2 text-center text-[10px] font-black tracking-widest text-zinc-500 uppercase">
+                        <div key={day} className="py-2 text-center text-[10px] font-black tracking-widest text-muted-foreground uppercase">
                             {day}
                         </div>
                     ))}
                 </div>
 
                 {/* Days Grid */}
-                <div className="grid grid-cols-7 bg-zinc-800 gap-[1px]">
+                <div className="grid grid-cols-7 bg-muted gap-[1px]">
                     {days.map((day, i) => {
                         // In month view, detect if day is part of current month for dimming effect
                         const isCurrentMonth = viewMode === 'week' || isSameMonth(day, currentDate);
@@ -210,13 +210,13 @@ export default function CalendarioPage() {
                             <div
                                 key={i}
                                 className={`
-                                    min-h-[120px] bg-zinc-900 p-2 transition-colors hover:bg-zinc-800/80 
-                                    ${!isCurrentMonth ? 'opacity-40 bg-zinc-950' : ''}
+                                    min-h-[120px] bg-card p-2 transition-colors hover:bg-muted/80 
+                                    ${!isCurrentMonth ? 'opacity-40 bg-background' : ''}
                                     ${viewMode === 'week' ? 'min-h-[200px] sm:min-h-[300px]' : ''}
                                 `}
                             >
                                 <div className="flex justify-between items-center mb-2">
-                                    <span className={`text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full ${isToday ? 'bg-emerald-600 text-white' : 'text-zinc-400'}`}>
+                                    <span className={`text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full ${isToday ? 'bg-emerald-600 text-white' : 'text-muted-foreground'}`}>
                                         {format(day, dateFormat)}
                                     </span>
                                 </div>

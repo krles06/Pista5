@@ -48,62 +48,62 @@ export default function ProfilePage() {
     return (
         <div className="max-w-3xl mx-auto space-y-6">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight text-zinc-50">Mi Perfil</h1>
-                <p className="text-zinc-400">Gestiona tu información personal y configuración de cuenta.</p>
+                <h1 className="text-3xl font-bold tracking-tight text-foreground">Mi Perfil</h1>
+                <p className="text-muted-foreground">Gestiona tu información personal y configuración de cuenta.</p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-                <Card className="border-zinc-800 bg-zinc-900 shadow-xl md:col-span-2">
+                <Card className="border-border bg-card shadow-xl md:col-span-2">
                     <form onSubmit={handleSubmit}>
                         <CardHeader>
                             <CardTitle className="text-xl flex items-center gap-2">
                                 <User className="h-5 w-5 text-emerald-500" />
                                 Información Personal
                             </CardTitle>
-                            <CardDescription className="text-zinc-400">
+                            <CardDescription className="text-muted-foreground">
                                 Actualiza tus datos de entrenador.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid gap-4 md:grid-cols-2">
                                 <div className="space-y-2">
-                                    <Label htmlFor="name" className="text-zinc-300">Nombre completo</Label>
+                                    <Label htmlFor="name" className="text-foreground">Nombre completo</Label>
                                     <Input
                                         id="name"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
+                                        className="bg-background border-border focus-visible:ring-emerald-500"
                                         disabled={loading}
                                         required
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="team" className="text-zinc-300">Equipo actual</Label>
+                                    <Label htmlFor="team" className="text-foreground">Equipo actual</Label>
                                     <Input
                                         id="team"
                                         value={team}
                                         onChange={(e) => setTeam(e.target.value)}
-                                        className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
+                                        className="bg-background border-border focus-visible:ring-emerald-500"
                                         placeholder="Ej: Sala 5 Martorell"
                                         disabled={loading}
                                     />
                                 </div>
                             </div>
 
-                            <div className="space-y-2 pt-4 border-t border-zinc-800">
-                                <Label className="text-zinc-300 flex items-center gap-2">
+                            <div className="space-y-2 pt-4 border-t border-border">
+                                <Label className="text-foreground flex items-center gap-2">
                                     <Mail className="h-4 w-4" />
                                     Email de acceso (Solo lectura)
                                 </Label>
                                 <Input
                                     value={user.email}
-                                    className="bg-zinc-950/50 border-zinc-800 text-zinc-500 cursor-not-allowed"
+                                    className="bg-background/50 border-border text-muted-foreground cursor-not-allowed"
                                     disabled
                                 />
-                                <p className="text-xs text-zinc-500">Para cambiar tu email debes contactar con soporte.</p>
+                                <p className="text-xs text-muted-foreground">Para cambiar tu email debes contactar con soporte.</p>
                             </div>
                         </CardContent>
-                        <CardFooter className="flex justify-end border-t border-zinc-800 pt-6">
+                        <CardFooter className="flex justify-end border-t border-border pt-6">
                             <Button
                                 type="submit"
                                 className="bg-emerald-600 hover:bg-emerald-700 text-white"
@@ -115,21 +115,21 @@ export default function ProfilePage() {
                     </form>
                 </Card>
 
-                <Card className="border-zinc-800 bg-zinc-900 shadow-xl md:col-span-2">
+                <Card className="border-border bg-card shadow-xl md:col-span-2">
                     <CardHeader>
-                        <CardTitle className="text-xl flex items-center gap-2 text-zinc-50">
+                        <CardTitle className="text-xl flex items-center gap-2 text-foreground">
                             <Shield className="h-5 w-5 text-emerald-500" />
                             Seguridad
                         </CardTitle>
-                        <CardDescription className="text-zinc-400">
+                        <CardDescription className="text-muted-foreground">
                             Gestiona tu contraseña.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Button variant="outline" className="border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-50">
+                        <Button variant="outline" className="border-border bg-muted text-foreground hover:bg-muted/80 hover:text-foreground">
                             Cambiar contraseña
                         </Button>
-                        <p className="mt-2 text-xs text-zinc-500">Se enviará un enlace de recuperación a tu email.</p>
+                        <p className="mt-2 text-xs text-muted-foreground">Se enviará un enlace de recuperación a tu email.</p>
                     </CardContent>
                 </Card>
             </div>

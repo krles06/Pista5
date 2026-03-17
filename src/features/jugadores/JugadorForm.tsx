@@ -153,15 +153,15 @@ export default function JugadorForm() {
                     size="icon"
                     type="button"
                     onClick={() => navigate(-1)}
-                    className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50"
+                    className="border-border bg-card text-muted-foreground hover:text-foreground"
                 >
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
+                    <h1 className="text-3xl font-bold tracking-tight text-foreground">
                         {isEditing ? 'Editar Jugador' : 'Nuevo Jugador'}
                     </h1>
-                    <p className="text-zinc-400">Completa la ficha técnica y personal del jugador.</p>
+                    <p className="text-muted-foreground">Completa la ficha técnica y personal del jugador.</p>
                 </div>
             </div>
 
@@ -169,19 +169,19 @@ export default function JugadorForm() {
 
                 {/* Foto y Estado - Sidebar Left */}
                 <div className="space-y-6">
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden">
-                        <CardHeader className="p-4 border-b border-zinc-800 text-center">
-                            <CardTitle className="text-sm font-bold uppercase tracking-widest text-zinc-400">Fotografía</CardTitle>
+                    <Card className="border-border bg-card shadow-xl overflow-hidden">
+                        <CardHeader className="p-4 border-b border-border text-center">
+                            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Fotografía</CardTitle>
                         </CardHeader>
                         <CardContent className="p-6 flex flex-col items-center">
                             <div
-                                className="w-32 h-32 rounded-full bg-zinc-950 border-2 border-dashed border-zinc-800 flex items-center justify-center overflow-hidden mb-4 group relative cursor-pointer"
+                                className="w-32 h-32 rounded-full bg-background border-2 border-dashed border-border flex items-center justify-center overflow-hidden mb-4 group relative cursor-pointer"
                                 onClick={() => fileInputRef.current?.click()}
                             >
                                 {photoPreview ? (
                                     <img src={photoPreview} alt="" className="w-full h-full object-cover" />
                                 ) : (
-                                    <User className="h-12 w-12 text-zinc-800" />
+                                    <User className="h-12 w-12 text-muted-foreground" />
                                 )}
                                 <div className="absolute inset-0 bg-emerald-600/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                                     <Upload className="h-6 w-6 text-emerald-500" />
@@ -195,7 +195,7 @@ export default function JugadorForm() {
                                 onChange={handlePhotoChange}
                             />
                             <div className="flex gap-2">
-                                <Button type="button" variant="outline" size="sm" className="border-zinc-800 text-xs text-zinc-400" onClick={() => fileInputRef.current?.click()}>
+                                <Button type="button" variant="outline" size="sm" className="border-border text-xs text-muted-foreground" onClick={() => fileInputRef.current?.click()}>
                                     {photoPreview ? 'Cambiar' : 'Subir foto'}
                                 </Button>
                                 {photoPreview && (
@@ -207,12 +207,12 @@ export default function JugadorForm() {
                         </CardContent>
                     </Card>
 
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                    <Card className="border-border bg-card shadow-xl">
                         <CardContent className="p-6 space-y-4">
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label htmlFor="lesionado" className="text-zinc-200">Lesionado</Label>
-                                    <p className="text-xs text-zinc-500">No disponible para jugar</p>
+                                    <Label htmlFor="lesionado" className="text-foreground">Lesionado</Label>
+                                    <p className="text-xs text-muted-foreground">No disponible para jugar</p>
                                 </div>
                                 <Switch
                                     id="lesionado"
@@ -226,32 +226,32 @@ export default function JugadorForm() {
 
                 {/* Main Form Data - Center/Right */}
                 <div className="md:col-span-2 space-y-6">
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                    <Card className="border-border bg-card shadow-xl">
                         <CardHeader>
-                            <CardTitle className="text-zinc-50">Información Personal</CardTitle>
+                            <CardTitle className="text-foreground">Información Personal</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="nombre" className="text-zinc-300">Nombre *</Label>
-                                    <Input id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} className="bg-zinc-950 border-zinc-800" required />
+                                    <Label htmlFor="nombre" className="text-foreground">Nombre *</Label>
+                                    <Input id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} className="bg-background border-border" required />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="apellidos" className="text-zinc-300">Apellidos</Label>
-                                    <Input id="apellidos" name="apellidos" value={formData.apellidos || ''} onChange={handleChange} className="bg-zinc-950 border-zinc-800" />
+                                    <Label htmlFor="apellidos" className="text-foreground">Apellidos</Label>
+                                    <Input id="apellidos" name="apellidos" value={formData.apellidos || ''} onChange={handleChange} className="bg-background border-border" />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="temporada" className="text-zinc-300">Temporada</Label>
+                                <Label htmlFor="temporada" className="text-foreground">Temporada</Label>
                                 <Select
                                     value={formData.id_temporada || 'none'}
                                     onValueChange={(v) => setFormData(prev => ({ ...prev, id_temporada: v === 'none' ? null : v }))}
                                 >
-                                    <SelectTrigger className="bg-zinc-950 border-zinc-800">
+                                    <SelectTrigger className="bg-background border-border">
                                         <SelectValue placeholder="Sin temporada (global)" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                    <SelectContent className="bg-card border-border text-foreground">
                                         <SelectItem value="none">Sin temporada (global)</SelectItem>
                                         {temporadas?.map(t => (
                                             <SelectItem key={t.id} value={t.id}>
@@ -264,53 +264,53 @@ export default function JugadorForm() {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="posicion" className="text-zinc-300">Posición Principal</Label>
+                                    <Label htmlFor="posicion" className="text-foreground">Posición Principal</Label>
                                     <Select value={formData.posicion || 'Universal'} onValueChange={(v) => setFormData(prev => ({ ...prev, posicion: v }))}>
-                                        <SelectTrigger className="bg-zinc-950 border-zinc-800">
+                                        <SelectTrigger className="bg-background border-border">
                                             <SelectValue placeholder="Selecciona..." />
                                         </SelectTrigger>
-                                        <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                        <SelectContent className="bg-card border-border text-foreground">
                                             {POSICIONES.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                                         </SelectContent>
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="dorsal" className="text-zinc-300">Dorsal</Label>
-                                    <Input id="dorsal" name="dorsal" type="number" value={formData.dorsal || ''} onChange={handleChange} className="bg-zinc-950 border-zinc-800" />
+                                    <Label htmlFor="dorsal" className="text-foreground">Dorsal</Label>
+                                    <Input id="dorsal" name="dorsal" type="number" value={formData.dorsal || ''} onChange={handleChange} className="bg-background border-border" />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="fecha_nacimiento" className="text-zinc-300">Fecha de Nacimiento</Label>
-                                <Input id="fecha_nacimiento" name="fecha_nacimiento" type="date" value={formData.fecha_nacimiento || ''} onChange={handleChange} className="bg-zinc-950 border-zinc-800 [color-scheme:dark]" />
+                                <Label htmlFor="fecha_nacimiento" className="text-foreground">Fecha de Nacimiento</Label>
+                                <Input id="fecha_nacimiento" name="fecha_nacimiento" type="date" value={formData.fecha_nacimiento || ''} onChange={handleChange} className="bg-background border-border [color-scheme:dark]" />
                             </div>
                         </CardContent>
                     </Card>
 
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                    <Card className="border-border bg-card shadow-xl">
                         <CardHeader>
-                            <CardTitle className="text-zinc-50">Contacto y Notas</CardTitle>
+                            <CardTitle className="text-foreground">Contacto y Notas</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="telefono" className="text-zinc-300">Teléfono</Label>
-                                    <Input id="telefono" name="telefono" value={formData.telefono || ''} onChange={handleChange} className="bg-zinc-950 border-zinc-800" />
+                                    <Label htmlFor="telefono" className="text-foreground">Teléfono</Label>
+                                    <Input id="telefono" name="telefono" value={formData.telefono || ''} onChange={handleChange} className="bg-background border-border" />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="email" className="text-zinc-300">Email</Label>
-                                    <Input id="email" name="email" value={formData.email || ''} onChange={handleChange} className="bg-zinc-950 border-zinc-800" />
+                                    <Label htmlFor="email" className="text-foreground">Email</Label>
+                                    <Input id="email" name="email" value={formData.email || ''} onChange={handleChange} className="bg-background border-border" />
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="notas" className="text-zinc-300">Observaciones Técnicas / Notas</Label>
-                                <Textarea id="notas" name="notas" value={formData.notas || ''} onChange={handleChange} className="bg-zinc-950 border-zinc-800 min-h-[100px]" />
+                                <Label htmlFor="notas" className="text-foreground">Observaciones Técnicas / Notas</Label>
+                                <Textarea id="notas" name="notas" value={formData.notas || ''} onChange={handleChange} className="bg-background border-border min-h-[100px]" />
                             </div>
                         </CardContent>
                     </Card>
 
                     <div className="flex justify-end gap-3 pt-4">
-                        <Button type="button" variant="outline" onClick={() => navigate(-1)} className="border-zinc-800 text-zinc-400 hover:text-zinc-50">
+                        <Button type="button" variant="outline" onClick={() => navigate(-1)} className="border-border text-muted-foreground hover:text-foreground">
                             Cancelar
                         </Button>
                         <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white px-8" disabled={isSaving}>

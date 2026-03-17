@@ -44,19 +44,19 @@ export default function PlanificacionPage() {
                     variant="outline"
                     size="icon"
                     onClick={() => navigate(`/temporadas/${temporada.id}`)}
-                    className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800 shrink-0"
+                    className="border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted shrink-0"
                 >
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div className="flex-1">
-                    <div className="flex items-center gap-2 text-sm text-zinc-400 mb-1">
-                        <span className="hover:text-zinc-300 cursor-pointer" onClick={() => navigate('/temporadas')}>Temporadas</span>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                        <span className="hover:text-foreground cursor-pointer" onClick={() => navigate('/temporadas')}>Temporadas</span>
                         <ChevronRight className="h-4 w-4" />
-                        <span className="hover:text-zinc-300 cursor-pointer" onClick={() => navigate(`/temporadas/${temporada.id}`)}>{temporada.temporada}</span>
+                        <span className="hover:text-foreground cursor-pointer" onClick={() => navigate(`/temporadas/${temporada.id}`)}>{temporada.temporada}</span>
                         <ChevronRight className="h-4 w-4" />
-                        <span className="text-zinc-300 font-medium">Planificación</span>
+                        <span className="text-foreground font-medium">Planificación</span>
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50 flex items-center gap-3">
+                    <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
                         <MapIcon className="h-8 w-8 text-emerald-500" />
                         Estructura de la Temporada
                     </h1>
@@ -70,8 +70,8 @@ export default function PlanificacionPage() {
                 </Button>
             </div>
 
-            <Card className="border-zinc-800 bg-zinc-900/50 shadow-none border-dashed">
-                <CardContent className="p-4 flex items-center justify-between text-sm text-zinc-400">
+            <Card className="border-border bg-card/50 shadow-none border-dashed">
+                <CardContent className="p-4 flex items-center justify-between text-sm text-muted-foreground">
                     <span>Límites de temporada: <strong>{format(new Date(temporada.fecha_inicio), "dd/MM/yyyy")}</strong> - <strong>{format(new Date(temporada.fecha_fin), "dd/MM/yyyy")}</strong></span>
                     <span>Asegúrate de que los bloques (Macro, Meso, Micro) estén dentro de estas fechas.</span>
                 </CardContent>
@@ -80,12 +80,12 @@ export default function PlanificacionPage() {
             {/* Tree View container */}
             <div className="space-y-4">
                 {!macrociclos || macrociclos.length === 0 ? (
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl border-dashed">
+                    <Card className="border-border bg-card shadow-xl border-dashed">
                         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                            <MapIcon className="h-12 w-12 text-zinc-600 mb-4" />
-                            <h3 className="text-lg font-medium text-zinc-200">Planificación vacía</h3>
-                            <p className="text-zinc-400 mt-1 mb-4">Empieza estructurando la temporada en grandes bloques (Macrociclos).</p>
-                            <Button onClick={() => setIsMacroModalOpen(true)} variant="outline" className="border-zinc-700 text-zinc-300">
+                            <MapIcon className="h-12 w-12 text-muted-foreground mb-4" />
+                            <h3 className="text-lg font-medium text-foreground">Planificación vacía</h3>
+                            <p className="text-muted-foreground mt-1 mb-4">Empieza estructurando la temporada en grandes bloques (Macrociclos).</p>
+                            <Button onClick={() => setIsMacroModalOpen(true)} variant="outline" className="border-border text-foreground">
                                 Añadir Macrociclo
                             </Button>
                         </CardContent>

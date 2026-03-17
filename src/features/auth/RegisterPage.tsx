@@ -52,7 +52,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-black p-4 relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
             {/* Ambient Background Glow */}
             <div className="absolute top-0 -left-4 w-72 h-72 bg-emerald-600/10 rounded-full blur-[128px]" />
             <div className="absolute bottom-0 -right-4 w-72 h-72 bg-emerald-600/10 rounded-full blur-[128px]" />
@@ -63,67 +63,67 @@ export default function RegisterPage() {
                         <Activity className="h-8 w-8 text-emerald-500" />
                     </div>
                     <div className="space-y-1">
-                        <h1 className="text-3xl font-black tracking-tighter text-white uppercase italic">Pista5</h1>
-                        <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">Unirse a la élite</p>
+                        <h1 className="text-3xl font-black tracking-tighter text-foreground uppercase italic">Pista5</h1>
+                        <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Unirse a la élite</p>
                     </div>
                 </div>
 
-                <Card className="border-zinc-800/50 bg-zinc-950/50 backdrop-blur-xl shadow-2xl">
+                <Card className="border-border/50 bg-background/50 backdrop-blur-xl shadow-2xl">
                     <form onSubmit={handleRegister}>
                         <CardHeader className="space-y-1">
-                            <CardTitle className="text-2xl text-white font-bold tracking-tight">Registro</CardTitle>
-                            <CardDescription className="text-zinc-500">
+                            <CardTitle className="text-2xl text-foreground font-bold tracking-tight">Registro</CardTitle>
+                            <CardDescription className="text-muted-foreground">
                                 Gestiona tus planificaciones profesionalmente
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="name" className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Nombre completo *</Label>
+                                <Label htmlFor="name" className="text-muted-foreground text-xs font-bold uppercase tracking-wider">Nombre completo *</Label>
                                 <Input
                                     id="name"
                                     placeholder="Ej: Carles..."
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-700 h-11 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50"
+                                    className="bg-background/40 border-border text-foreground placeholder:text-muted-foreground/50 h-11 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50"
                                     disabled={loading}
                                     required
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="email" className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Email de contacto *</Label>
+                                <Label htmlFor="email" className="text-muted-foreground text-xs font-bold uppercase tracking-wider">Email de contacto *</Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     placeholder="tu-nombre@gmail.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-700 h-11 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50"
+                                    className="bg-background/40 border-border text-foreground placeholder:text-muted-foreground/50 h-11 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50"
                                     disabled={loading}
                                     required
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="password" className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Contraseña *</Label>
+                                <Label htmlFor="password" className="text-muted-foreground text-xs font-bold uppercase tracking-wider">Contraseña *</Label>
                                 <Input
                                     id="password"
                                     type="password"
                                     placeholder="Seguridad avanzada"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-700 h-11 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50"
+                                    className="bg-background/40 border-border text-foreground placeholder:text-muted-foreground/50 h-11 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50"
                                     disabled={loading}
                                     minLength={6}
                                     required
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="team" className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Club actual (Opcional)</Label>
+                                <Label htmlFor="team" className="text-muted-foreground text-xs font-bold uppercase tracking-wider">Club actual (Opcional)</Label>
                                 <Input
                                     id="team"
                                     placeholder="Ej: Sala 5 Martorell"
                                     value={team}
                                     onChange={(e) => setTeam(e.target.value)}
-                                    className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-700 h-11 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50"
+                                    className="bg-background/40 border-border text-foreground placeholder:text-muted-foreground/50 h-11 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50"
                                     disabled={loading}
                                 />
                             </div>
@@ -136,9 +136,9 @@ export default function RegisterPage() {
                             >
                                 {loading ? 'Creando perfil...' : 'Comenzar ahora'}
                             </Button>
-                            <div className="text-sm text-center text-zinc-500">
+                            <div className="text-sm text-center text-muted-foreground">
                                 ¿Ya tienes cuenta?{' '}
-                                <Link to="/login" className="font-bold text-white hover:text-emerald-500 transition-colors underline underline-offset-4 decoration-emerald-500/20">
+                                <Link to="/login" className="font-bold text-foreground hover:text-emerald-500 transition-colors underline underline-offset-4 decoration-emerald-500/20">
                                     Inicia sesión
                                 </Link>
                             </div>
@@ -147,10 +147,10 @@ export default function RegisterPage() {
                 </Card>
 
                 <div className="flex flex-col items-center gap-4 py-4">
-                    <p className="text-center text-[10px] text-zinc-600 uppercase tracking-[0.2em] font-bold">
+                    <p className="text-center text-[10px] text-muted-foreground/60 uppercase tracking-[0.2em] font-bold">
                         © {new Date().getFullYear()} Pista5 Performance System
                     </p>
-                    <div className="flex items-center gap-6 text-[10px] text-zinc-500 uppercase tracking-widest font-bold">
+                    <div className="flex items-center gap-6 text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
                         <Link to="/contacto" className="hover:text-emerald-500 transition-colors">Contacto</Link>
                         <Link to="/terminos" className="hover:text-emerald-500 transition-colors">Términos</Link>
                     </div>

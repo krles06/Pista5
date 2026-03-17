@@ -98,100 +98,100 @@ export default function TemporadaForm() {
                     variant="outline"
                     size="icon"
                     onClick={() => navigate('/temporadas')}
-                    className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800"
+                    className="border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted"
                 >
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
+                    <h1 className="text-3xl font-bold tracking-tight text-foreground">
                         {isEditing ? 'Editar Temporada' : 'Nueva Temporada'}
                     </h1>
-                    <p className="text-zinc-400">
+                    <p className="text-muted-foreground">
                         {isEditing ? 'Modifica los datos generales de la temporada.' : 'Configura una nueva temporada deportiva.'}
                     </p>
                 </div>
             </div>
 
-            <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+            <Card className="border-border bg-card shadow-xl">
                 <form onSubmit={handleSubmit}>
                     <CardHeader>
-                        <CardTitle className="text-xl text-zinc-50">Datos Generales</CardTitle>
-                        <CardDescription className="text-zinc-400">
+                        <CardTitle className="text-xl text-foreground">Datos Generales</CardTitle>
+                        <CardDescription className="text-muted-foreground">
                             Información básica para identificar esta planificación.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="grid gap-6 md:grid-cols-2">
                             <div className="space-y-2">
-                                <Label htmlFor="temporada" className="text-zinc-300">Nombre temporada *</Label>
+                                <Label htmlFor="temporada" className="text-foreground">Nombre temporada *</Label>
                                 <Input
                                     id="temporada"
                                     name="temporada"
                                     placeholder="Ej: 2025/2026 o Apertura 2025"
                                     value={formData.temporada}
                                     onChange={handleChange}
-                                    className="bg-zinc-950 border-zinc-800 text-zinc-50 focus-visible:ring-emerald-500"
+                                    className="bg-background border-border text-foreground focus-visible:ring-emerald-500"
                                     required
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="equipo" className="text-zinc-300">Equipo *</Label>
+                                <Label htmlFor="equipo" className="text-foreground">Equipo *</Label>
                                 <Input
                                     id="equipo"
                                     name="equipo"
                                     placeholder="Ej: Sala 5 Martorell"
                                     value={formData.equipo}
                                     onChange={handleChange}
-                                    className="bg-zinc-950 border-zinc-800 text-zinc-50 focus-visible:ring-emerald-500"
+                                    className="bg-background border-border text-foreground focus-visible:ring-emerald-500"
                                     required
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="categoria" className="text-zinc-300">Categoría (Opcional)</Label>
+                                <Label htmlFor="categoria" className="text-foreground">Categoría (Opcional)</Label>
                                 <Input
                                     id="categoria"
                                     name="categoria"
                                     placeholder="Ej: Senior, Juvenil A..."
                                     value={formData.categoria}
                                     onChange={handleChange}
-                                    className="bg-zinc-950 border-zinc-800 text-zinc-50 focus-visible:ring-emerald-500"
+                                    className="bg-background border-border text-foreground focus-visible:ring-emerald-500"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="entrenador" className="text-zinc-300">Entrenador Principal (Opcional)</Label>
+                                <Label htmlFor="entrenador" className="text-foreground">Entrenador Principal (Opcional)</Label>
                                 <Input
                                     id="entrenador"
                                     name="entrenador"
                                     value={formData.entrenador}
                                     onChange={handleChange}
-                                    className="bg-zinc-950 border-zinc-800 text-zinc-50 focus-visible:ring-emerald-500"
+                                    className="bg-background border-border text-foreground focus-visible:ring-emerald-500"
                                 />
                             </div>
 
-                            <div className="space-y-4 md:col-span-2 border-t border-zinc-800 pt-6 mt-2">
-                                <h3 className="text-sm font-medium text-zinc-50">Duración y Objetivos</h3>
+                            <div className="space-y-4 md:col-span-2 border-t border-border pt-6 mt-2">
+                                <h3 className="text-sm font-medium text-foreground">Duración y Objetivos</h3>
                                 <div className="grid gap-6 md:grid-cols-2">
                                     <div className="space-y-2">
-                                        <Label htmlFor="fecha_inicio" className="text-zinc-300">Fecha de inicio *</Label>
+                                        <Label htmlFor="fecha_inicio" className="text-foreground">Fecha de inicio *</Label>
                                         <Input
                                             id="fecha_inicio"
                                             name="fecha_inicio"
                                             type="date"
                                             value={formData.fecha_inicio}
                                             onChange={handleChange}
-                                            className="bg-zinc-950 border-zinc-800 text-zinc-50 focus-visible:ring-emerald-500 [color-scheme:dark]"
+                                            className="bg-background border-border text-foreground focus-visible:ring-emerald-500 [color-scheme:dark]"
                                             required
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="fecha_fin" className="text-zinc-300">Fecha de fin *</Label>
+                                        <Label htmlFor="fecha_fin" className="text-foreground">Fecha de fin *</Label>
                                         <Input
                                             id="fecha_fin"
                                             name="fecha_fin"
                                             type="date"
                                             value={formData.fecha_fin}
                                             onChange={handleChange}
-                                            className="bg-zinc-950 border-zinc-800 text-zinc-50 focus-visible:ring-emerald-500 [color-scheme:dark]"
+                                            className="bg-background border-border text-foreground focus-visible:ring-emerald-500 [color-scheme:dark]"
                                             required
                                         />
                                     </div>
@@ -199,24 +199,24 @@ export default function TemporadaForm() {
                             </div>
 
                             <div className="space-y-2 md:col-span-2">
-                                <Label htmlFor="objetivos" className="text-zinc-300">Objetivos generales (Opcional)</Label>
+                                <Label htmlFor="objetivos" className="text-foreground">Objetivos generales (Opcional)</Label>
                                 <Textarea
                                     id="objetivos"
                                     name="objetivos"
                                     placeholder="Resume los objetivos físicos, tácticos y competitivos para esta temporada..."
                                     value={formData.objetivos}
                                     onChange={handleChange}
-                                    className="min-h-[120px] bg-zinc-950 border-zinc-800 text-zinc-50 focus-visible:ring-emerald-500"
+                                    className="min-h-[120px] bg-background border-border text-foreground focus-visible:ring-emerald-500"
                                 />
                             </div>
                         </div>
 
-                        <div className="flex justify-end gap-4 pt-6 mt-6 border-t border-zinc-800">
+                        <div className="flex justify-end gap-4 pt-6 mt-6 border-t border-border">
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={() => navigate('/temporadas')}
-                                className="border-zinc-700 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-50"
+                                className="border-border bg-transparent text-foreground hover:bg-muted hover:text-foreground"
                             >
                                 Cancelar
                             </Button>

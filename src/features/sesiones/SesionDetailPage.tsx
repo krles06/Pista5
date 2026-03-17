@@ -79,7 +79,7 @@ export default function SesionDetailPage() {
 
     if (!sesion) {
         return (
-            <div className="p-8 text-center text-zinc-500">
+            <div className="p-8 text-center text-muted-foreground">
                 No se encontró la sesión.
                 <Button onClick={() => navigate(-1)} variant="link">Volver</Button>
             </div>
@@ -95,7 +95,7 @@ export default function SesionDetailPage() {
                         variant="outline"
                         size="icon"
                         onClick={() => navigate(`/sesiones/${sesion.id_microciclo}`)}
-                        className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 shrink-0"
+                        className="border-border bg-card text-muted-foreground hover:text-foreground shrink-0"
                     >
                         <ArrowLeft className="h-4 w-4" />
                     </Button>
@@ -105,12 +105,12 @@ export default function SesionDetailPage() {
                                 {format(new Date(sesion.fecha), "EEEE d MMM", { locale: es })}
                             </Badge>
                             {sesion.lugar && (
-                                <span className="text-xs text-zinc-500 flex items-center gap-1">
+                                <span className="text-xs text-muted-foreground flex items-center gap-1">
                                     <MapPin className="h-3 w-3" /> {sesion.lugar}
                                 </span>
                             )}
                         </div>
-                        <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground">
                             {sesion.objetivos || "Plan de Entrenamiento"}
                         </h1>
                     </div>
@@ -119,13 +119,13 @@ export default function SesionDetailPage() {
                 <div className="flex items-center gap-2 self-end sm:self-auto">
                     <Button
                         variant="outline"
-                        className="border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-zinc-50"
+                        className="border-border bg-card text-foreground hover:text-foreground"
                         onClick={() => navigate(`/sesiones/${sesion.id}/editar`)}
                     >
                         <Edit className="h-4 w-4 mr-2" /> Editar
                     </Button>
                     <Button
-                        className="bg-zinc-100 text-zinc-900 hover:bg-white font-medium"
+                        className="bg-foreground text-background hover:bg-white font-medium"
                         onClick={handleExportPDF}
                         disabled={exportingPDF}
                     >
@@ -143,29 +143,29 @@ export default function SesionDetailPage() {
 
                 {/* Left column - Session Info */}
                 <div className="md:col-span-1 space-y-6">
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                    <Card className="border-border bg-card shadow-xl">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-2">
+                            <CardTitle className="text-sm font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                                 <ClipboardList className="h-4 w-4" /> Resumen
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-1">
-                                <p className="text-xs text-zinc-500">Material necesario</p>
-                                <p className="text-sm text-zinc-200">{sesion.material || 'No especificado'}</p>
+                                <p className="text-xs text-muted-foreground">Material necesario</p>
+                                <p className="text-sm text-foreground">{sesion.material || 'No especificado'}</p>
                             </div>
-                            <Separator className="bg-zinc-800" />
+                            <Separator className="bg-muted" />
                             <div className="space-y-1">
-                                <p className="text-xs text-zinc-500">Observaciones</p>
-                                <p className="text-sm text-zinc-200 whitespace-pre-wrap">{sesion.observaciones || 'Sin notas'}</p>
+                                <p className="text-xs text-muted-foreground">Observaciones</p>
+                                <p className="text-sm text-foreground whitespace-pre-wrap">{sesion.observaciones || 'Sin notas'}</p>
                             </div>
-                            <Separator className="bg-zinc-800" />
+                            <Separator className="bg-muted" />
                             <div className="flex justify-between items-center text-sm pt-1">
-                                <span className="text-zinc-500">Total Ejercicios</span>
+                                <span className="text-muted-foreground">Total Ejercicios</span>
                                 <span className="font-bold text-emerald-500">{sesion.ejercicios.length}</span>
                             </div>
                             <div className="flex justify-between items-center text-sm">
-                                <span className="text-zinc-500">Tiempo Estimado</span>
+                                <span className="text-muted-foreground">Tiempo Estimado</span>
                                 <span className="font-bold text-emerald-500">
                                     {sesion.ejercicios.reduce((acc, curr) => acc + (curr.ejercicio.duracion_minutos || 0), 0)} min
                                 </span>
@@ -174,20 +174,20 @@ export default function SesionDetailPage() {
                     </Card>
 
                     {/* Feedback Táctico Section */}
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden">
+                    <Card className="border-border bg-card shadow-xl overflow-hidden">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-2">
+                            <CardTitle className="text-sm font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                                 <FileText className="h-4 w-4" /> Análisis Táctico
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="p-4 bg-zinc-950/50 rounded-xl border border-zinc-800/50 min-h-[100px]">
+                            <div className="p-4 bg-background/50 rounded-xl border border-border/50 min-h-[100px]">
                                 {sesion.feedback_tactico ? (
-                                    <p className="text-sm text-zinc-300 whitespace-pre-wrap leading-relaxed">
+                                    <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">
                                         {sesion.feedback_tactico}
                                     </p>
                                 ) : (
-                                    <p className="text-sm text-zinc-600 italic">
+                                    <p className="text-sm text-muted-foreground italic">
                                         Sin observaciones tácticas después de la sesión.
                                     </p>
                                 )}
@@ -196,7 +196,7 @@ export default function SesionDetailPage() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => navigate(`/sesiones/${sesion.id}/editar`)}
-                                className="w-full mt-4 text-xs font-black tracking-widest text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/5 border border-dashed border-zinc-800"
+                                className="w-full mt-4 text-xs font-black tracking-widest text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/5 border border-dashed border-border"
                             >
                                 ACTUALIZAR ANÁLISIS
                             </Button>
@@ -207,20 +207,20 @@ export default function SesionDetailPage() {
                 {/* Right column - Exercise list & Attendance */}
                 <div className="md:col-span-2 space-y-8">
                     <div className="space-y-4">
-                        <h2 className="text-lg font-bold text-zinc-300 flex items-center gap-2 px-1">
+                        <h2 className="text-lg font-bold text-foreground flex items-center gap-2 px-1">
                             <Target className="h-5 w-5 text-emerald-500" /> Ejercicios Planificados
                         </h2>
 
                         {sesion.ejercicios.length === 0 ? (
-                            <div className="p-8 text-center text-zinc-600 bg-zinc-900/30 rounded-2xl border border-zinc-800/50 border-dashed">
+                            <div className="p-8 text-center text-muted-foreground bg-card/30 rounded-2xl border border-border/50 border-dashed">
                                 No hay ejercicios añadidos a esta sesión.
                             </div>
                         ) : (
                             <div className="space-y-6">
                                 {sesion.ejercicios.map((se, index) => (
-                                    <Card key={se.id} className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden hover:border-zinc-700 transition-colors">
+                                    <Card key={se.id} className="border-border bg-card shadow-xl overflow-hidden hover:border-border transition-colors">
                                         <div className="flex flex-col sm:flex-row">
-                                            <div className="w-full sm:w-48 aspect-video sm:aspect-square bg-zinc-950 border-b sm:border-b-0 sm:border-r border-zinc-800 shrink-0">
+                                            <div className="w-full sm:w-48 aspect-video sm:aspect-square bg-background border-b sm:border-b-0 sm:border-r border-border shrink-0">
                                                 {se.ejercicio.url_imagen ? (
                                                     <img src={se.ejercicio.url_imagen} alt="" className="w-full h-full object-cover" />
                                                 ) : (
@@ -234,16 +234,16 @@ export default function SesionDetailPage() {
                                                     <span className="h-6 w-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-xs font-bold border border-emerald-500/20">
                                                         {index + 1}
                                                     </span>
-                                                    <Badge variant="outline" className="text-[10px] uppercase font-bold text-zinc-500 border-zinc-800">
+                                                    <Badge variant="outline" className="text-[10px] uppercase font-bold text-muted-foreground border-border">
                                                         {se.ejercicio.etapa_sesion}
                                                     </Badge>
                                                 </div>
-                                                <h3 className="text-xl font-bold text-zinc-100 mb-2">{se.ejercicio.titulo}</h3>
-                                                <p className="text-sm text-zinc-400 line-clamp-3 mb-4 leading-relaxed">
+                                                <h3 className="text-xl font-bold text-foreground mb-2">{se.ejercicio.titulo}</h3>
+                                                <p className="text-sm text-muted-foreground line-clamp-3 mb-4 leading-relaxed">
                                                     {se.ejercicio.objetivo_principal}
                                                 </p>
 
-                                                <div className="flex flex-wrap gap-4 text-xs text-zinc-500 bg-zinc-950/50 p-3 rounded-lg border border-zinc-800/50">
+                                                <div className="flex flex-wrap gap-4 text-xs text-muted-foreground bg-background/50 p-3 rounded-lg border border-border/50">
                                                     <div className="flex items-center gap-1.5">
                                                         <Clock className="h-3.5 w-3.5 text-emerald-500" />
                                                         <span>{se.ejercicio.duracion_minutos || '--'} min</span>

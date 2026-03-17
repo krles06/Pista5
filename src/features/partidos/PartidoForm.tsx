@@ -153,38 +153,38 @@ export default function PartidoForm() {
                     size="icon"
                     type="button"
                     onClick={() => navigate(-1)}
-                    className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50"
+                    className="border-border bg-card text-muted-foreground hover:text-foreground"
                 >
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
+                    <h1 className="text-3xl font-bold tracking-tight text-foreground">
                         {isEditing ? 'Editar Informe de Partido' : 'Nuevo Informe de Partido'}
                     </h1>
-                    <p className="text-zinc-400">Registra el resultado y la alineación del encuentro.</p>
+                    <p className="text-muted-foreground">Registra el resultado y la alineación del encuentro.</p>
                 </div>
             </div>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
                     {/* General Info */}
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden">
-                        <CardHeader className="border-b border-zinc-800/50 bg-zinc-900/50">
-                            <CardTitle className="text-lg text-zinc-50">Detalles del Encuentro</CardTitle>
+                    <Card className="border-border bg-card shadow-xl overflow-hidden">
+                        <CardHeader className="border-b border-border/50 bg-card/50">
+                            <CardTitle className="text-lg text-foreground">Detalles del Encuentro</CardTitle>
                         </CardHeader>
                         <CardContent className="p-6 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label className="text-zinc-400">Temporada *</Label>
+                                    <Label className="text-muted-foreground">Temporada *</Label>
                                     <Select
                                         value={selectedTemporada}
                                         onValueChange={setSelectedTemporada}
                                         disabled={isEditing}
                                     >
-                                        <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-100">
+                                        <SelectTrigger className="bg-background border-border text-foreground">
                                             <SelectValue placeholder="Selecciona temporada" />
                                         </SelectTrigger>
-                                        <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-100">
+                                        <SelectContent className="bg-card border-border text-foreground">
                                             {temporadas?.map(t => (
                                                 <SelectItem key={t.id} value={t.id}>{t.temporada} - {t.equipo}</SelectItem>
                                             ))}
@@ -192,12 +192,12 @@ export default function PartidoForm() {
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="fecha" className="text-zinc-400">Fecha *</Label>
+                                    <Label htmlFor="fecha" className="text-muted-foreground">Fecha *</Label>
                                     <Input
                                         type="date" id="fecha" name="fecha"
                                         value={formData.fecha}
                                         onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 text-zinc-100 [color-scheme:dark]"
+                                        className="bg-background border-border text-foreground [color-scheme:dark]"
                                         required
                                     />
                                 </div>
@@ -205,29 +205,29 @@ export default function PartidoForm() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="rival" className="text-zinc-400">Rival *</Label>
+                                    <Label htmlFor="rival" className="text-muted-foreground">Rival *</Label>
                                     <Input
                                         id="rival" name="rival"
                                         placeholder="Nombre del rival"
                                         value={formData.rival || ''}
                                         onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-600"
+                                        className="bg-background border-border text-foreground placeholder:text-muted-foreground"
                                         required
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-zinc-400">Condición</Label>
-                                    <div className="flex bg-zinc-950 p-1 rounded-lg border border-zinc-800">
+                                    <Label className="text-muted-foreground">Condición</Label>
+                                    <div className="flex bg-background p-1 rounded-lg border border-border">
                                         <button
                                             type="button"
-                                            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${formData.condicion === 'local' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-500 hover:text-zinc-300'}`}
+                                            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${formData.condicion === 'local' ? 'bg-emerald-600 text-white shadow-lg' : 'text-muted-foreground hover:text-foreground'}`}
                                             onClick={() => setFormData(prev => ({ ...prev, condicion: 'local' }))}
                                         >
                                             LOCAL
                                         </button>
                                         <button
                                             type="button"
-                                            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${formData.condicion === 'visitante' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-500 hover:text-zinc-300'}`}
+                                            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${formData.condicion === 'visitante' ? 'bg-emerald-600 text-white shadow-lg' : 'text-muted-foreground hover:text-foreground'}`}
                                             onClick={() => setFormData(prev => ({ ...prev, condicion: 'visitante' }))}
                                         >
                                             VISITANTE
@@ -236,35 +236,35 @@ export default function PartidoForm() {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-8 items-center justify-center py-4 bg-zinc-950/50 rounded-2xl border border-zinc-800/50">
+                            <div className="grid grid-cols-2 gap-8 items-center justify-center py-4 bg-background/50 rounded-2xl border border-border/50">
                                 <div className="text-center space-y-3">
-                                    <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-black">Goles {formData.condicion === 'local' ? 'Nosotros' : 'Rival'}</Label>
+                                    <Label className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Goles {formData.condicion === 'local' ? 'Nosotros' : 'Rival'}</Label>
                                     <Input
                                         type="number" name="goles_local"
                                         value={formData.goles_local || 0}
                                         onChange={handleChange}
-                                        className="bg-zinc-900 border-zinc-800 text-center text-3xl font-black h-16 w-24 mx-auto rounded-xl"
+                                        className="bg-card border-border text-center text-3xl font-black h-16 w-24 mx-auto rounded-xl"
                                     />
                                 </div>
                                 <div className="text-center space-y-3">
-                                    <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-black">Goles {formData.condicion === 'visitante' ? 'Nosotros' : 'Rival'}</Label>
+                                    <Label className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Goles {formData.condicion === 'visitante' ? 'Nosotros' : 'Rival'}</Label>
                                     <Input
                                         type="number" name="goles_visitante"
                                         value={formData.goles_visitante || 0}
                                         onChange={handleChange}
-                                        className="bg-zinc-900 border-zinc-800 text-center text-3xl font-black h-16 w-24 mx-auto rounded-xl"
+                                        className="bg-card border-border text-center text-3xl font-black h-16 w-24 mx-auto rounded-xl"
                                     />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="notas_tacticas" className="text-zinc-400">Notas Tácticas / Crónica</Label>
+                                <Label htmlFor="notas_tacticas" className="text-muted-foreground">Notas Tácticas / Crónica</Label>
                                 <Textarea
                                     id="notas_tacticas" name="notas_tacticas"
                                     placeholder="Observaciones sobre el planteamiento, cambios, rendimiento..."
                                     value={formData.notas_tacticas || ''}
                                     onChange={handleChange}
-                                    className="min-h-[150px] bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-600"
+                                    className="min-h-[150px] bg-background border-border text-foreground placeholder:text-muted-foreground"
                                 />
                             </div>
                         </CardContent>
@@ -273,10 +273,10 @@ export default function PartidoForm() {
 
                 <div className="space-y-8">
                     {/* Lineup Selection */}
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden flex flex-col h-[600px]">
-                        <CardHeader className="border-b border-zinc-800/50 bg-zinc-900/50 shrink-0">
+                    <Card className="border-border bg-card shadow-xl overflow-hidden flex flex-col h-[600px]">
+                        <CardHeader className="border-b border-border/50 bg-card/50 shrink-0">
                             <div className="flex items-center justify-between">
-                                <CardTitle className="text-lg text-zinc-50 flex items-center gap-2">
+                                <CardTitle className="text-lg text-foreground flex items-center gap-2">
                                     <Users className="h-5 w-5 text-emerald-500" />
                                     Convocatoria
                                 </CardTitle>
@@ -289,23 +289,23 @@ export default function PartidoForm() {
                         <ScrollArea className="flex-1">
                             <div className="p-4 space-y-2">
                                 {!jugadores || jugadores.length === 0 ? (
-                                    <p className="text-center text-zinc-600 text-sm py-8 italic">No hay jugadores en esta temporada.</p>
+                                    <p className="text-center text-muted-foreground text-sm py-8 italic">No hay jugadores en esta temporada.</p>
                                 ) : (
                                     jugadores.map((jugador: any) => {
                                         const isInAlineacion = alineacion.find(a => a.id_jugador === jugador.id);
                                         return (
                                             <div
                                                 key={jugador.id}
-                                                className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer ${isInAlineacion ? 'bg-emerald-500/5 border-emerald-500/20 shadow-inner' : 'bg-zinc-950/30 border-zinc-800 hover:border-zinc-700'}`}
+                                                className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer ${isInAlineacion ? 'bg-emerald-500/5 border-emerald-500/20 shadow-inner' : 'bg-background/30 border-border hover:border-border'}`}
                                                 onClick={() => togglePlayer(jugador.id)}
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`h-8 w-8 rounded-lg flex items-center justify-center text-xs font-bold transition-colors ${isInAlineacion ? 'bg-emerald-600 text-white' : 'bg-zinc-800 text-zinc-500'}`}>
+                                                    <div className={`h-8 w-8 rounded-lg flex items-center justify-center text-xs font-bold transition-colors ${isInAlineacion ? 'bg-emerald-600 text-white' : 'bg-muted text-muted-foreground'}`}>
                                                         {isInAlineacion ? <Check className="h-4 w-4" /> : jugador.posicion?.[0] || 'J'}
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <span className={`text-sm font-bold ${isInAlineacion ? 'text-zinc-50' : 'text-zinc-400'}`}>{jugador.nombre}</span>
-                                                        <span className="text-[10px] text-zinc-600 uppercase font-black tracking-tighter">{jugador.posicion || 'Sin Pos.'}</span>
+                                                        <span className={`text-sm font-bold ${isInAlineacion ? 'text-foreground' : 'text-muted-foreground'}`}>{jugador.nombre}</span>
+                                                        <span className="text-[10px] text-muted-foreground uppercase font-black tracking-tighter">{jugador.posicion || 'Sin Pos.'}</span>
                                                     </div>
                                                 </div>
 
@@ -314,7 +314,7 @@ export default function PartidoForm() {
                                                         type="button"
                                                         variant="ghost"
                                                         size="sm"
-                                                        className={`h-7 px-2 text-[9px] font-black tracking-widest rounded-md ${isInAlineacion.es_titular ? 'bg-amber-500 text-zinc-950 hover:bg-amber-400 hover:text-zinc-950' : 'text-zinc-500 hover:text-zinc-300'}`}
+                                                        className={`h-7 px-2 text-[9px] font-black tracking-widest rounded-md ${isInAlineacion.es_titular ? 'bg-amber-500 text-zinc-950 hover:bg-amber-400 hover:text-zinc-950' : 'text-muted-foreground hover:text-foreground'}`}
                                                         onClick={(e) => { e.stopPropagation(); toggleTitular(jugador.id); }}
                                                     >
                                                         {isInAlineacion.es_titular ? 'TITULAR' : 'SUPLENTE'}
@@ -326,7 +326,7 @@ export default function PartidoForm() {
                                 )}
                             </div>
                         </ScrollArea>
-                        <CardFooter className="p-4 bg-zinc-950/50 border-t border-zinc-800/50 shrink-0">
+                        <CardFooter className="p-4 bg-background/50 border-t border-border/50 shrink-0">
                             <Button
                                 type="submit"
                                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 shadow-lg shadow-emerald-900/20 font-bold"

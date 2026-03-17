@@ -51,25 +51,25 @@ export default function MicrocicloNode({ microciclo, mesociclo }: Props) {
 
     return (
         <>
-            <Card className="border-emerald-700/20 bg-zinc-950/80 shadow-none hover:bg-zinc-800/60 transition-colors">
+            <Card className="border-emerald-700/20 bg-background/80 shadow-none hover:bg-muted/60 transition-colors">
                 <CardHeader className="p-0">
                     <div className="flex items-center justify-between p-2.5">
                         <div className="flex items-center gap-3 pl-2">
                             <CalendarHeart className="h-4 w-4 text-emerald-600/70" />
                             <div>
-                                <CardTitle className="text-sm font-medium text-zinc-200 flex items-center gap-2">
+                                <CardTitle className="text-sm font-medium text-foreground flex items-center gap-2">
                                     {microciclo.nombre}
                                     {microciclo.tipo && (
-                                        <span className="text-[9px] font-normal px-1.5 py-0.5 rounded border bg-zinc-900 border-zinc-800 text-zinc-500">
+                                        <span className="text-[9px] font-normal px-1.5 py-0.5 rounded border bg-card border-border text-muted-foreground">
                                             {microciclo.tipo}
                                         </span>
                                     )}
                                 </CardTitle>
-                                <div className="flex items-center gap-2 text-[10px] text-zinc-500 mt-0.5">
+                                <div className="flex items-center gap-2 text-[10px] text-muted-foreground mt-0.5">
                                     <span>{format(startDate, "d MMM", { locale: es })} — {format(endDate, "d MMM", { locale: es })}</span>
                                     {microciclo.objetivos && (
                                         <>
-                                            <span className="text-zinc-700">•</span>
+                                            <span className="text-muted-foreground">•</span>
                                             <span className="truncate max-w-[150px] sm:max-w-xs">{microciclo.objetivos}</span>
                                         </>
                                     )}
@@ -86,10 +86,10 @@ export default function MicrocicloNode({ microciclo, mesociclo }: Props) {
                             >
                                 Ver Sesiones
                             </Button>
-                            <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-500 hover:text-zinc-50" onClick={() => setIsEditModalOpen(true)}>
+                            <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" onClick={() => setIsEditModalOpen(true)}>
                                 <Edit2 className="h-3 w-3" />
                             </Button>
-                            <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-500 hover:text-red-400" onClick={() => setIsDeleteAlertOpen(true)}>
+                            <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-red-400" onClick={() => setIsDeleteAlertOpen(true)}>
                                 <Trash2 className="h-3 w-3" />
                             </Button>
                         </div>
@@ -109,15 +109,15 @@ export default function MicrocicloNode({ microciclo, mesociclo }: Props) {
 
             {/* Delete Alert */}
             <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
-                <AlertDialogContent className="bg-zinc-900 border-zinc-800 text-zinc-50">
+                <AlertDialogContent className="bg-card border-border text-foreground">
                     <AlertDialogHeader>
                         <AlertDialogTitle>¿Eliminar Microciclo?</AlertDialogTitle>
-                        <AlertDialogDescription className="text-zinc-400">
+                        <AlertDialogDescription className="text-muted-foreground">
                             Se eliminará este microciclo y todas las sesiones de entrenamiento en su interior.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-zinc-800 text-zinc-300 border-zinc-700">Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel className="bg-muted text-foreground border-border">Cancelar</AlertDialogCancel>
                         <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">Eliminar</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

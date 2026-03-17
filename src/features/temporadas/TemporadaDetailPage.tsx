@@ -43,24 +43,24 @@ export default function TemporadaDetailPage() {
                     variant="outline"
                     size="icon"
                     onClick={() => navigate('/temporadas')}
-                    className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800"
+                    className="border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted"
                 >
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div className="flex-1">
                     <div className="flex items-center gap-3">
-                        <h1 className="text-3xl font-bold tracking-tight text-zinc-50">{temporada.temporada}</h1>
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground">{temporada.temporada}</h1>
                         {isActive && (
                             <Badge className="bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-transparent">
                                 Temporada actual
                             </Badge>
                         )}
                     </div>
-                    <p className="text-zinc-400 flex items-center gap-2 mt-1">
-                        <span className="font-semibold text-zinc-300">{temporada.equipo}</span>
+                    <p className="text-muted-foreground flex items-center gap-2 mt-1">
+                        <span className="font-semibold text-foreground">{temporada.equipo}</span>
                         {temporada.categoria && (
                             <>
-                                <span className="text-zinc-600">•</span>
+                                <span className="text-muted-foreground">•</span>
                                 <span>{temporada.categoria}</span>
                             </>
                         )}
@@ -69,7 +69,7 @@ export default function TemporadaDetailPage() {
                 <Button
                     onClick={() => navigate(`/temporadas/${temporada.id}/editar`)}
                     variant="secondary"
-                    className="bg-zinc-800 text-zinc-100 hover:bg-zinc-700"
+                    className="bg-muted text-foreground hover:bg-muted"
                 >
                     Editar información
                 </Button>
@@ -78,16 +78,16 @@ export default function TemporadaDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
                 {/* Main Info Column */}
                 <div className="md:col-span-1 space-y-6">
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                    <Card className="border-border bg-card shadow-xl">
                         <CardHeader>
-                            <CardTitle className="text-lg text-zinc-50">Resumen</CardTitle>
+                            <CardTitle className="text-lg text-foreground">Resumen</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="flex items-start gap-3 text-sm">
                                 <CalendarDays className="h-5 w-5 text-emerald-500 shrink-0" />
                                 <div>
-                                    <p className="text-zinc-400">Período</p>
-                                    <p className="font-medium text-zinc-200">
+                                    <p className="text-muted-foreground">Período</p>
+                                    <p className="font-medium text-foreground">
                                         {format(startDate, "d MMM yyyy", { locale: es })} — {format(endDate, "d MMM yyyy", { locale: es })}
                                     </p>
                                 </div>
@@ -97,8 +97,8 @@ export default function TemporadaDetailPage() {
                                 <div className="flex items-start gap-3 text-sm">
                                     <Users className="h-5 w-5 text-emerald-500 shrink-0" />
                                     <div>
-                                        <p className="text-zinc-400">Entrenador principal</p>
-                                        <p className="font-medium text-zinc-200">{temporada.entrenador}</p>
+                                        <p className="text-muted-foreground">Entrenador principal</p>
+                                        <p className="font-medium text-foreground">{temporada.entrenador}</p>
                                     </div>
                                 </div>
                             )}
@@ -106,15 +106,15 @@ export default function TemporadaDetailPage() {
                     </Card>
 
                     {temporada.objetivos && (
-                        <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                        <Card className="border-border bg-card shadow-xl">
                             <CardHeader>
-                                <CardTitle className="text-lg text-zinc-50 flex items-center gap-2">
+                                <CardTitle className="text-lg text-foreground flex items-center gap-2">
                                     <Target className="h-5 w-5 text-emerald-500" />
                                     Objetivos
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-sm text-zinc-300 whitespace-pre-wrap">
+                                <p className="text-sm text-foreground whitespace-pre-wrap">
                                     {temporada.objetivos}
                                 </p>
                             </CardContent>
@@ -125,37 +125,37 @@ export default function TemporadaDetailPage() {
                 {/* Action Modules Column */}
                 <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl hover:border-emerald-500/30 transition-colors cursor-pointer"
+                    <Card className="border-border bg-card shadow-xl hover:border-emerald-500/30 transition-colors cursor-pointer"
                         onClick={() => navigate(`/planificacion/${temporada.id}`)}
                     >
                         <CardHeader>
                             <MapIcon className="h-8 w-8 text-emerald-500 mb-2" />
-                            <CardTitle className="text-xl text-zinc-50">Planificación</CardTitle>
-                            <CardDescription className="text-zinc-400 max-w-xs">
+                            <CardTitle className="text-xl text-foreground">Planificación</CardTitle>
+                            <CardDescription className="text-muted-foreground max-w-xs">
                                 Gestiona Macrociclos, Mesociclos y Microciclos.
                             </CardDescription>
                         </CardHeader>
                     </Card>
 
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl hover:border-emerald-500/30 transition-colors cursor-pointer"
+                    <Card className="border-border bg-card shadow-xl hover:border-emerald-500/30 transition-colors cursor-pointer"
                         onClick={() => navigate(`/calendario/${temporada.id}`)}
                     >
                         <CardHeader>
                             <Trophy className="h-8 w-8 text-emerald-500 mb-2" />
-                            <CardTitle className="text-xl text-zinc-50">Sesiones y Partidos</CardTitle>
-                            <CardDescription className="text-zinc-400 max-w-xs">
+                            <CardTitle className="text-xl text-foreground">Sesiones y Partidos</CardTitle>
+                            <CardDescription className="text-muted-foreground max-w-xs">
                                 Diseña las sesiones de entrenamiento y el calendario competitivo.
                             </CardDescription>
                         </CardHeader>
                     </Card>
 
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl hover:border-emerald-500/30 transition-colors cursor-pointer"
+                    <Card className="border-border bg-card shadow-xl hover:border-emerald-500/30 transition-colors cursor-pointer"
                         onClick={() => navigate(`/temporadas/${temporada.id}/jugadores`)}
                     >
                         <CardHeader>
                             <Users className="h-8 w-8 text-emerald-500 mb-2" />
-                            <CardTitle className="text-xl text-zinc-50">Plantilla</CardTitle>
-                            <CardDescription className="text-zinc-400 max-w-xs">
+                            <CardTitle className="text-xl text-foreground">Plantilla</CardTitle>
+                            <CardDescription className="text-muted-foreground max-w-xs">
                                 Jugadores inscritos en esta temporada, asistencias.
                             </CardDescription>
                         </CardHeader>

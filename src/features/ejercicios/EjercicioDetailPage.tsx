@@ -68,7 +68,7 @@ export default function EjercicioDetailPage() {
                         variant="outline"
                         size="icon"
                         onClick={() => navigate(basePath)}
-                        className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800 shrink-0 mt-1"
+                        className="border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted shrink-0 mt-1"
                     >
                         <ArrowLeft className="h-4 w-4" />
                     </Button>
@@ -83,11 +83,11 @@ export default function EjercicioDetailPage() {
                                 </Badge>
                             )}
                         </div>
-                        <h1 className="text-3xl font-bold tracking-tight text-zinc-50 leading-tight">
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground leading-tight">
                             {ejercicio.titulo}
                         </h1>
                         {ejercicio.objetivo_principal && (
-                            <p className="text-zinc-400 text-lg mt-2 font-medium">
+                            <p className="text-muted-foreground text-lg mt-2 font-medium">
                                 {ejercicio.objetivo_principal}
                             </p>
                         )}
@@ -97,7 +97,7 @@ export default function EjercicioDetailPage() {
                 <div className="flex items-center gap-2 self-end sm:self-auto">
                     <Button
                         variant="outline"
-                        className="border-zinc-800 bg-zinc-900 text-zinc-100 hover:bg-zinc-800"
+                        className="border-border bg-card text-foreground hover:bg-muted"
                         onClick={() => navigate(`${basePath}/${ejercicio.id}/editar`)}
                     >
                         <Edit className="mr-2 h-4 w-4" /> Editar
@@ -117,51 +117,51 @@ export default function EjercicioDetailPage() {
                 {/* Left Column (Image & Main Data) */}
                 <div className="lg:col-span-2 space-y-6 shrink-0">
 
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden rounded-2xl">
+                    <Card className="border-border bg-card shadow-xl overflow-hidden rounded-2xl">
                         {ejercicio.url_imagen || ejercicio.fichero_imagen ? (
                             <img
                                 src={ejercicio.url_imagen || ejercicio.fichero_imagen || ''}
                                 alt={ejercicio.titulo}
-                                className="w-full aspect-video object-contain bg-zinc-950"
+                                className="w-full aspect-video object-contain bg-background"
                             />
                         ) : (
-                            <div className="w-full aspect-video bg-zinc-950 flex flex-col items-center justify-center text-zinc-600 border-b border-zinc-800/50">
+                            <div className="w-full aspect-video bg-background flex flex-col items-center justify-center text-muted-foreground border-b border-border/50">
                                 <LayoutGrid className="h-16 w-16 mb-4 opacity-50" />
                                 <p>Sin imagen representativa</p>
                             </div>
                         )}
 
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-zinc-800">
-                            <div className="bg-zinc-900 p-4 flex flex-col items-center justify-center text-center">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-muted">
+                            <div className="bg-card p-4 flex flex-col items-center justify-center text-center">
                                 <Clock className="h-5 w-5 text-emerald-500 mb-1" />
-                                <span className="text-xs text-zinc-500 uppercase font-medium">Duración</span>
-                                <span className="text-lg font-bold text-zinc-100">{ejercicio.duracion_minutos ? `${ejercicio.duracion_minutos}'` : '--'}</span>
+                                <span className="text-xs text-muted-foreground uppercase font-medium">Duración</span>
+                                <span className="text-lg font-bold text-foreground">{ejercicio.duracion_minutos ? `${ejercicio.duracion_minutos}'` : '--'}</span>
                             </div>
-                            <div className="bg-zinc-900 p-4 flex flex-col items-center justify-center text-center">
+                            <div className="bg-card p-4 flex flex-col items-center justify-center text-center">
                                 <Users className="h-5 w-5 text-emerald-500 mb-1" />
-                                <span className="text-xs text-zinc-500 uppercase font-medium">Jugadores</span>
-                                <span className="text-lg font-bold text-zinc-100">{ejercicio.n_jugadores || '--'}</span>
+                                <span className="text-xs text-muted-foreground uppercase font-medium">Jugadores</span>
+                                <span className="text-lg font-bold text-foreground">{ejercicio.n_jugadores || '--'}</span>
                             </div>
-                            <div className="bg-zinc-900 p-4 flex flex-col items-center justify-center text-center">
+                            <div className="bg-card p-4 flex flex-col items-center justify-center text-center">
                                 <Maximize2 className="h-5 w-5 text-emerald-500 mb-1" />
-                                <span className="text-xs text-zinc-500 uppercase font-medium">Dimensiones</span>
-                                <span className="text-lg font-bold text-zinc-100 whitespace-nowrap overflow-hidden text-ellipsis w-full px-2" title={ejercicio.dimensiones || '--'}>
+                                <span className="text-xs text-muted-foreground uppercase font-medium">Dimensiones</span>
+                                <span className="text-lg font-bold text-foreground whitespace-nowrap overflow-hidden text-ellipsis w-full px-2" title={ejercicio.dimensiones || '--'}>
                                     {ejercicio.dimensiones || '--'}
                                 </span>
                             </div>
-                            <div className="bg-zinc-900 p-4 flex flex-col items-center justify-center text-center">
+                            <div className="bg-card p-4 flex flex-col items-center justify-center text-center">
                                 <Map className="h-5 w-5 text-emerald-500 mb-1" />
-                                <span className="text-xs text-zinc-500 uppercase font-medium">Material</span>
-                                <span className="text-xs font-medium text-zinc-300 line-clamp-2 px-1">
+                                <span className="text-xs text-muted-foreground uppercase font-medium">Material</span>
+                                <span className="text-xs font-medium text-foreground line-clamp-2 px-1">
                                     {ejercicio.material || '--'}
                                 </span>
                             </div>
                         </div>
                     </Card>
 
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden rounded-2xl">
-                        <CardHeader className="pb-3 border-b border-zinc-800/50">
-                            <CardTitle className="text-lg text-zinc-100">Categorización y Análisis</CardTitle>
+                    <Card className="border-border bg-card shadow-xl overflow-hidden rounded-2xl">
+                        <CardHeader className="pb-3 border-b border-border/50">
+                            <CardTitle className="text-lg text-foreground">Categorización y Análisis</CardTitle>
                         </CardHeader>
                         <CardContent className="pt-6">
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -180,29 +180,29 @@ export default function EjercicioDetailPage() {
 
                 {/* Right Column (Text descriptions) */}
                 <div className="space-y-6">
-                    <Card className="border-zinc-800 bg-zinc-900 shadow-xl h-full flex flex-col">
-                        <CardHeader className="pb-3 border-b border-zinc-800/50">
-                            <CardTitle className="text-lg flex items-center gap-2 text-zinc-100">
+                    <Card className="border-border bg-card shadow-xl h-full flex flex-col">
+                        <CardHeader className="pb-3 border-b border-border/50">
+                            <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                                 <Target className="h-5 w-5 text-emerald-500" />
                                 Desarrollo del Ejercicio
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="pt-4 space-y-6 flex-1 text-sm text-zinc-300">
+                        <CardContent className="pt-4 space-y-6 flex-1 text-sm text-foreground">
                             <div>
-                                <h3 className="font-semibold text-zinc-100 mb-2 uppercase text-xs tracking-wider">Descripción</h3>
+                                <h3 className="font-semibold text-foreground mb-2 uppercase text-xs tracking-wider">Descripción</h3>
                                 {ejercicio.descripcion ? (
                                     <p className="whitespace-pre-wrap leading-relaxed">
                                         {ejercicio.descripcion}
                                     </p>
                                 ) : (
-                                    <p className="text-zinc-600 italic">No hay descripción añadida.</p>
+                                    <p className="text-muted-foreground italic">No hay descripción añadida.</p>
                                 )}
                             </div>
 
                             {ejercicio.reglas && (
                                 <div>
-                                    <h3 className="font-semibold text-zinc-100 mb-2 uppercase text-xs tracking-wider">Reglas / Consignas</h3>
-                                    <div className="bg-zinc-950 p-4 rounded-lg border border-zinc-800">
+                                    <h3 className="font-semibold text-foreground mb-2 uppercase text-xs tracking-wider">Reglas / Consignas</h3>
+                                    <div className="bg-background p-4 rounded-lg border border-border">
                                         <p className="whitespace-pre-wrap leading-relaxed text-emerald-100/80">
                                             {ejercicio.reglas}
                                         </p>
@@ -212,7 +212,7 @@ export default function EjercicioDetailPage() {
 
                             {ejercicio.url_video && (
                                 <div>
-                                    <h3 className="font-semibold text-zinc-100 mb-2 uppercase text-xs tracking-wider">Animación / Video</h3>
+                                    <h3 className="font-semibold text-foreground mb-2 uppercase text-xs tracking-wider">Animación / Video</h3>
                                     <a
                                         href={ejercicio.url_video}
                                         target="_blank"
@@ -232,15 +232,15 @@ export default function EjercicioDetailPage() {
 
             {/* Delete Alert */}
             <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
-                <AlertDialogContent className="bg-zinc-900 border-zinc-800 text-zinc-50">
+                <AlertDialogContent className="bg-card border-border text-foreground">
                     <AlertDialogHeader>
                         <AlertDialogTitle>¿Eliminar Ejercicio?</AlertDialogTitle>
-                        <AlertDialogDescription className="text-zinc-400">
+                        <AlertDialogDescription className="text-muted-foreground">
                             Esta acción no se puede deshacer. El ejercicio se eliminará permanentemente.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-zinc-800 text-zinc-300 border-zinc-700 hover:bg-zinc-700 hover:text-zinc-50">Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel className="bg-muted text-foreground border-border hover:bg-muted hover:text-foreground">Cancelar</AlertDialogCancel>
                         <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700 text-white">Eliminar</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
@@ -252,9 +252,9 @@ export default function EjercicioDetailPage() {
 function DetailItem({ label, value }: { label: string; value?: string | number | null }) {
     return (
         <div className="flex flex-col gap-1">
-            <span className="text-xs text-zinc-500 uppercase font-medium tracking-wider">{label}</span>
-            <span className="text-sm font-semibold text-zinc-200">
-                {value || <span className="text-zinc-700 font-normal italic">No especificado</span>}
+            <span className="text-xs text-muted-foreground uppercase font-medium tracking-wider">{label}</span>
+            <span className="text-sm font-semibold text-foreground">
+                {value || <span className="text-muted-foreground font-normal italic">No especificado</span>}
             </span>
         </div>
     );

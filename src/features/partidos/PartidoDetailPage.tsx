@@ -74,25 +74,25 @@ export default function PartidoDetailPage() {
                         variant="outline"
                         size="icon"
                         onClick={() => navigate('/partidos')}
-                        className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800 shrink-0 mt-1"
+                        className="border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted shrink-0 mt-1"
                     >
                         <ArrowLeft className="h-4 w-4" />
                     </Button>
                     <div>
                         <div className="flex items-center gap-2 mb-2">
-                            <Badge className={`uppercase tracking-widest text-[10px] font-black ${isWin ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : isDraw ? 'bg-zinc-500/10 text-zinc-500 border-zinc-500/20' : 'bg-red-500/10 text-red-500 border-red-500/20'}`}>
+                            <Badge className={`uppercase tracking-widest text-[10px] font-black ${isWin ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : isDraw ? 'bg-zinc-500/10 text-muted-foreground border-zinc-500/20' : 'bg-red-500/10 text-red-500 border-red-500/20'}`}>
                                 {isWin ? 'Victoria' : isDraw ? 'Empate' : 'Derrota'}
                             </Badge>
                             {partido.tipo_partido && (
-                                <Badge className="bg-zinc-800 text-zinc-400 border-zinc-700 uppercase tracking-widest text-[10px]">
+                                <Badge className="bg-muted text-muted-foreground border-border uppercase tracking-widest text-[10px]">
                                     {partido.tipo_partido}
                                 </Badge>
                             )}
                         </div>
-                        <h1 className="text-3xl font-bold tracking-tight text-zinc-50 leading-tight">
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground leading-tight">
                             vs {partido.rival || 'Sin rival'}
                         </h1>
-                        <div className="flex items-center gap-2 mt-2 text-zinc-400">
+                        <div className="flex items-center gap-2 mt-2 text-muted-foreground">
                             <Calendar className="h-4 w-4" />
                             <span className="text-sm">
                                 {format(new Date(partido.fecha), "EEEE, d 'de' MMMM 'de' yyyy", { locale: es })}
@@ -104,7 +104,7 @@ export default function PartidoDetailPage() {
                 <div className="flex items-center gap-2 self-end sm:self-auto">
                     <Button
                         variant="outline"
-                        className="border-zinc-800 bg-zinc-900 text-zinc-100 hover:bg-zinc-800"
+                        className="border-border bg-card text-foreground hover:bg-muted"
                         onClick={() => navigate(`/partidos/${partido.id}/editar`)}
                     >
                         <Edit className="mr-2 h-4 w-4" /> Editar
@@ -120,52 +120,52 @@ export default function PartidoDetailPage() {
             </div>
 
             {/* Scoreboard */}
-            <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden rounded-2xl">
-                <div className="p-8 flex items-center justify-center gap-8 bg-gradient-to-b from-zinc-900 to-zinc-950">
+            <Card className="border-border bg-card shadow-xl overflow-hidden rounded-2xl">
+                <div className="p-8 flex items-center justify-center gap-8 bg-gradient-to-b from-card to-background">
                     <div className="flex-1 text-center flex flex-col items-center gap-2">
-                        <div className="h-14 w-14 bg-zinc-800 rounded-xl flex items-center justify-center border border-zinc-700/30">
-                            <Home className={`h-7 w-7 ${partido.condicion === 'local' ? 'text-emerald-500' : 'text-zinc-600'}`} />
+                        <div className="h-14 w-14 bg-muted rounded-xl flex items-center justify-center border border-border/30">
+                            <Home className={`h-7 w-7 ${partido.condicion === 'local' ? 'text-emerald-500' : 'text-muted-foreground'}`} />
                         </div>
-                        <span className="text-sm font-black text-zinc-100 uppercase tracking-wider">
+                        <span className="text-sm font-black text-foreground uppercase tracking-wider">
                             {partido.condicion === 'local' ? 'Nosotros' : (partido.rival || 'Rival')}
                         </span>
-                        <span className="text-[10px] text-zinc-500 uppercase font-bold">Local</span>
+                        <span className="text-[10px] text-muted-foreground uppercase font-bold">Local</span>
                     </div>
 
                     <div className="flex items-center gap-4 px-6">
-                        <span className="text-6xl font-black text-zinc-50">{partido.goles_local ?? 0}</span>
-                        <span className="text-2xl text-zinc-700 font-black">—</span>
-                        <span className="text-6xl font-black text-zinc-50">{partido.goles_visitante ?? 0}</span>
+                        <span className="text-6xl font-black text-foreground">{partido.goles_local ?? 0}</span>
+                        <span className="text-2xl text-muted-foreground font-black">—</span>
+                        <span className="text-6xl font-black text-foreground">{partido.goles_visitante ?? 0}</span>
                     </div>
 
                     <div className="flex-1 text-center flex flex-col items-center gap-2">
-                        <div className="h-14 w-14 bg-zinc-800 rounded-xl flex items-center justify-center border border-zinc-700/30">
-                            <ExternalLink className={`h-7 w-7 ${partido.condicion === 'visitante' ? 'text-emerald-500' : 'text-zinc-600'}`} />
+                        <div className="h-14 w-14 bg-muted rounded-xl flex items-center justify-center border border-border/30">
+                            <ExternalLink className={`h-7 w-7 ${partido.condicion === 'visitante' ? 'text-emerald-500' : 'text-muted-foreground'}`} />
                         </div>
-                        <span className="text-sm font-black text-zinc-100 uppercase tracking-wider">
+                        <span className="text-sm font-black text-foreground uppercase tracking-wider">
                             {partido.condicion === 'visitante' ? 'Nosotros' : (partido.rival || 'Rival')}
                         </span>
-                        <span className="text-[10px] text-zinc-500 uppercase font-bold">Visitante</span>
+                        <span className="text-[10px] text-muted-foreground uppercase font-bold">Visitante</span>
                     </div>
                 </div>
             </Card>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Titulares */}
-                <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
-                    <CardHeader className="pb-3 border-b border-zinc-800/50">
-                        <CardTitle className="text-lg flex items-center gap-2 text-zinc-100">
+                <Card className="border-border bg-card shadow-xl">
+                    <CardHeader className="pb-3 border-b border-border/50">
+                        <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                             <Users className="h-5 w-5 text-emerald-500" />
                             Titulares ({titulares.length})
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-4">
                         {titulares.length === 0 ? (
-                            <p className="text-zinc-600 italic text-sm py-4 text-center">No hay titulares registrados</p>
+                            <p className="text-muted-foreground italic text-sm py-4 text-center">No hay titulares registrados</p>
                         ) : (
                             <div className="space-y-2">
                                 {titulares.map((jugador) => (
-                                    <div key={jugador.id} className="flex items-center justify-between p-3 bg-zinc-950 rounded-xl border border-zinc-800/50">
+                                    <div key={jugador.id} className="flex items-center justify-between p-3 bg-background rounded-xl border border-border/50">
                                         <div className="flex items-center gap-3">
                                             <div className="h-8 w-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
                                                 <span className="text-xs font-bold text-emerald-500">
@@ -173,13 +173,13 @@ export default function PartidoDetailPage() {
                                                 </span>
                                             </div>
                                             <div>
-                                                <span className="text-sm font-semibold text-zinc-100">
+                                                <span className="text-sm font-semibold text-foreground">
                                                     {jugador.jugador?.nombre || 'Jugador desconocido'}
                                                 </span>
-                                                <span className="text-xs text-zinc-500 ml-2">{jugador.jugador?.posicion}</span>
+                                                <span className="text-xs text-muted-foreground ml-2">{jugador.jugador?.posicion}</span>
                                             </div>
                                         </div>
-                                        <span className="text-xs font-bold text-zinc-500">{jugador.minutos_jugados}'</span>
+                                        <span className="text-xs font-bold text-muted-foreground">{jugador.minutos_jugados}'</span>
                                     </div>
                                 ))}
                             </div>
@@ -188,34 +188,34 @@ export default function PartidoDetailPage() {
                 </Card>
 
                 {/* Suplentes */}
-                <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
-                    <CardHeader className="pb-3 border-b border-zinc-800/50">
-                        <CardTitle className="text-lg flex items-center gap-2 text-zinc-100">
-                            <Users className="h-5 w-5 text-zinc-500" />
+                <Card className="border-border bg-card shadow-xl">
+                    <CardHeader className="pb-3 border-b border-border/50">
+                        <CardTitle className="text-lg flex items-center gap-2 text-foreground">
+                            <Users className="h-5 w-5 text-muted-foreground" />
                             Suplentes ({suplentes.length})
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-4">
                         {suplentes.length === 0 ? (
-                            <p className="text-zinc-600 italic text-sm py-4 text-center">No hay suplentes registrados</p>
+                            <p className="text-muted-foreground italic text-sm py-4 text-center">No hay suplentes registrados</p>
                         ) : (
                             <div className="space-y-2">
                                 {suplentes.map((jugador) => (
-                                    <div key={jugador.id} className="flex items-center justify-between p-3 bg-zinc-950 rounded-xl border border-zinc-800/50">
+                                    <div key={jugador.id} className="flex items-center justify-between p-3 bg-background rounded-xl border border-border/50">
                                         <div className="flex items-center gap-3">
-                                            <div className="h-8 w-8 bg-zinc-800 rounded-lg flex items-center justify-center">
-                                                <span className="text-xs font-bold text-zinc-500">
+                                            <div className="h-8 w-8 bg-muted rounded-lg flex items-center justify-center">
+                                                <span className="text-xs font-bold text-muted-foreground">
                                                     {jugador.jugador?.posicion?.charAt(0) || '?'}
                                                 </span>
                                             </div>
                                             <div>
-                                                <span className="text-sm font-semibold text-zinc-100">
+                                                <span className="text-sm font-semibold text-foreground">
                                                     {jugador.jugador?.nombre || 'Jugador desconocido'}
                                                 </span>
-                                                <span className="text-xs text-zinc-500 ml-2">{jugador.jugador?.posicion}</span>
+                                                <span className="text-xs text-muted-foreground ml-2">{jugador.jugador?.posicion}</span>
                                             </div>
                                         </div>
-                                        <span className="text-xs font-bold text-zinc-500">{jugador.minutos_jugados}'</span>
+                                        <span className="text-xs font-bold text-muted-foreground">{jugador.minutos_jugados}'</span>
                                     </div>
                                 ))}
                             </div>
@@ -225,20 +225,20 @@ export default function PartidoDetailPage() {
             </div>
 
             {/* Notas tácticas */}
-            <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
-                <CardHeader className="pb-3 border-b border-zinc-800/50">
-                    <CardTitle className="text-lg flex items-center gap-2 text-zinc-100">
+            <Card className="border-border bg-card shadow-xl">
+                <CardHeader className="pb-3 border-b border-border/50">
+                    <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                         <ClipboardList className="h-5 w-5 text-emerald-500" />
                         Notas Tácticas
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4">
                     {partido.notas_tacticas ? (
-                        <p className="text-sm text-zinc-300 whitespace-pre-wrap leading-relaxed">
+                        <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">
                             {partido.notas_tacticas}
                         </p>
                     ) : (
-                        <p className="text-zinc-600 italic text-sm py-4 text-center">
+                        <p className="text-muted-foreground italic text-sm py-4 text-center">
                             No se añadieron notas tácticas para este partido.
                         </p>
                     )}
@@ -247,15 +247,15 @@ export default function PartidoDetailPage() {
 
             {/* Delete Alert */}
             <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-                <AlertDialogContent className="bg-zinc-900 border-zinc-800 text-zinc-50 rounded-2xl">
+                <AlertDialogContent className="bg-card border-border text-foreground rounded-2xl">
                     <AlertDialogHeader>
                         <AlertDialogTitle className="text-xl font-bold">¿Eliminar informe de partido?</AlertDialogTitle>
-                        <AlertDialogDescription className="text-zinc-400">
+                        <AlertDialogDescription className="text-muted-foreground">
                             Esta acción no se puede deshacer. Se eliminarán permanentemente el resultado y la alineación asociada.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-zinc-800 text-zinc-300 border-zinc-700 hover:bg-zinc-700 hover:text-zinc-50 rounded-xl">Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel className="bg-muted text-foreground border-border hover:bg-muted hover:text-foreground rounded-xl">Cancelar</AlertDialogCancel>
                         <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700 text-white rounded-xl">Eliminar</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

@@ -174,16 +174,16 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                     variant="outline"
                     size="icon"
                     onClick={() => navigate(basePath)}
-                    className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800"
+                    className="border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted"
                 >
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
+                    <h1 className="text-3xl font-bold tracking-tight text-foreground">
                         {isEditing ? 'Editar Ejercicio' : 'Nuevo Ejercicio'}
                         {esPorteros && <span className="ml-3 text-sm font-normal text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-500/20">Porteros</span>}
                     </h1>
-                    <p className="text-zinc-400">
+                    <p className="text-muted-foreground">
                         Completa los detalles de esta tarea técnica o táctica.
                     </p>
                 </div>
@@ -194,32 +194,32 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
 
                     {/* Main Info */}
                     <div className="lg:col-span-2 space-y-6">
-                        <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                        <Card className="border-border bg-card shadow-xl">
                             <CardHeader>
-                                <CardTitle className="text-xl text-zinc-50">Información Principal</CardTitle>
-                                <CardDescription className="text-zinc-400">Nombres, objetivos y explicación descriptiva.</CardDescription>
+                                <CardTitle className="text-xl text-foreground">Información Principal</CardTitle>
+                                <CardDescription className="text-muted-foreground">Nombres, objetivos y explicación descriptiva.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-5">
                                 <div className="space-y-2">
-                                    <Label htmlFor="titulo" className="text-zinc-300">Título del ejercicio *</Label>
+                                    <Label htmlFor="titulo" className="text-foreground">Título del ejercicio *</Label>
                                     <Input
                                         id="titulo" name="titulo"
                                         placeholder="Ej: Rondo 4v1, Posesión 6v6 con comodines..."
                                         value={formData.titulo}
                                         onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
+                                        className="bg-background border-border focus-visible:ring-emerald-500"
                                         required
                                     />
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label htmlFor="etapa_sesion" className="text-zinc-300">Etapa de la sesión *</Label>
+                                        <Label htmlFor="etapa_sesion" className="text-foreground">Etapa de la sesión *</Label>
                                         <Select value={formData.etapa_sesion} onValueChange={(v) => handleSelectChange('etapa_sesion', v)}>
-                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                            <SelectTrigger className="bg-background border-border text-foreground">
                                                 <SelectValue placeholder="Selecciona la etapa" />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                            <SelectContent className="bg-card border-border text-foreground">
                                                 {ETAPAS_SESION.map((etapa) => (
                                                     <SelectItem key={etapa} value={etapa}>{etapa}</SelectItem>
                                                 ))}
@@ -232,9 +232,9 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                             id="es_portero"
                                             checked={formData.es_portero}
                                             onCheckedChange={(c) => setFormData((prev: any) => ({ ...prev, es_portero: !!c }))}
-                                            className="border-zinc-700 data-[state=checked]:bg-emerald-600"
+                                            className="border-border data-[state=checked]:bg-emerald-600"
                                         />
-                                        <Label htmlFor="es_portero" className="text-zinc-300 font-normal leading-none cursor-pointer">
+                                        <Label htmlFor="es_portero" className="text-foreground font-normal leading-none cursor-pointer">
                                             Específico para porteros
                                         </Label>
                                     </div>
@@ -242,23 +242,23 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label htmlFor="objetivo_principal" className="text-zinc-300">Objetivo Principal</Label>
+                                        <Label htmlFor="objetivo_principal" className="text-foreground">Objetivo Principal</Label>
                                         <Input
                                             id="objetivo_principal" name="objetivo_principal"
                                             placeholder="Ej: Mejora del pase de seguridad"
                                             value={formData.objetivo_principal}
                                             onChange={handleChange}
-                                            className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
+                                            className="bg-background border-border focus-visible:ring-emerald-500"
                                         />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="tipo_tarea" className="text-zinc-300">Tipo de Tarea</Label>
+                                        <Label htmlFor="tipo_tarea" className="text-foreground">Tipo de Tarea</Label>
                                         <Select value={formData.tipo_tarea} onValueChange={(v) => handleSelectChange('tipo_tarea', v)}>
-                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                            <SelectTrigger className="bg-background border-border text-foreground">
                                                 <SelectValue placeholder="Selecciona tipo" />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                            <SelectContent className="bg-card border-border text-foreground">
                                                 {TIPO_TAREA.map((item) => (
                                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                                 ))}
@@ -268,43 +268,43 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="descripcion" className="text-zinc-300">Descripción detallada</Label>
+                                    <Label htmlFor="descripcion" className="text-foreground">Descripción detallada</Label>
                                     <Textarea
                                         id="descripcion" name="descripcion"
                                         placeholder="Explica el funcionamiento del ejercicio..."
                                         value={formData.descripcion}
                                         onChange={handleChange}
-                                        className="min-h-[120px] bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500 placeholder:text-zinc-600"
+                                        className="min-h-[120px] bg-background border-border focus-visible:ring-emerald-500 placeholder:text-muted-foreground"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="reglas" className="text-zinc-300">Reglas y consignas</Label>
+                                    <Label htmlFor="reglas" className="text-foreground">Reglas y consignas</Label>
                                     <Textarea
                                         id="reglas" name="reglas"
                                         placeholder="Restricciones de toques, puntuaciones especiales..."
                                         value={formData.reglas}
                                         onChange={handleChange}
-                                        className="min-h-[80px] bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500 placeholder:text-zinc-600"
+                                        className="min-h-[80px] bg-background border-border focus-visible:ring-emerald-500 placeholder:text-muted-foreground"
                                     />
                                 </div>
                             </CardContent>
                         </Card>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <Card className="border-zinc-800 bg-zinc-900 shadow-xl lg:col-span-2">
+                            <Card className="border-border bg-card shadow-xl lg:col-span-2">
                                 <CardHeader>
-                                    <CardTitle className="text-xl text-zinc-50">Categorización</CardTitle>
-                                    <CardDescription className="text-zinc-400">Define los aspectos técnicos y tácticos de la tarea.</CardDescription>
+                                    <CardTitle className="text-xl text-foreground">Categorización</CardTitle>
+                                    <CardDescription className="text-muted-foreground">Define los aspectos técnicos y tácticos de la tarea.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                     <div className="space-y-2">
-                                        <Label className="text-zinc-300">Tipo de Trabajo</Label>
+                                        <Label className="text-foreground">Tipo de Trabajo</Label>
                                         <Select value={formData.tipo_trabajo} onValueChange={(v) => handleSelectChange('tipo_trabajo', v)}>
-                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                            <SelectTrigger className="bg-background border-border text-foreground">
                                                 <SelectValue placeholder="Selecciona trabajo" />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                            <SelectContent className="bg-card border-border text-foreground">
                                                 {TIPO_TRABAJO.map((item) => (
                                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                                 ))}
@@ -313,12 +313,12 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-zinc-300">Trabajo Específico</Label>
+                                        <Label className="text-foreground">Trabajo Específico</Label>
                                         <Select value={formData.trabajo} onValueChange={(v) => handleSelectChange('trabajo', v)}>
-                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                            <SelectTrigger className="bg-background border-border text-foreground">
                                                 <SelectValue placeholder="Selecciona fase" />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                            <SelectContent className="bg-card border-border text-foreground">
                                                 {TRABAJO.map((item) => (
                                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                                 ))}
@@ -327,12 +327,12 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-zinc-300">Componente del Juego</Label>
+                                        <Label className="text-foreground">Componente del Juego</Label>
                                         <Select value={formData.componente_juego} onValueChange={(v) => handleSelectChange('componente_juego', v)}>
-                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                            <SelectTrigger className="bg-background border-border text-foreground">
                                                 <SelectValue placeholder="Selecciona componente" />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                            <SelectContent className="bg-card border-border text-foreground">
                                                 {COMPONENTE_JUEGO.map((item) => (
                                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                                 ))}
@@ -341,12 +341,12 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-zinc-300">Sistema de Juego</Label>
+                                        <Label className="text-foreground">Sistema de Juego</Label>
                                         <Select value={formData.sistema_juego} onValueChange={(v) => handleSelectChange('sistema_juego', v)}>
-                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                            <SelectTrigger className="bg-background border-border text-foreground">
                                                 <SelectValue placeholder="Selecciona sistema" />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                            <SelectContent className="bg-card border-border text-foreground">
                                                 {SISTEMA_JUEGO.map((item) => (
                                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                                 ))}
@@ -355,12 +355,12 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-zinc-300">Dificultad</Label>
+                                        <Label className="text-foreground">Dificultad</Label>
                                         <Select value={formData.dificultad} onValueChange={(v) => handleSelectChange('dificultad', v)}>
-                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                            <SelectTrigger className="bg-background border-border text-foreground">
                                                 <SelectValue placeholder="Selecciona dificultad" />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                            <SelectContent className="bg-card border-border text-foreground">
                                                 {DIFICULTAD.map((item) => (
                                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                                 ))}
@@ -369,12 +369,12 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-zinc-300">Trabajo Físico Integrado</Label>
+                                        <Label className="text-foreground">Trabajo Físico Integrado</Label>
                                         <Select value={formData.trabajo_fisico_integrado} onValueChange={(v) => handleSelectChange('trabajo_fisico_integrado', v)}>
-                                            <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                            <SelectTrigger className="bg-background border-border text-foreground">
                                                 <SelectValue placeholder="Selecciona físico" />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                            <SelectContent className="bg-card border-border text-foreground">
                                                 {TRABAJO_FISICO_INTEGRADO.map((item) => (
                                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                                 ))}
@@ -385,30 +385,30 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                             </Card>
 
                             <div className="space-y-6 lg:col-span-1">
-                                <Card className="border-zinc-800 bg-zinc-900 shadow-xl">
+                                <Card className="border-border bg-card shadow-xl">
                                     <CardHeader>
-                                        <CardTitle className="text-xl text-zinc-50">Parámetros</CardTitle>
-                                        <CardDescription className="text-zinc-400">Organización y tiempos.</CardDescription>
+                                        <CardTitle className="text-xl text-foreground">Parámetros</CardTitle>
+                                        <CardDescription className="text-muted-foreground">Organización y tiempos.</CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-5">
                                         <div className="space-y-2">
-                                            <Label htmlFor="duracion_minutos" className="text-zinc-300">Duración (min)</Label>
+                                            <Label htmlFor="duracion_minutos" className="text-foreground">Duración (min)</Label>
                                             <Input
                                                 type="number" id="duracion_minutos" name="duracion_minutos"
                                                 placeholder="Ej: 15"
                                                 value={formData.duracion_minutos}
                                                 onChange={handleChange}
-                                                className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
+                                                className="bg-background border-border focus-visible:ring-emerald-500"
                                                 min="1"
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="n_jugadores" className="text-zinc-300">Nº Jugadores</Label>
+                                            <Label htmlFor="n_jugadores" className="text-foreground">Nº Jugadores</Label>
                                             <Select value={formData.n_jugadores} onValueChange={(v) => handleSelectChange('n_jugadores', v)}>
-                                                <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-50">
+                                                <SelectTrigger className="bg-background border-border text-foreground">
                                                     <SelectValue placeholder="Nº Jug." />
                                                 </SelectTrigger>
-                                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                                <SelectContent className="bg-card border-border text-foreground">
                                                     {NUMERO_JUGADORES.map((num) => (
                                                         <SelectItem key={num} value={String(num)}>{num}</SelectItem>
                                                     ))}
@@ -416,13 +416,13 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                             </Select>
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="dimensiones" className="text-zinc-300">Dimensiones</Label>
+                                            <Label htmlFor="dimensiones" className="text-foreground">Dimensiones</Label>
                                             <Input
                                                 id="dimensiones" name="dimensiones"
                                                 placeholder="Ej: 20x20m"
                                                 value={formData.dimensiones}
                                                 onChange={handleChange}
-                                                className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500"
+                                                className="bg-background border-border focus-visible:ring-emerald-500"
                                             />
                                         </div>
                                     </CardContent>
@@ -433,7 +433,7 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
 
                     {/* Sidebar */}
                     <div className="space-y-6">
-                        <Card className="border-zinc-800 bg-zinc-900 shadow-xl overflow-hidden">
+                        <Card className="border-border bg-card shadow-xl overflow-hidden">
                             <CardContent className="p-4 space-y-4">
                                 <ImageUpload
                                     value={imagePreview}
@@ -441,14 +441,14 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     onRemove={clearImage}
                                 />
 
-                                <div className="space-y-2 pt-2 border-t border-zinc-800">
-                                    <Label htmlFor="url_video" className="text-zinc-300 text-sm">URL Vídeo / Animación</Label>
+                                <div className="space-y-2 pt-2 border-t border-border">
+                                    <Label htmlFor="url_video" className="text-foreground text-sm">URL Vídeo / Animación</Label>
                                     <Input
                                         id="url_video" name="url_video"
                                         placeholder="URL de YouTube, Drive..."
                                         value={formData.url_video}
                                         onChange={handleChange}
-                                        className="bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500 text-xs"
+                                        className="bg-background border-border focus-visible:ring-emerald-500 text-xs"
                                     />
                                 </div>
                             </CardContent>
@@ -476,7 +476,7 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                 type="button"
                                 variant="outline"
                                 onClick={() => navigate(basePath)}
-                                className="w-full mt-3 border-zinc-800 bg-transparent text-zinc-400 hover:bg-zinc-900 hover:text-zinc-50"
+                                className="w-full mt-3 border-border bg-transparent text-muted-foreground hover:bg-card hover:text-foreground"
                                 disabled={isLoading}
                             >
                                 Cancelar y descartar

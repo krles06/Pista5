@@ -53,12 +53,12 @@ export function ImageUpload({
     return (
         <div className={`space-y-4 ${className}`}>
             <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-zinc-300">{label}</label>
+                <label className="text-sm font-medium text-foreground">{label}</label>
             </div>
 
             <div
                 onClick={() => fileInputRef.current?.click()}
-                className="relative group cursor-pointer border-2 border-dashed border-zinc-800 bg-zinc-950 rounded-xl overflow-hidden aspect-[4/3] flex flex-col items-center justify-center transition-all hover:border-emerald-500/50 hover:bg-zinc-900/50"
+                className="relative group cursor-pointer border-2 border-dashed border-border bg-background rounded-xl overflow-hidden aspect-[4/3] flex flex-col items-center justify-center transition-all hover:border-emerald-500/50 hover:bg-card/50"
             >
                 {preview ? (
                     <>
@@ -67,7 +67,7 @@ export function ImageUpload({
                             alt="Preview"
                             className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm">
+                        <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm">
                             <Button
                                 type="button"
                                 size="sm"
@@ -89,11 +89,11 @@ export function ImageUpload({
                     </>
                 ) : (
                     <div className="p-6 text-center">
-                        <div className="mx-auto w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center mb-3 group-hover:bg-emerald-500/10 group-hover:text-emerald-500 transition-colors">
-                            <Upload className="h-6 w-6 text-zinc-500 group-hover:text-emerald-500" />
+                        <div className="mx-auto w-12 h-12 bg-card rounded-full flex items-center justify-center mb-3 group-hover:bg-emerald-500/10 group-hover:text-emerald-500 transition-colors">
+                            <Upload className="h-6 w-6 text-muted-foreground group-hover:text-emerald-500" />
                         </div>
-                        <p className="text-sm font-medium text-zinc-300 font-outfit">Subir imagen</p>
-                        <p className="text-xs text-zinc-500 mt-1">{description}</p>
+                        <p className="text-sm font-medium text-foreground font-outfit">Subir imagen</p>
+                        <p className="text-xs text-muted-foreground mt-1">{description}</p>
                     </div>
                 )}
 

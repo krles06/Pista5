@@ -61,18 +61,18 @@ export default function PartidosPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div className="space-y-1">
-                    <h1 className="text-4xl font-black tracking-tighter text-zinc-50 flex items-center gap-3 italic">
+                    <h1 className="text-4xl font-black tracking-tighter text-foreground flex items-center gap-3 italic">
                         <Trophy className="h-10 w-10 text-emerald-500 not-italic" />
                         INFORMES DE PARTIDOS
                     </h1>
-                    <p className="text-zinc-500 font-medium">Gestiona los resultados y alineaciones de la temporada.</p>
+                    <p className="text-muted-foreground font-medium">Gestiona los resultados y alineaciones de la temporada.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <Select value={selectedTemporada} onValueChange={setSelectedTemporada}>
-                        <SelectTrigger className="w-[200px] bg-zinc-900 border-zinc-800 text-zinc-300">
+                        <SelectTrigger className="w-[200px] bg-card border-border text-foreground">
                             <SelectValue placeholder="Todas las temporadas" />
                         </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                        <SelectContent className="bg-card border-border text-foreground">
                             <SelectItem value="all">Todas las temporadas</SelectItem>
                             {temporadas?.map(t => (
                                 <SelectItem key={t.id} value={t.id}>{t.temporada}</SelectItem>
@@ -94,13 +94,13 @@ export default function PartidosPage() {
                     <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent"></div>
                 </div>
             ) : !partidos || partidos.length === 0 ? (
-                <Card className="border-zinc-800 bg-zinc-900/50 shadow-xl border-dashed">
+                <Card className="border-border bg-card/50 shadow-xl border-dashed">
                     <CardContent className="flex flex-col items-center justify-center py-20 text-center">
-                        <div className="h-20 w-20 bg-zinc-800/50 rounded-full flex items-center justify-center mb-6 border border-zinc-700/50">
-                            <Trophy className="h-10 w-10 text-zinc-600" />
+                        <div className="h-20 w-20 bg-muted/50 rounded-full flex items-center justify-center mb-6 border border-border/50">
+                            <Trophy className="h-10 w-10 text-muted-foreground" />
                         </div>
-                        <h3 className="text-2xl font-bold text-zinc-200">No hay informes todavía</h3>
-                        <p className="text-zinc-500 mt-2 mb-8 max-w-sm">
+                        <h3 className="text-2xl font-bold text-foreground">No hay informes todavía</h3>
+                        <p className="text-muted-foreground mt-2 mb-8 max-w-sm">
                             Registra el primer partido para empezar a analizar el rendimiento del equipo.
                         </p>
                         <Button
@@ -119,55 +119,55 @@ export default function PartidosPage() {
                         const isDraw = (partido.goles_local || 0) === (partido.goles_visitante || 0);
 
                         return (
-                            <Card key={partido.id} className="border-zinc-800 bg-zinc-900 hover:border-emerald-500/50 transition-all shadow-xl group overflow-hidden">
+                            <Card key={partido.id} className="border-border bg-card hover:border-emerald-500/50 transition-all shadow-xl group overflow-hidden">
                                 <div className="p-5 flex flex-col h-full">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center gap-2">
-                                            <Calendar className="h-3.5 w-3.5 text-zinc-500" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                                            <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                                                 {format(new Date(partido.fecha), "PPP", { locale: es })}
                                             </span>
                                         </div>
-                                        <Badge variant="outline" className={`text-[10px] h-5 font-bold uppercase ${isWin ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : isDraw ? 'bg-zinc-500/10 text-zinc-500 border-zinc-500/20' : 'bg-red-500/10 text-red-500 border-red-500/20'}`}>
+                                        <Badge variant="outline" className={`text-[10px] h-5 font-bold uppercase ${isWin ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : isDraw ? 'bg-zinc-500/10 text-muted-foreground border-zinc-500/20' : 'bg-red-500/10 text-red-500 border-red-500/20'}`}>
                                             {isWin ? 'Victoria' : isDraw ? 'Empate' : 'Derrota'}
                                         </Badge>
                                     </div>
 
-                                    <div className="flex items-center justify-between gap-4 py-4 px-2 bg-zinc-950/40 rounded-2xl border border-zinc-800/50 mb-4">
+                                    <div className="flex items-center justify-between gap-4 py-4 px-2 bg-background/40 rounded-2xl border border-border/50 mb-4">
                                         <div className="flex-1 text-center flex flex-col items-center gap-1 min-w-0">
-                                            <div className="h-8 w-8 bg-zinc-800 rounded-lg flex items-center justify-center mb-1">
-                                                <Home className={`h-4 w-4 ${partido.condicion === 'local' ? 'text-emerald-500' : 'text-zinc-600'}`} />
+                                            <div className="h-8 w-8 bg-muted rounded-lg flex items-center justify-center mb-1">
+                                                <Home className={`h-4 w-4 ${partido.condicion === 'local' ? 'text-emerald-500' : 'text-muted-foreground'}`} />
                                             </div>
-                                            <span className="text-xs font-black text-zinc-100 truncate w-full uppercase">
+                                            <span className="text-xs font-black text-foreground truncate w-full uppercase">
                                                 {partido.condicion === 'local' ? 'Nosotros' : partido.rival}
                                             </span>
                                         </div>
 
                                         <div className="flex items-center gap-2">
-                                            <span className="text-3xl font-black text-zinc-50">{partido.goles_local || 0}</span>
-                                            <span className="text-zinc-700 font-black">-</span>
-                                            <span className="text-3xl font-black text-zinc-50">{partido.goles_visitante || 0}</span>
+                                            <span className="text-3xl font-black text-foreground">{partido.goles_local || 0}</span>
+                                            <span className="text-muted-foreground font-black">-</span>
+                                            <span className="text-3xl font-black text-foreground">{partido.goles_visitante || 0}</span>
                                         </div>
 
                                         <div className="flex-1 text-center flex flex-col items-center gap-1 min-w-0">
-                                            <div className="h-8 w-8 bg-zinc-800 rounded-lg flex items-center justify-center mb-1">
-                                                <ExternalLink className={`h-4 w-4 ${partido.condicion === 'visitante' ? 'text-emerald-500' : 'text-zinc-600'}`} />
+                                            <div className="h-8 w-8 bg-muted rounded-lg flex items-center justify-center mb-1">
+                                                <ExternalLink className={`h-4 w-4 ${partido.condicion === 'visitante' ? 'text-emerald-500' : 'text-muted-foreground'}`} />
                                             </div>
-                                            <span className="text-xs font-black text-zinc-100 truncate w-full uppercase">
+                                            <span className="text-xs font-black text-foreground truncate w-full uppercase">
                                                 {partido.condicion === 'visitante' ? 'Nosotros' : partido.rival}
                                             </span>
                                         </div>
                                     </div>
 
                                     {partido.notas_tacticas && (
-                                        <p className="text-sm text-zinc-500 line-clamp-2 italic mb-6">
+                                        <p className="text-sm text-muted-foreground line-clamp-2 italic mb-6">
                                             "{partido.notas_tacticas}"
                                         </p>
                                     )}
 
-                                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-zinc-800/50">
+                                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-border/50">
                                         <div className="flex items-center gap-4">
-                                            <Badge className="bg-zinc-800 text-zinc-400 border-zinc-700 uppercase p-0.5 px-2 text-[9px] font-black">{partido.tipo_partido}</Badge>
+                                            <Badge className="bg-muted text-muted-foreground border-border uppercase p-0.5 px-2 text-[9px] font-black">{partido.tipo_partido}</Badge>
                                         </div>
                                         <div className="flex items-center gap-1">
                                             <Button
@@ -180,11 +180,11 @@ export default function PartidosPage() {
                                             </Button>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-zinc-50 rounded-full">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground rounded-full">
                                                         <MoreVertical className="h-4 w-4" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-zinc-300 rounded-xl">
+                                                <DropdownMenuContent align="end" className="bg-card border-border text-foreground rounded-xl">
                                                     <DropdownMenuItem onClick={() => navigate(`/partidos/${partido.id}`)} className="cursor-pointer">
                                                         Ver detalles
                                                     </DropdownMenuItem>
@@ -207,15 +207,15 @@ export default function PartidosPage() {
 
             {/* Delete Alert */}
             <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-                <AlertDialogContent className="bg-zinc-900 border-zinc-800 text-zinc-50 rounded-2xl">
+                <AlertDialogContent className="bg-card border-border text-foreground rounded-2xl">
                     <AlertDialogHeader>
                         <AlertDialogTitle className="text-xl font-bold">¿Eliminar informe de partido?</AlertDialogTitle>
-                        <AlertDialogDescription className="text-zinc-400">
+                        <AlertDialogDescription className="text-muted-foreground">
                             Esta acción no se puede deshacer. Se eliminarán permanentemente el resultado y la alineación asociada.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="mt-6">
-                        <AlertDialogCancel className="bg-zinc-800 text-zinc-300 border-zinc-700 hover:bg-zinc-700 rounded-xl">Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel className="bg-muted text-foreground border-border hover:bg-muted rounded-xl">Cancelar</AlertDialogCancel>
                         <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700 text-white rounded-xl">Eliminar permanentemente</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
