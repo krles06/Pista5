@@ -245,21 +245,21 @@ export function useActiveMicrociclo() {
             console.log('Today:', today);
 
             // 1. Check all Microcycles for the coach
-            const { data: allMicros, error: allErrors } = await supabase
+            const { data: allMicros } = await supabase
                 .from('microciclos')
                 .select('*')
                 .eq('coach_id', userId);
             console.log('Microcycles in DB for this coach:', allMicros);
 
             // 2. Check all Seasons for the coach
-            const { data: allSeasons, error: seasonErrors } = await supabase
+            const { data: allSeasons } = await supabase
                 .from('temporadas')
                 .select('*')
                 .eq('coach_id', userId);
             console.log('Seasons in DB for this coach:', allSeasons);
 
             // 3. Check for ANY sessions this week
-            const { data: weekSessions, error: sessionErrors2 } = await supabase
+            const { data: weekSessions } = await supabase
                 .from('sesiones')
                 .select('*')
                 .eq('coach_id', userId)
