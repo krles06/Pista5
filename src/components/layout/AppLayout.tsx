@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
     Home,
     Users,
     Settings,
     LogOut,
-    Menu,
-    X,
     ChevronRight,
     ClipboardList,
     Target,
@@ -19,6 +16,7 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import BottomNav from './BottomNav';
 
 interface AppLayoutProps {
     children: React.ReactNode;
@@ -28,7 +26,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
     const { user, coach, signOut } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navItems = [
         { name: 'Dashboard', href: '/', icon: Home },
@@ -51,26 +48,30 @@ export default function AppLayout({ children }: AppLayoutProps) {
         navigate('/login');
     };
 
-    useEffect(() => {
-        setIsMobileMenuOpen(false);
-    }, [location.pathname]);
-
     return (
         <div className="min-h-screen bg-background text-foreground font-sans selection:bg-emerald-500/30 selection:text-emerald-500">
 
             {/* Mobile Top Bar */}
-            <div className="lg:hidden flex items-center justify-between p-4 border-b border-border/50 bg-background/80 backdrop-blur-md sticky top-0 z-40">
+            <div className="md:hidden flex items-center justify-between p-4 border-b border-border/50 bg-background/80 backdrop-blur-md sticky top-0 z-40">
                 <div className="flex items-center gap-2">
                     <div className="h-8 w-8 bg-emerald-600 rounded-lg flex items-center justify-center font-black text-white italic text-xs">P5</div>
                     <span className="font-bold tracking-tighter text-xl uppercase">Pista5</span>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(true)}>
-                    <Menu className="h-6 w-6" />
-                </Button>
+                {/* Secondary Actions for Mobile */}
+                <div className="flex items-center gap-2">
+                    <Link to="/profile">
+                        <Avatar className="h-8 w-8 border border-border">
+                            <AvatarImage src={user?.user_metadata?.avatar_url} />
+                            <AvatarFallback className="bg-emerald-600 text-white text-[10px]">
+                                {(coach?.nombre || coach?.email)?.[0].toUpperCase()}
+                            </AvatarFallback>
+                        </Avatar>
+                    </Link>
+                </div>
             </div>
 
             {/* Sidebar Desktop */}
-            <aside className="hidden lg:flex flex-col w-72 border-r border-border/50 bg-background fixed left-0 top-0 bottom-0 z-30">
+            <aside className="hidden md:flex flex-col w-64 lg:w-72 border-r border-border/50 bg-background fixed left-0 top-0 bottom-0 z-30">
                 <div className="p-8">
                     <div className="flex items-center gap-3 mb-10">
                         <div className="h-10 w-10 bg-emerald-600 rounded-xl flex items-center justify-center font-black text-white italic shadow-lg shadow-emerald-900/20">P5</div>
@@ -146,65 +147,16 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 </div>
             </aside>
 
-            {/* Mobile Menu Overlay */}
-            {isMobileMenuOpen && (
-                <div className="lg:hidden fixed inset-0 bg-background z-50 flex flex-col p-6 animate-in slide-in-from-right duration-300">
-                    <div className="flex items-center justify-between mb-8">
-                        <div className="flex items-center gap-2">
-                            <div className="h-8 w-8 bg-emerald-600 rounded-lg flex items-center justify-center font-black text-white italic text-xs">P5</div>
-                            <span className="font-bold tracking-tighter text-xl uppercase">Pista5</span>
-                        </div>
-                        <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
-                            <X className="h-6 w-6" />
-                        </Button>
-                    </div>
-
-                    <nav className="space-y-2 mb-8">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.href}
-                                to={item.href}
-                                className={`flex items-center gap-4 px-6 py-4 rounded-2xl text-lg font-medium ${location.pathname === item.href
-                                    ? 'bg-emerald-600 text-white'
-                                    : 'text-muted-foreground hover:bg-muted'
-                                    }`}
-                            >
-                                <item.icon className="h-6 w-6" />
-                                {item.name}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    <nav className="space-y-2 mb-auto border-t border-border/50 pt-4">
-                        {footerItems.map((item) => (
-                            <Link
-                                key={item.href}
-                                to={item.href}
-                                className={`flex items-center gap-4 px-6 py-3 rounded-2xl text-muted-foreground hover:text-foreground ${location.pathname === item.href ? 'text-emerald-500' : ''}`}
-                            >
-                                <item.icon className="h-5 w-5" />
-                                {item.name}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    <Button
-                        variant="outline"
-                        className="w-full justify-center gap-2 border-border text-muted-foreground h-14 rounded-2xl"
-                        onClick={handleSignOut}
-                    >
-                        <LogOut className="h-5 w-5" />
-                        <span>Cerrar Sesión</span>
-                    </Button>
-                </div>
-            )}
+            {/* No secondary overlay needed since we have BottomNav, but keeping code for reference if needed or removing it */}
 
             {/* Main Content */}
-            <main className="lg:pl-72 min-h-screen bg-background">
+            <main className="md:pl-64 lg:pl-72 min-h-screen bg-background pb-20 md:pb-0">
                 <div className="p-4 lg:p-8">
                     {children}
                 </div>
             </main>
+
+            <BottomNav />
         </div>
     );
 }
