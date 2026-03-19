@@ -245,30 +245,38 @@ export function useActiveMicrociclo() {
             console.log('User ID:', userId);
             console.log('Today (Local):', today);
 
-            const { data, error } = await supabase
+            // Fetch ALL microcycles for the coach to debug
+            const { data: allMicros, error: allErrors } = await supabase
                 .from('microciclos')
                 .select(`
                     *,
-                    mesociclos!inner (
+                    mesociclos (
                         *,
-                        macrociclos!inner (
+                        macrociclos (
                             *,
                             id_temporada
                         )
                     )
                 `)
-                .eq('coach_id', userId)
-                .lte('fecha_inicio', today)
-                .gte('fecha_fin', today)
-                .maybeSingle();
+                .eq('coach_id', userId);
 
-            if (error) {
-                console.error('Error fetching active microcycle:', error);
-                throw error;
+            if (allErrors) {
+                console.error('Error fetching ALL microcycles:', allErrors);
+                throw allErrors;
             }
+
+            console.log('Total microcycles found for coach:', allMicros?.length);
             
-            console.log('Active Micro Result:', data);
-            return data as any;
+            // Find the active one in JS
+            const active = allMicros?.find(m => {
+                const isStarted = m.fecha_inicio <= today;
+                const isNotEnded = m.fecha_fin >= today;
+                console.log(`Checking Micro [${m.nombre}]: ${m.fecha_inicio} <= ${today} <= ${m.fecha_fin} | Result: ${isStarted && isNotEnded}`);
+                return isStarted && isNotEnded;
+            });
+
+            console.log('Active Micro Found in JS:', active);
+            return active as any;
         },
         enabled: !!session?.user?.id,
     });
