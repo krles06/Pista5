@@ -16,6 +16,7 @@ import { usePartidos } from '@/hooks/usePartidos';
 import { useEjercicios } from '@/hooks/useEjercicios';
 import { useActiveMicrociclo, useMacrociclos, useMesociclos, useMicrociclos } from '@/hooks/usePlanificacion';
 import { useTemporadas } from '@/hooks/useTemporadas';
+import { useSesiones } from '@/hooks/useSesiones';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -47,6 +48,13 @@ export default function DashboardPage() {
     const { data: partidos } = usePartidos();
     const { data: ejercicios } = useEjercicios();
     const { data: activeMicro, isLoading: loadingActiveMicro } = useActiveMicrociclo();
+    const { data: activeMicroSesiones } = useSesiones(activeMicro?.id);
+
+    const sessionsCount = activeMicroSesiones?.length || 0;
+    const totalMinutes = activeMicroSesiones?.reduce((acc, sesion) => {
+        const sesionMinutes = sesion.ejercicios?.reduce((exAcc, ex) => exAcc + (ex.minutos || 0), 0) || 0;
+        return acc + sesionMinutes;
+    }, 0) || 0;
 
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -147,12 +155,78 @@ export default function DashboardPage() {
                     bg="bg-blue-500/10"
                 />
                 <StatCard
-                    title="ASISTENCIA MEDIA"
-                    value="92%"
+                    title="SESIONES SEMANA"
+                    value={sessionsCount}
                     icon={TrendingUp}
                     color="text-purple-500"
                     bg="bg-purple-500/10"
                 />
+            </div>
+
+            {/* Active Microcycle Header */}
+            <div className="space-y-4">
+                <div className="flex items-center gap-2 px-2">
+                    <CalendarDays className="h-5 w-5 text-emerald-500" />
+                    <h2 className="text-lg font-black tracking-widest text-muted-foreground uppercase">Planificación Semanal</h2>
+                </div>
+                
+                {activeMicro ? (
+                    <Card className="border-border bg-card/50 hover:bg-card transition-all rounded-3xl overflow-hidden shadow-xl border-l-4 border-l-emerald-500">
+                        <CardContent className="p-8">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <Badge className="bg-emerald-500 text-white border-none font-black text-[9px] px-2 py-0.5 uppercase tracking-widest">Activo</Badge>
+                                        <span className="text-xs text-muted-foreground font-bold uppercase tracking-tight">
+                                            {format(new Date(activeMicro.fecha_inicio), "d MMM", { locale: es })} — {format(new Date(activeMicro.fecha_fin), "d MMM", { locale: es })}
+                                        </span>
+                                    </div>
+                                    <h3 className="text-2xl font-black text-foreground italic uppercase tracking-tighter">
+                                        {activeMicro.nombre}
+                                    </h3>
+                                    <div className="flex items-center gap-4 text-sm text-muted-foreground font-medium">
+                                        <div className="flex items-center gap-1.5">
+                                            <ClipboardList className="h-4 w-4 text-emerald-500" />
+                                            <span>{sessionsCount} sesiones planificadas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-3 w-full md:w-auto">
+                                    <Button 
+                                        onClick={() => navigate(`/sesiones/${activeMicro.id}`)}
+                                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 px-8 rounded-2xl"
+                                    >
+                                        VER SESIONES <ArrowRight className="h-4 w-4 ml-2" />
+                                    </Button>
+                                    <p className="text-[10px] text-center md:text-left text-muted-foreground font-black uppercase tracking-widest">
+                                        Esta semana: <span className="text-foreground">{totalMinutes} min</span> planificados en <span className="text-foreground">{sessionsCount} sesiones</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                ) : (
+                    <Card className="border-border border-dashed bg-card/20 rounded-3xl p-10 text-center">
+                        <CardContent className="flex flex-col items-center gap-4">
+                            <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center mb-2">
+                                <Calendar className="h-8 w-8 text-muted-foreground opacity-50" />
+                            </div>
+                            <div className="space-y-1">
+                                <h3 className="text-xl font-bold text-foreground">No hay microciclo activo</h3>
+                                <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                                    Parece que no tienes ninguna planificación activa para las fechas de hoy.
+                                </p>
+                            </div>
+                            <Button 
+                                variant="outline" 
+                                onClick={() => navigate('/temporadas')}
+                                className="mt-2 border-emerald-500/50 text-emerald-500 hover:bg-emerald-500/10 font-bold"
+                            >
+                                IR A PLANIFICACIÓN
+                            </Button>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -217,60 +291,58 @@ export default function DashboardPage() {
                     )}
                 </div>
 
-                {/* Next Steps / Quick Actions */}
                 <div className="space-y-4">
                     <h2 className="text-lg font-black tracking-widest text-muted-foreground uppercase flex items-center gap-2 px-2">
                         <Target className="h-5 w-5 text-emerald-500" />
                         Accesos Rápidos
                     </h2>
-                    <div className="grid gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
                         <button
                             onClick={() => setIsModalOpen(true)}
                             disabled={loadingActiveMicro}
-                            className="flex items-center gap-4 p-4 rounded-2xl bg-emerald-600 border border-emerald-500 hover:bg-emerald-700 transition-all text-left group shadow-lg shadow-emerald-900/20"
+                            className="flex items-center gap-4 p-5 rounded-3xl bg-emerald-600 border border-emerald-500 hover:bg-emerald-700 transition-all text-left group shadow-xl shadow-emerald-900/40 md:col-span-2 lg:col-span-1"
                         >
-                            <div className="h-10 w-10 bg-white/20 rounded-xl flex items-center justify-center border border-white/20 group-hover:bg-white/30 transition-all shrink-0">
-                                <Plus className="h-6 w-6 text-white" />
+                            <div className="h-12 w-12 bg-white/20 rounded-2xl flex items-center justify-center border border-white/20 group-hover:bg-white/30 transition-all shrink-0">
+                                <Plus className="h-8 w-8 text-white" />
                             </div>
                             <div className="min-w-0">
-                                <p className="font-bold text-white text-sm italic underline-offset-4 decoration-white/30 group-hover:underline">NUEVA SESIÓN</p>
-                                <p className="text-[10px] text-emerald-100 font-bold uppercase tracking-tight truncate">Crea tu entrenamiento</p>
+                                <p className="font-black text-white text-lg lg:text-xl italic leading-none tracking-tighter">NUEVA SESIÓN</p>
+                                <p className="text-xs text-emerald-100 font-bold uppercase tracking-tight mt-1 opacity-80">Empieza tu entrenamiento hoy</p>
                             </div>
-                            <ArrowRight className="h-4 w-4 ml-auto text-white/50 group-hover:text-white transition-colors" />
+                            <ArrowRight className="h-5 w-5 ml-auto text-white/50 group-hover:text-white transition-all transform group-hover:translate-x-1" />
                         </button>
-                        <QuickAction
-                            title="Calendario"
-                            desc="Agenda global"
-                            icon={CalendarDays}
-                            href="/calendario"
-                        />
-                        <QuickAction
-                            title="Plantilla"
-                            desc="Gestiona tus jugadores"
-                            icon={Users}
-                            href="/jugadores"
-                        />
-                        <QuickAction
-                            title="Planificar"
-                            desc="Crea microciclos"
-                            icon={Calendar}
-                            href="/temporadas"
-                        />
-                        <QuickAction
-                            title="Ejercicios"
-                            desc="Explora ejercicios"
-                            icon={ClipboardList}
-                            href="/ejercicios"
-                        />
-                        <QuickAction
-                            title="Porteros"
-                            desc="Específicos"
-                            icon={Target}
-                            href="/porteros"
-                        />
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-1 gap-4">
+                            <QuickAction
+                                title="Planificar"
+                                desc="Crea microciclos"
+                                icon={Calendar}
+                                href="/temporadas"
+                            />
+                            <QuickAction
+                                title="Ejercicios"
+                                desc="Explora ejercicios"
+                                icon={ClipboardList}
+                                href="/ejercicios"
+                            />
+                            <QuickAction
+                                title="Plantilla"
+                                desc="Gestiona tus jugadores"
+                                icon={Users}
+                                href="/jugadores"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {/* FAB for Mobile */}
+            <button
+                onClick={() => setIsModalOpen(true)}
+                className="fixed bottom-20 right-4 z-50 md:hidden bg-emerald-600 text-white rounded-full p-4 shadow-2xl shadow-emerald-900/50 hover:bg-emerald-700 active:scale-90 transition-all"
+            >
+                <Plus className="h-7 w-7" />
+            </button>
 
             {/* Session Selector Modal */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
