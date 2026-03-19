@@ -238,7 +238,13 @@ export function useActiveMicrociclo() {
         queryKey: ['activeMicrociclo', session?.user?.id],
         queryFn: async () => {
             const userId = await getAuthenticatedUserId();
-            const today = new Date().toISOString().split('T')[0];
+            const now = new Date();
+            const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+            
+            console.log('--- DEBUG ACTIVE MICRO ---');
+            console.log('User ID:', userId);
+            console.log('Today (Local):', today);
+
             const { data, error } = await supabase
                 .from('microciclos')
                 .select(`
@@ -256,7 +262,12 @@ export function useActiveMicrociclo() {
                 .gte('fecha_fin', today)
                 .maybeSingle();
 
-            if (error) throw error;
+            if (error) {
+                console.error('Error fetching active microcycle:', error);
+                throw error;
+            }
+            
+            console.log('Active Micro Result:', data);
             return data as any;
         },
         enabled: !!session?.user?.id,
