@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useCategorias, useCreateCategoria, useDeleteCategoria } from '@/hooks/useCategorias';
 import { toast } from 'sonner';
 
@@ -64,14 +65,14 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
 
     return (
         <div className="space-y-2">
-            {label && <label className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">{label}</label>}
+            {label && <Label className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">{label}</Label>}
             
             <div className="flex items-center gap-2">
                 {!isAdding ? (
                     <>
                         <div className="flex-1 min-w-0">
                             <Select value={value} onValueChange={onChange}>
-                                <SelectTrigger className="bg-card border-border h-11 w-full text-foreground">
+                                <SelectTrigger className="bg-card border-border h-10 w-full text-foreground">
                                     <SelectValue placeholder={placeholder || "Selecciona..."} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-card border-border text-foreground">
@@ -103,7 +104,7 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
                             type="button"
                             variant="outline"
                             size="icon"
-                            className="h-11 w-11 shrink-0 border-border bg-muted hover:bg-emerald-500/10 hover:text-emerald-500"
+                            className="h-10 w-10 shrink-0 border-border bg-muted hover:bg-emerald-500/10 hover:text-emerald-500"
                             onClick={() => setIsAdding(true)}
                         >
                             <Plus className="h-5 w-5" />
@@ -112,7 +113,7 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
                 ) : (
                     <div className="flex-1 flex items-center gap-1 animate-in slide-in-from-right duration-200 min-w-0">
                         <Input
-                            className="h-11 flex-1 bg-background border-emerald-500/50 focus:ring-emerald-500 min-w-0"
+                            className="h-10 flex-1 bg-background border-emerald-500/50 focus:ring-emerald-500 min-w-0"
                             placeholder="Nueva..."
                             value={newValue}
                             onChange={(e) => setNewValue(e.target.value)}
@@ -122,7 +123,7 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
                         <Button
                             type="button"
                             size="icon"
-                            className="h-11 w-11 shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white"
+                            className="h-10 w-10 shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white"
                             onClick={handleAdd}
                             disabled={createMutation.isPending}
                         >
@@ -132,7 +133,7 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className="h-11 w-11 shrink-0 text-muted-foreground hover:text-foreground"
+                            className="h-10 w-10 shrink-0 text-muted-foreground hover:text-foreground"
                             onClick={() => { setIsAdding(false); setNewValue(''); }}
                         >
                             <X className="h-4 w-4" />
