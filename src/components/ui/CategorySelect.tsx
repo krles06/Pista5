@@ -103,15 +103,15 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
                         type="button"
                         variant="outline"
                         size="icon"
-                        className="h-11 w-11 border-border bg-muted hover:bg-emerald-500/10 hover:text-emerald-500"
+                        className="h-11 w-11 shrink-0 border-border bg-muted hover:bg-emerald-500/10 hover:text-emerald-500"
                         onClick={() => setIsAdding(true)}
                     >
                         <Plus className="h-5 w-5" />
                     </Button>
                 ) : (
-                    <div className="flex gap-1 animate-in slide-in-from-right duration-200">
+                    <div className="flex-1 flex gap-1 animate-in slide-in-from-right duration-200 min-w-0">
                         <Input
-                            className="h-11 w-32 bg-background border-emerald-500/50 focus:ring-emerald-500"
+                            className="h-11 flex-1 bg-background border-emerald-500/50 focus:ring-emerald-500 min-w-0"
                             placeholder="Nueva..."
                             value={newValue}
                             onChange={(e) => setNewValue(e.target.value)}
@@ -121,7 +121,7 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
                         <Button
                             type="button"
                             size="icon"
-                            className="h-11 w-11 bg-emerald-600 hover:bg-emerald-700 text-white"
+                            className="h-11 w-11 shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white"
                             onClick={handleAdd}
                             disabled={createMutation.isPending}
                         >
@@ -131,7 +131,7 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className="h-11 w-11 text-muted-foreground hover:text-foreground"
+                            className="h-11 w-11 shrink-0 text-muted-foreground hover:text-foreground"
                             onClick={() => { setIsAdding(false); setNewValue(''); }}
                         >
                             <X className="h-4 w-4" />

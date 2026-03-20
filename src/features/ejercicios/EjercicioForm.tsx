@@ -213,7 +213,7 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     />
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <Label htmlFor="etapa_sesion" className="text-foreground">Etapa de la sesión *</Label>
                                         <Select value={formData.etapa_sesion} onValueChange={(v) => handleSelectChange('etapa_sesion', v)}>
@@ -241,7 +241,7 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <Label htmlFor="objetivo_principal" className="text-foreground">Objetivo Principal</Label>
                                         <Input
@@ -289,13 +289,13 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                             </CardContent>
                         </Card>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <Card className="border-border bg-card shadow-xl lg:col-span-2">
                                 <CardHeader>
                                     <CardTitle className="text-xl text-foreground">Categorización</CardTitle>
                                     <CardDescription className="text-muted-foreground">Define los aspectos técnicos y tácticos de la tarea.</CardDescription>
                                 </CardHeader>
-                                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div className="space-y-2">
                                         <CategorySelect
                                             campo="tipo_trabajo"
