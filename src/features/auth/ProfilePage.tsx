@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, Mail, Shield, Tags, Trash2 } from 'lucide-react';
-import { getAuthenticatedUserId } from '@/lib/utils';
 import { useCategorias, useDeleteCategoria } from '@/hooks/useCategorias';
 import { Badge } from '@/components/ui/badge';
 
@@ -34,9 +33,7 @@ export default function ProfilePage() {
 
         try {
             setUpdating(true);
-            const userId = await getAuthenticatedUserId();
             await updateProfile({
-                id: userId,
                 nombre: name,
                 equipo: team,
             });
