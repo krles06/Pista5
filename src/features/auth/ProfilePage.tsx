@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Mail, Shield } from 'lucide-react';
+import { User, Mail, Shield, Tags, Trash2 } from 'lucide-react';
 import { getAuthenticatedUserId } from '@/lib/utils';
+import { useCategorias, useDeleteCategoria } from '@/hooks/useCategorias';
+import { Badge } from '@/components/ui/badge';
 
 export default function ProfilePage() {
     const { user, coach, loading, updateProfile } = useAuth();
@@ -143,6 +145,21 @@ export default function ProfilePage() {
                 <Card className="border-border bg-card shadow-xl md:col-span-2">
                     <CardHeader>
                         <CardTitle className="text-xl flex items-center gap-2 text-foreground">
+                            <Tags className="h-5 w-5 text-emerald-500" />
+                            Categorías Personalizadas
+                        </CardTitle>
+                        <CardDescription className="text-muted-foreground">
+                            Gestiona tus etiquetas personalizadas para los ejercicios.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <CategoriesManager />
+                    </CardContent>
+                </Card>
+
+                <Card className="border-border bg-card shadow-xl md:col-span-2">
+                    <CardHeader>
+                        <CardTitle className="text-xl flex items-center gap-2 text-foreground">
                             <Shield className="h-5 w-5 text-emerald-500" />
                             Seguridad
                         </CardTitle>
@@ -158,6 +175,69 @@ export default function ProfilePage() {
                     </CardContent>
                 </Card>
             </div>
+        </div>
+    );
+}
+function CategoriesManager() {
+    const { data: allCategories, isLoading } = useCategorias();
+    const deleteMutation = useDeleteCategoria();
+
+    if (isLoading) return <div className="p-4 text-center text-muted-foreground animate-pulse">Cargando categorías...</div>;
+    if (!allCategories || allCategories.length === 0) {
+        return (
+            <div className="p-8 text-center border-2 border-dashed border-border rounded-xl">
+                <p className="text-muted-foreground">No tienes categorías personalizadas aún.</p>
+                <p className="text-xs text-muted-foreground mt-1">Puedes crearlas directamente desde el formulario de nuevo ejercicio.</p>
+            </div>
+        );
+    }
+
+    // Group by campo
+    const grouped = allCategories.reduce((acc, cat) => {
+        if (!acc[cat.campo]) acc[cat.campo] = [];
+        acc[cat.campo].push(cat);
+        return acc;
+    }, {} as Record<string, typeof allCategories>);
+
+    const campoLabels: Record<string, string> = {
+        tipo_tarea: 'Tipo de Tarea',
+        tipo_trabajo: 'Tipo de Trabajo',
+        trabajo: 'Trabajo Específico',
+        componente_juego: 'Componente Juego',
+        sistema_juego: 'Sistema Juego',
+        dificultad: 'Dificultad',
+        trabajo_fisico_integrado: 'Físico Integrado'
+    };
+
+    return (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(grouped).map(([campo, cats]) => (
+                <div key={campo} className="space-y-3 p-4 bg-muted/50 rounded-2xl border border-border">
+                    <h3 className="text-[10px] font-black tracking-widest text-muted-foreground uppercase flex items-center justify-between">
+                        {campoLabels[campo] || campo}
+                        <Badge variant="outline" className="text-[10px] font-bold border-emerald-500/20 text-emerald-500">
+                            {cats.length}
+                        </Badge>
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                        {cats.map((cat) => (
+                            <div 
+                                key={cat.id} 
+                                className="group flex items-center gap-1.5 px-3 py-1.5 bg-card hover:bg-muted border border-border rounded-lg transition-all hover:scale-105"
+                            >
+                                <span className="text-sm font-medium text-foreground">{cat.valor}</span>
+                                <button
+                                    onClick={() => deleteMutation.mutate(cat.id)}
+                                    className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                                    title="Eliminar"
+                                >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ))}
         </div>
     );
 }

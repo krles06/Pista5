@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowLeft, Save } from 'lucide-react';
 import { ImageUpload } from '@/components/shared/ImageUpload';
+import { CategorySelect } from '@/components/ui/CategorySelect';
 
 import { useCreateEjercicio, useUpdateEjercicio, useEjercicio } from '@/hooks/useEjercicios';
 
@@ -253,17 +254,14 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="tipo_tarea" className="text-foreground">Tipo de Tarea</Label>
-                                        <Select value={formData.tipo_tarea} onValueChange={(v) => handleSelectChange('tipo_tarea', v)}>
-                                            <SelectTrigger className="bg-background border-border text-foreground">
-                                                <SelectValue placeholder="Selecciona tipo" />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-card border-border text-foreground">
-                                                {TIPO_TAREA.map((item) => (
-                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <CategorySelect
+                                            campo="tipo_tarea"
+                                            label="Tipo de Tarea"
+                                            value={formData.tipo_tarea}
+                                            onChange={(v) => handleSelectChange('tipo_tarea', v)}
+                                            staticOptions={TIPO_TAREA}
+                                            placeholder="Selecciona tipo"
+                                        />
                                     </div>
                                 </div>
 
@@ -299,87 +297,69 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                 </CardHeader>
                                 <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                     <div className="space-y-2">
-                                        <Label className="text-foreground">Tipo de Trabajo</Label>
-                                        <Select value={formData.tipo_trabajo} onValueChange={(v) => handleSelectChange('tipo_trabajo', v)}>
-                                            <SelectTrigger className="bg-background border-border text-foreground">
-                                                <SelectValue placeholder="Selecciona trabajo" />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-card border-border text-foreground">
-                                                {TIPO_TRABAJO.map((item) => (
-                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <CategorySelect
+                                            campo="tipo_trabajo"
+                                            label="Tipo de Trabajo"
+                                            value={formData.tipo_trabajo}
+                                            onChange={(v) => handleSelectChange('tipo_trabajo', v)}
+                                            staticOptions={TIPO_TRABAJO}
+                                            placeholder="Selecciona trabajo"
+                                        />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-foreground">Trabajo Específico</Label>
-                                        <Select value={formData.trabajo} onValueChange={(v) => handleSelectChange('trabajo', v)}>
-                                            <SelectTrigger className="bg-background border-border text-foreground">
-                                                <SelectValue placeholder="Selecciona fase" />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-card border-border text-foreground">
-                                                {TRABAJO.map((item) => (
-                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <CategorySelect
+                                            campo="trabajo"
+                                            label="Trabajo Específico"
+                                            value={formData.trabajo}
+                                            onChange={(v) => handleSelectChange('trabajo', v)}
+                                            staticOptions={TRABAJO}
+                                            placeholder="Selecciona fase"
+                                        />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-foreground">Componente del Juego</Label>
-                                        <Select value={formData.componente_juego} onValueChange={(v) => handleSelectChange('componente_juego', v)}>
-                                            <SelectTrigger className="bg-background border-border text-foreground">
-                                                <SelectValue placeholder="Selecciona componente" />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-card border-border text-foreground">
-                                                {COMPONENTE_JUEGO.map((item) => (
-                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <CategorySelect
+                                            campo="componente_juego"
+                                            label="Componente del Juego"
+                                            value={formData.componente_juego}
+                                            onChange={(v) => handleSelectChange('componente_juego', v)}
+                                            staticOptions={COMPONENTE_JUEGO}
+                                            placeholder="Selecciona componente"
+                                        />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-foreground">Sistema de Juego</Label>
-                                        <Select value={formData.sistema_juego} onValueChange={(v) => handleSelectChange('sistema_juego', v)}>
-                                            <SelectTrigger className="bg-background border-border text-foreground">
-                                                <SelectValue placeholder="Selecciona sistema" />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-card border-border text-foreground">
-                                                {SISTEMA_JUEGO.map((item) => (
-                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <CategorySelect
+                                            campo="sistema_juego"
+                                            label="Sistema de Juego"
+                                            value={formData.sistema_juego}
+                                            onChange={(v) => handleSelectChange('sistema_juego', v)}
+                                            staticOptions={SISTEMA_JUEGO}
+                                            placeholder="Selecciona sistema"
+                                        />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-foreground">Dificultad</Label>
-                                        <Select value={formData.dificultad} onValueChange={(v) => handleSelectChange('dificultad', v)}>
-                                            <SelectTrigger className="bg-background border-border text-foreground">
-                                                <SelectValue placeholder="Selecciona dificultad" />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-card border-border text-foreground">
-                                                {DIFICULTAD.map((item) => (
-                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <CategorySelect
+                                            campo="dificultad"
+                                            label="Dificultad"
+                                            value={formData.dificultad}
+                                            onChange={(v) => handleSelectChange('dificultad', v)}
+                                            staticOptions={DIFICULTAD}
+                                            placeholder="Selecciona dificultad"
+                                        />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-foreground">Trabajo Físico Integrado</Label>
-                                        <Select value={formData.trabajo_fisico_integrado} onValueChange={(v) => handleSelectChange('trabajo_fisico_integrado', v)}>
-                                            <SelectTrigger className="bg-background border-border text-foreground">
-                                                <SelectValue placeholder="Selecciona físico" />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-card border-border text-foreground">
-                                                {TRABAJO_FISICO_INTEGRADO.map((item) => (
-                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <CategorySelect
+                                            campo="trabajo_fisico_integrado"
+                                            label="Trabajo Físico Integrado"
+                                            value={formData.trabajo_fisico_integrado}
+                                            onChange={(v) => handleSelectChange('trabajo_fisico_integrado', v)}
+                                            staticOptions={TRABAJO_FISICO_INTEGRADO}
+                                            placeholder="Selecciona físico"
+                                        />
                                     </div>
                                 </CardContent>
                             </Card>
