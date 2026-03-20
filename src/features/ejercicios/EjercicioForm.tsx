@@ -253,16 +253,14 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                         />
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <CategorySelect
-                                            campo="tipo_tarea"
-                                            label="Tipo de Tarea"
-                                            value={formData.tipo_tarea}
-                                            onChange={(v) => handleSelectChange('tipo_tarea', v)}
-                                            staticOptions={TIPO_TAREA}
-                                            placeholder="Selecciona tipo"
-                                        />
-                                    </div>
+                                    <CategorySelect
+                                        campo="tipo_tarea"
+                                        label="Tipo de Tarea"
+                                        value={formData.tipo_tarea}
+                                        onChange={(v) => handleSelectChange('tipo_tarea', v)}
+                                        staticOptions={TIPO_TAREA}
+                                        placeholder="Selecciona tipo"
+                                    />
                                 </div>
 
                                 <div className="space-y-2">
@@ -296,71 +294,59 @@ export default function EjercicioForm({ esPorteros = false }: EjercicioFormProps
                                     <CardDescription className="text-muted-foreground">Define los aspectos técnicos y tácticos de la tarea.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <div className="space-y-2">
-                                        <CategorySelect
-                                            campo="tipo_trabajo"
-                                            label="Tipo de Trabajo"
-                                            value={formData.tipo_trabajo}
-                                            onChange={(v) => handleSelectChange('tipo_trabajo', v)}
-                                            staticOptions={TIPO_TRABAJO}
-                                            placeholder="Selecciona trabajo"
-                                        />
-                                    </div>
+                                    <CategorySelect
+                                        campo="tipo_trabajo"
+                                        label="Tipo de Trabajo"
+                                        value={formData.tipo_trabajo}
+                                        onChange={(v) => handleSelectChange('tipo_trabajo', v)}
+                                        staticOptions={TIPO_TRABAJO}
+                                        placeholder="Selecciona trabajo"
+                                    />
 
-                                    <div className="space-y-2">
-                                        <CategorySelect
-                                            campo="trabajo"
-                                            label="Trabajo Específico"
-                                            value={formData.trabajo}
-                                            onChange={(v) => handleSelectChange('trabajo', v)}
-                                            staticOptions={TRABAJO}
-                                            placeholder="Selecciona fase"
-                                        />
-                                    </div>
+                                    <CategorySelect
+                                        campo="trabajo"
+                                        label="Trabajo Específico"
+                                        value={formData.trabajo}
+                                        onChange={(v) => handleSelectChange('trabajo', v)}
+                                        staticOptions={TRABAJO}
+                                        placeholder="Selecciona fase"
+                                    />
 
-                                    <div className="space-y-2">
-                                        <CategorySelect
-                                            campo="componente_juego"
-                                            label="Componente del Juego"
-                                            value={formData.componente_juego}
-                                            onChange={(v) => handleSelectChange('componente_juego', v)}
-                                            staticOptions={COMPONENTE_JUEGO}
-                                            placeholder="Selecciona componente"
-                                        />
-                                    </div>
+                                    <CategorySelect
+                                        campo="componente_juego"
+                                        label="Componente del Juego"
+                                        value={formData.componente_juego}
+                                        onChange={(v) => handleSelectChange('componente_juego', v)}
+                                        staticOptions={COMPONENTE_JUEGO}
+                                        placeholder="Selecciona componente"
+                                    />
 
-                                    <div className="space-y-2">
-                                        <CategorySelect
-                                            campo="sistema_juego"
-                                            label="Sistema de Juego"
-                                            value={formData.sistema_juego}
-                                            onChange={(v) => handleSelectChange('sistema_juego', v)}
-                                            staticOptions={SISTEMA_JUEGO}
-                                            placeholder="Selecciona sistema"
-                                        />
-                                    </div>
+                                    <CategorySelect
+                                        campo="sistema_juego"
+                                        label="Sistema de Juego"
+                                        value={formData.sistema_juego}
+                                        onChange={(v) => handleSelectChange('sistema_juego', v)}
+                                        staticOptions={SISTEMA_JUEGO}
+                                        placeholder="Selecciona sistema"
+                                    />
 
-                                    <div className="space-y-2">
-                                        <CategorySelect
-                                            campo="dificultad"
-                                            label="Dificultad"
-                                            value={formData.dificultad}
-                                            onChange={(v) => handleSelectChange('dificultad', v)}
-                                            staticOptions={DIFICULTAD}
-                                            placeholder="Selecciona dificultad"
-                                        />
-                                    </div>
+                                    <CategorySelect
+                                        campo="dificultad"
+                                        label="Dificultad"
+                                        value={formData.dificultad}
+                                        onChange={(v) => handleSelectChange('dificultad', v)}
+                                        staticOptions={DIFICULTAD}
+                                        placeholder="Selecciona dificultad"
+                                    />
 
-                                    <div className="space-y-2">
-                                        <CategorySelect
-                                            campo="trabajo_fisico_integrado"
-                                            label="Trabajo Físico Integrado"
-                                            value={formData.trabajo_fisico_integrado}
-                                            onChange={(v) => handleSelectChange('trabajo_fisico_integrado', v)}
-                                            staticOptions={TRABAJO_FISICO_INTEGRADO}
-                                            placeholder="Selecciona físico"
-                                        />
-                                    </div>
+                                    <CategorySelect
+                                        campo="trabajo_fisico_integrado"
+                                        label="Trabajo Físico Integrado"
+                                        value={formData.trabajo_fisico_integrado}
+                                        onChange={(v) => handleSelectChange('trabajo_fisico_integrado', v)}
+                                        staticOptions={TRABAJO_FISICO_INTEGRADO}
+                                        placeholder="Selecciona físico"
+                                    />
                                 </CardContent>
                             </Card>
 
