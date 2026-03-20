@@ -58,6 +58,20 @@ export function useCreateTemporada() {
         mutationFn: async (newTemporada: Omit<Temporada, 'id' | 'coach_id' | 'created_at'>) => {
             const userId = await getAuthenticatedUserId();
 
+            // Check if there is already an active season for today
+            const today = new Date().toISOString().split('T')[0];
+            const { data: existingSeasons, error: checkError } = await supabase
+                .from('temporadas')
+                .select('id')
+                .eq('coach_id', userId)
+                .lte('fecha_inicio', today)
+                .gte('fecha_fin', today);
+
+            if (checkError) throw checkError;
+            if (existingSeasons && existingSeasons.length > 0) {
+                throw new Error('Ya tienes una temporada activa para las fechas de hoy. No puedes crear otra solapada.');
+            }
+
             const { data, error } = await supabase
                 .from('temporadas')
                 .insert([{ ...newTemporada, coach_id: userId }])

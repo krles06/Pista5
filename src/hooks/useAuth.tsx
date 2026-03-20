@@ -91,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .from('coaches')
             .upsert({ id: user.id, ...updates })
             .select()
-            .single();
+            .maybeSingle();
 
         if (error) throw error;
         if (data) setCoach(data);
