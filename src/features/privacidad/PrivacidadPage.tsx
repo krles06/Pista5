@@ -1,4 +1,4 @@
-import { ArrowLeft, Eye, Lock, Database, UserX, Globe, Mail } from 'lucide-react';
+import { ArrowLeft, Eye, Lock, Database, UserX, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
