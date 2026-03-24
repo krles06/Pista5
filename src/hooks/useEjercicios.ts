@@ -51,22 +51,27 @@ export function useEjercicio(id?: string) {
     });
 }
 
-// Upload image helper
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_IMAGE_SIZE_MB = 5;
+
+// Upload image helper — returns the storage path (not a public URL)
 const uploadImage = async (file: File, coachId: string): Promise<string> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${coachId}/${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        throw new Error('Tipo de archivo no permitido. Solo se aceptan imágenes JPG, PNG, WEBP o GIF.');
+    }
+    if (file.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
+        throw new Error(`La imagen no puede superar ${MAX_IMAGE_SIZE_MB} MB.`);
+    }
+    const ext = file.type.split('/')[1];
+    const fileName = `${coachId}/${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${ext}`;
 
     const { error: uploadError } = await supabase.storage
         .from('ejercicios-imagenes')
-        .upload(fileName, file);
+        .upload(fileName, file, { contentType: file.type });
 
     if (uploadError) throw new Error('Error al subir la imagen: ' + uploadError.message);
 
-    const { data } = supabase.storage
-        .from('ejercicios-imagenes')
-        .getPublicUrl(fileName);
-
-    return data.publicUrl;
+    return fileName;
 };
 
 // Create exercise
@@ -148,6 +153,7 @@ export function useUpdateEjercicio() {
                 .from('ejercicios')
                 .update(dataToUpdate)
                 .eq('id', id)
+                .eq('coach_id', userId)
                 .select()
                 .single();
 
@@ -167,12 +173,12 @@ export function useDeleteEjercicio() {
 
     return useMutation({
         mutationFn: async (id: string) => {
-            await getAuthenticatedUserId();
-            // Opcional: Eliminar la imagen del storage si existe (requiere extraer el path de la URL pública)
+            const userId = await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('ejercicios')
                 .delete()
                 .eq('id', id)
+                .eq('coach_id', userId)
                 .select()
                 .single();
 

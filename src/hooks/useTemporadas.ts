@@ -93,11 +93,12 @@ export function useUpdateTemporada() {
 
     return useMutation({
         mutationFn: async ({ id, updates }: { id: string; updates: Partial<Temporada> }) => {
-            await getAuthenticatedUserId();
+            const userId = await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('temporadas')
                 .update(updates)
                 .eq('id', id)
+                .eq('coach_id', userId)
                 .select()
                 .single();
 
@@ -117,11 +118,12 @@ export function useDeleteTemporada() {
 
     return useMutation({
         mutationFn: async (id: string) => {
-            await getAuthenticatedUserId();
+            const userId = await getAuthenticatedUserId();
             const { error } = await supabase
                 .from('temporadas')
                 .delete()
-                .eq('id', id);
+                .eq('id', id)
+                .eq('coach_id', userId);
 
             if (error) throw error;
         },

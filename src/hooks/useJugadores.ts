@@ -4,22 +4,27 @@ import { getAuthenticatedUserId } from '@/lib/utils';
 import type { Jugador, JugadorInsert, JugadorUpdate } from '@/lib/types-jugadores';
 import { useAuth } from './useAuth';
 
-// Upload photo helper
+const ALLOWED_PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const MAX_PHOTO_SIZE_MB = 3;
+
+// Upload photo helper — returns the storage path (not a public URL)
 const uploadPhoto = async (file: File, coachId: string): Promise<string> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${coachId}/${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+    if (!ALLOWED_PHOTO_TYPES.includes(file.type)) {
+        throw new Error('Tipo de archivo no permitido. Solo se aceptan imágenes JPG, PNG o WEBP.');
+    }
+    if (file.size > MAX_PHOTO_SIZE_MB * 1024 * 1024) {
+        throw new Error(`La foto no puede superar ${MAX_PHOTO_SIZE_MB} MB.`);
+    }
+    const ext = file.type.split('/')[1];
+    const fileName = `${coachId}/${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${ext}`;
 
     const { error: uploadError } = await supabase.storage
         .from('jugadores-fotos')
-        .upload(fileName, file);
+        .upload(fileName, file, { contentType: file.type });
 
     if (uploadError) throw new Error('Error al subir la foto: ' + uploadError.message);
 
-    const { data } = supabase.storage
-        .from('jugadores-fotos')
-        .getPublicUrl(fileName);
-
-    return data.publicUrl;
+    return fileName;
 };
 
 // Fetch all players for a coach, optionally filtered by season
@@ -142,6 +147,7 @@ export function useUpdateJugador() {
                 .from('jugadores')
                 .update({ ...updates, url_foto, updated_at: new Date().toISOString() })
                 .eq('id', id)
+                .eq('coach_id', userId)
                 .select()
                 .single();
 
@@ -161,11 +167,12 @@ export function useDeleteJugador() {
 
     return useMutation({
         mutationFn: async (id: string) => {
-            await getAuthenticatedUserId();
+            const userId = await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('jugadores')
                 .delete()
                 .eq('id', id)
+                .eq('coach_id', userId)
                 .select()
                 .single();
 
