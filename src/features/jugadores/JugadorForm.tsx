@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowLeft, Save, Upload, X, User } from 'lucide-react';
+import { getSignedStorageUrl } from '@/lib/utils';
 
 import { useJugador, useCreateJugador, useUpdateJugador } from '@/hooks/useJugadores';
 import { useTemporadas } from '@/hooks/useTemporadas';
@@ -75,7 +76,11 @@ export default function JugadorForm() {
                 notas: jugador.notas || '',
                 url_foto: jugador.url_foto
             });
-            if (jugador.url_foto) setPhotoPreview(jugador.url_foto);
+            if (jugador.url_foto) {
+                const url = jugador.url_foto.startsWith('http') ? jugador.url_foto : null;
+                if (url) setPhotoPreview(url);
+                else getSignedStorageUrl('jugadores-fotos', jugador.url_foto).then(setPhotoPreview);
+            }
         } else if (!isEditing && seasonIdParam) {
             setFormData(prev => ({ ...prev, id_temporada: seasonIdParam }));
         }

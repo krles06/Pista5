@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 
 import { useSesion } from '@/hooks/useSesiones';
+import { StorageImage } from '@/components/ui/storage-image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -222,7 +223,7 @@ export default function SesionDetailPage() {
                                         <div className="flex flex-col sm:flex-row">
                                             <div className="w-full sm:w-48 aspect-video sm:aspect-square bg-background border-b sm:border-b-0 sm:border-r border-border shrink-0">
                                                 {se.ejercicio.url_imagen ? (
-                                                    <img src={se.ejercicio.url_imagen} alt="" className="w-full h-full object-cover" />
+                                                    <StorageImage path={se.ejercicio.url_imagen} bucket="ejercicios-imagenes" alt="" className="w-full h-full object-cover" />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center opacity-10">
                                                         <FileText className="h-12 w-12" />

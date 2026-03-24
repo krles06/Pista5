@@ -5,6 +5,7 @@ import { Plus, Search, LayoutGrid, List as ListIcon, Trash2, Edit } from 'lucide
 
 import { useEjercicios, useDeleteEjercicio } from '@/hooks/useEjercicios';
 import type { Ejercicio } from '@/lib/types-ejercicios';
+import { StorageImage } from '@/components/ui/storage-image';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -302,8 +303,9 @@ function EjercicioCard({
         >
             <div className="aspect-video w-full bg-background relative overflow-hidden border-b border-border">
                 {ejercicio.url_imagen || ejercicio.fichero_imagen ? (
-                    <img
-                        src={ejercicio.url_imagen || ejercicio.fichero_imagen || ''}
+                    <StorageImage
+                        path={ejercicio.url_imagen || ejercicio.fichero_imagen}
+                        bucket="ejercicios-imagenes"
                         alt={ejercicio.titulo}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />

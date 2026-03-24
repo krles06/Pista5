@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase';
 import type { DropResult, DroppableProvided, DraggableProvided } from '@hello-pangea/dnd';
 
 import { useCreateSesion, useUpdateSesion, useSesion } from '@/hooks/useSesiones';
+import { StorageImage } from '@/components/ui/storage-image';
 import { useEjercicios } from '@/hooks/useEjercicios';
 import type { Ejercicio } from '@/lib/types-ejercicios';
 import type { Sesion } from '@/lib/types-sesiones';
@@ -337,7 +338,7 @@ export default function SesionForm() {
                                                                         </div>
                                                                         <div className="h-12 w-12 bg-background rounded-lg border border-border flex items-center justify-center overflow-hidden shrink-0">
                                                                             {ex.url_imagen ? (
-                                                                                <img src={ex.url_imagen} alt="" className="w-full h-full object-cover" />
+                                                                                <StorageImage path={ex.url_imagen} bucket="ejercicios-imagenes" alt="" className="w-full h-full object-cover" />
                                                                             ) : (
                                                                                 <ImageIcon className="h-5 w-5 text-muted-foreground" />
                                                                             )}
@@ -519,7 +520,7 @@ function EjercicioSelector({ onSelect }: { onSelect: (ex: Ejercicio) => void }) 
                             onClick={() => onSelect(ex)}
                         >
                             <div className="h-10 w-10 bg-background rounded-lg flex items-center justify-center overflow-hidden shrink-0 border border-border">
-                                {ex.url_imagen ? <img src={ex.url_imagen} alt="" className="w-full h-full object-cover" /> : <ImageIcon className="h-4 w-4 text-muted-foreground" />}
+                                {ex.url_imagen ? <StorageImage path={ex.url_imagen} bucket="ejercicios-imagenes" alt="" className="w-full h-full object-cover" fallback={<ImageIcon className="h-4 w-4 text-muted-foreground" />} /> : <ImageIcon className="h-4 w-4 text-muted-foreground" />}
                             </div>
                             <div className="ml-3 flex-1 min-w-0">
                                 <p className="text-sm font-bold text-foreground truncate leading-none mb-1">{ex.titulo}</p>

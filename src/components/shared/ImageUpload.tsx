@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getSignedStorageUrl } from '@/lib/utils';
 
 interface ImageUploadProps {
     value?: string | null;
@@ -23,10 +24,11 @@ export function ImageUpload({
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (value) {
+        if (!value) { setPreview(null); return; }
+        if (value.startsWith('http') || value.startsWith('data:') || value.startsWith('blob:')) {
             setPreview(value);
         } else {
-            setPreview(null);
+            getSignedStorageUrl('ejercicios-imagenes', value).then(setPreview);
         }
     }, [value]);
 

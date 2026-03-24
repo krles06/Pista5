@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 import { ArrowLeft, Clock, Users, Maximize2, Map, LayoutGrid, Target, Play, Edit, Trash2 } from 'lucide-react';
 
 import { useEjercicio, useDeleteEjercicio } from '@/hooks/useEjercicios';
+import { StorageImage } from '@/components/ui/storage-image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -119,8 +120,9 @@ export default function EjercicioDetailPage() {
 
                     <Card className="border-border bg-card shadow-xl overflow-hidden rounded-2xl">
                         {ejercicio.url_imagen || ejercicio.fichero_imagen ? (
-                            <img
-                                src={ejercicio.url_imagen || ejercicio.fichero_imagen || ''}
+                            <StorageImage
+                                path={ejercicio.url_imagen || ejercicio.fichero_imagen}
+                                bucket="ejercicios-imagenes"
                                 alt={ejercicio.titulo}
                                 className="w-full aspect-video object-contain bg-background"
                             />
