@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Activity } from 'lucide-react';
 
 export default function RegisterPage() {
     const [name, setName] = useState('');
@@ -73,8 +72,8 @@ export default function RegisterPage() {
 
             <div className="w-full max-w-md space-y-6 relative z-10">
                 <div className="flex flex-col items-center justify-center text-center space-y-3">
-                    <div className="bg-emerald-600/10 p-3 rounded-2xl mb-1 border border-emerald-500/10 shadow-2xl shadow-emerald-500/5">
-                        <Activity className="h-8 w-8 text-emerald-500" />
+                    <div className="mb-1">
+                        <img src="/P5-LogoS.png" alt="Pista5" className="h-16 w-16 rounded-2xl shadow-2xl shadow-emerald-500/10" />
                     </div>
                     <div className="space-y-1">
                         <h1 className="text-3xl font-black tracking-tighter text-foreground uppercase italic">Pista5</h1>
