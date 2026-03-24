@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Activity, LayoutGrid, Calendar, Users, Trophy, BarChart2, FileText, ChevronRight, CheckCircle2, Mail } from 'lucide-react';
+import { LayoutGrid, Calendar, Users, Trophy, BarChart2, FileText, ChevronRight, CheckCircle2, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const features = [
@@ -51,7 +51,7 @@ export default function LandingPage() {
             <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
                 <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Activity className="h-6 w-6 text-emerald-500" />
+                        <img src="/P5-LogoS.png" alt="Pista5" className="h-8 w-8 rounded-lg" />
                         <span className="text-xl font-black tracking-tighter italic uppercase">Pista5</span>
                     </div>
                     <div className="flex items-center gap-3">
@@ -167,7 +167,7 @@ export default function LandingPage() {
             <footer className="border-t border-border/50 py-10 px-4">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-2">
-                        <Activity className="h-5 w-5 text-emerald-500" />
+                        <img src="/P5-LogoS.png" alt="Pista5" className="h-6 w-6 rounded-md" />
                         <span className="font-black tracking-tighter italic uppercase text-sm">Pista5</span>
                         <span className="text-muted-foreground/40 text-xs ml-2">© {new Date().getFullYear()}</span>
                     </div>
