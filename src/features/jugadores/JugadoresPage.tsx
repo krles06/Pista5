@@ -31,7 +31,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { StorageAvatarImage } from '@/components/ui/storage-image';
 
 export default function JugadoresPage() {
     const { id_temporada } = useParams<{ id_temporada: string }>();
@@ -157,7 +158,7 @@ export default function JugadoresPage() {
                                 >
                                     <CardHeader className="p-5 flex flex-row items-center gap-4 space-y-0">
                                         <Avatar className="h-14 w-14 border-2 border-border">
-                                            <AvatarImage src={j.url_foto || ''} className="object-cover" />
+                                            <StorageAvatarImage path={j.url_foto} bucket="jugadores-fotos" className="object-cover" />
                                             <AvatarFallback className="bg-background text-emerald-500 font-bold text-lg">
                                                 {j.nombre[0]}{j.apellidos?.[0]}
                                             </AvatarFallback>
@@ -221,7 +222,7 @@ export default function JugadoresPage() {
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
                                                     <Avatar className="h-8 w-8 border border-border">
-                                                        <AvatarImage src={j.url_foto || ''} />
+                                                        <StorageAvatarImage path={j.url_foto} bucket="jugadores-fotos" />
                                                         <AvatarFallback className="text-[10px] bg-background text-emerald-500">
                                                             {j.nombre[0]}
                                                         </AvatarFallback>

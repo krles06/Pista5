@@ -28,7 +28,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     const navigate = useNavigate();
 
     const navItems = [
-        { name: 'Dashboard', href: '/', icon: Home },
+        { name: 'Dashboard', href: '/dashboard', icon: Home },
         { name: 'Calendario', href: '/calendario', icon: CalendarDays },
         { name: 'Planificación', href: '/temporadas', icon: Calendar },
         { name: 'Ejercicios', href: '/ejercicios', icon: ClipboardList },
@@ -83,7 +83,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
                     <nav className="space-y-1">
                         {navItems.map((item) => {
-                            const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
+                            const isActive = location.pathname === item.href || (item.href !== '/dashboard' && location.pathname.startsWith(item.href));
                             return (
                                 <Link
                                     key={item.href}

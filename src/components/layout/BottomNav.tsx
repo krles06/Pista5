@@ -5,7 +5,7 @@ export default function BottomNav() {
     const location = useLocation();
 
     const navItems = [
-        { name: 'Dashboard', href: '/', icon: Home },
+        { name: 'Dashboard', href: '/dashboard', icon: Home },
         { name: 'Planificación', href: '/temporadas', icon: Calendar },
         { name: 'Ejercicios', href: '/ejercicios', icon: Dumbbell },
         { name: 'Sesiones', href: '/calendario', icon: ClipboardList },
@@ -15,7 +15,7 @@ export default function BottomNav() {
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-t border-border flex items-center justify-around px-2 py-3 md:hidden">
             {navItems.map((item) => {
-                const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
+                const isActive = location.pathname === item.href || (item.href !== '/dashboard' && location.pathname.startsWith(item.href));
                 const Icon = item.icon;
                 
                 return (

@@ -1,12 +1,21 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
-const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGINS') ?? '').split(',').map(o => o.trim()).filter(Boolean);
+
+function getCorsHeaders(requestOrigin: string | null) {
+    const origin = requestOrigin && (ALLOWED_ORIGINS.length === 0 || ALLOWED_ORIGINS.includes(requestOrigin))
+        ? requestOrigin
+        : ALLOWED_ORIGINS[0] ?? '';
+    return {
+        'Access-Control-Allow-Origin': origin,
+        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+        'Vary': 'Origin',
+    };
 }
 
 serve(async (req) => {
+    const corsHeaders = getCorsHeaders(req.headers.get('Origin'));
     if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders })
     }
@@ -191,10 +200,12 @@ serve(async (req) => {
         })
 
     } catch (error: any) {
-        console.error(error);
-        return new Response(error.message, {
+        const isClientError = ['Unauthenticated', 'Unauthorized access', 'Missing sesion_id', 'Session not found'].includes(error.message);
+        const status = isClientError ? (error.message === 'Unauthenticated' || error.message === 'Unauthorized access' ? 401 : 400) : 500;
+        const message = isClientError ? error.message : 'Internal server error';
+        return new Response(message, {
             headers: { ...corsHeaders, 'Content-Type': 'text/plain' },
-            status: 400,
+            status,
         })
     }
 })

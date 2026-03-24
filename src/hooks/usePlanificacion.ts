@@ -48,8 +48,8 @@ export function useUpdateMacrociclo() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async ({ id, updates }: { id: string; updates: Partial<Macrociclo> }) => {
-            await getAuthenticatedUserId();
-            const { data, error } = await supabase.from('macrociclos').update(updates).eq('id', id).select().single();
+            const userId = await getAuthenticatedUserId();
+            const { data, error } = await supabase.from('macrociclos').update(updates).eq('id', id).eq('coach_id', userId).select().single();
             if (error) throw error;
             return data as Macrociclo;
         },
@@ -63,8 +63,8 @@ export function useDeleteMacrociclo() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (id: string) => {
-            await getAuthenticatedUserId();
-            const { data, error } = await supabase.from('macrociclos').delete().eq('id', id).select().single();
+            const userId = await getAuthenticatedUserId();
+            const { data, error } = await supabase.from('macrociclos').delete().eq('id', id).eq('coach_id', userId).select().single();
             if (error) throw error;
             return data as Macrociclo;
         },
@@ -118,8 +118,8 @@ export function useUpdateMesociclo() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async ({ id, updates }: { id: string; updates: Partial<Mesociclo> }) => {
-            await getAuthenticatedUserId();
-            const { data, error } = await supabase.from('mesociclos').update(updates).eq('id', id).select().single();
+            const userId = await getAuthenticatedUserId();
+            const { data, error } = await supabase.from('mesociclos').update(updates).eq('id', id).eq('coach_id', userId).select().single();
             if (error) throw error;
             return data as Mesociclo;
         },
@@ -133,8 +133,8 @@ export function useDeleteMesociclo() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (id: string) => {
-            await getAuthenticatedUserId();
-            const { data, error } = await supabase.from('mesociclos').delete().eq('id', id).select().single();
+            const userId = await getAuthenticatedUserId();
+            const { data, error } = await supabase.from('mesociclos').delete().eq('id', id).eq('coach_id', userId).select().single();
             if (error) throw error;
             return data as Mesociclo;
         },
@@ -188,8 +188,8 @@ export function useUpdateMicrociclo() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async ({ id, updates }: { id: string; updates: Partial<Microciclo> }) => {
-            await getAuthenticatedUserId();
-            const { data, error } = await supabase.from('microciclos').update(updates).eq('id', id).select().single();
+            const userId = await getAuthenticatedUserId();
+            const { data, error } = await supabase.from('microciclos').update(updates).eq('id', id).eq('coach_id', userId).select().single();
             if (error) throw error;
             return data as Microciclo;
         },
@@ -203,8 +203,8 @@ export function useDeleteMicrociclo() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (id: string) => {
-            await getAuthenticatedUserId();
-            const { data, error } = await supabase.from('microciclos').delete().eq('id', id).select().single();
+            const userId = await getAuthenticatedUserId();
+            const { data, error } = await supabase.from('microciclos').delete().eq('id', id).eq('coach_id', userId).select().single();
             if (error) throw error;
             return data as Microciclo;
         },

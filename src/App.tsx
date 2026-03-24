@@ -1,17 +1,19 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { Toaster } from 'sonner';
-import { AuthProvider } from '@/hooks/useAuth';
+import { AuthProvider, useAuth } from '@/hooks/useAuth';
 
 // Layouts and Auth
 import AppLayout from '@/components/layout/AppLayout';
 import ProtectedRoute from '@/components/shared/ProtectedRoute';
+import { OnboardingModal } from '@/components/shared/OnboardingModal';
 
 // Auth Pages
 import LoginPage from '@/features/auth/LoginPage';
 import RegisterPage from '@/features/auth/RegisterPage';
 import ForgotPasswordPage from '@/features/auth/ForgotPasswordPage';
 import ProfilePage from '@/features/auth/ProfilePage';
+import VerificacionEmailPage from '@/features/auth/VerificacionEmailPage';
 
 // Temporadas Pages
 import TemporadasPage from '@/features/temporadas/TemporadasPage';
@@ -50,6 +52,20 @@ import DashboardPage from '@/features/dashboard/DashboardPage';
 // Static Pages
 import ContactoPage from '@/features/contacto/ContactoPage';
 import TerminosPage from '@/features/terminos/TerminosPage';
+import PrivacidadPage from '@/features/privacidad/PrivacidadPage';
+import LandingPage from '@/features/landing/LandingPage';
+import NotFoundPage from '@/features/errors/NotFoundPage';
+
+// Landing route: shows landing if not logged in, dashboard if logged in
+function HomeRoute() {
+  const { session, loading } = useAuth();
+  if (loading) return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
+    </div>
+  );
+  return session ? <Navigate to="/dashboard" replace /> : <LandingPage />;
+}
 
 function App() {
   return (
@@ -57,17 +73,22 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
+            {/* Landing */}
+            <Route path="/" element={<HomeRoute />} />
+
             {/* Public Routes */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/registro" element={<RegisterPage />} />
             <Route path="/recuperar-password" element={<ForgotPasswordPage />} />
+            <Route path="/verificar-email" element={<VerificacionEmailPage />} />
             <Route path="/contacto" element={<ContactoPage />} />
             <Route path="/terminos" element={<TerminosPage />} />
+            <Route path="/privacidad" element={<PrivacidadPage />} />
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
               <Route element={<AppLayout><Outlet /></AppLayout>}>
-                <Route path="/" element={<DashboardPage />} />
+                <Route path="/dashboard" element={<><DashboardPage /><OnboardingModal /></>} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/perfil" element={<ProfilePage />} />
 
@@ -113,13 +134,11 @@ function App() {
                 <Route path="/calendario" element={<CalendarioPage />} />
                 <Route path="/calendario/:id_temporada" element={<CalendarioPage />} />
 
-                {/* Fallback internal */}
-                <Route path="*" element={<Navigate to="/" replace />} />
               </Route>
             </Route>
 
-            {/* Fallback global */}
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            {/* 404 — must be last */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
           <Toaster richColors position="top-right" theme="dark" />
         </BrowserRouter>
@@ -129,4 +148,3 @@ function App() {
 }
 
 export default App;
-// Trigger redeploy

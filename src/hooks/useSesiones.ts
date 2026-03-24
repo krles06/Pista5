@@ -198,13 +198,14 @@ export function useUpdateSesion() {
                 notas_sesion?: string;
             }>
         }) => {
-            await getAuthenticatedUserId(); // ensure user is authenticated
+            const userId = await getAuthenticatedUserId();
 
             // 1. Update session basic data
             const { data: updatedSession, error: sessionError } = await supabase
                 .from('sesiones')
                 .update({ ...updates, updated_at: new Date().toISOString() })
                 .eq('id', id)
+                .eq('coach_id', userId)
                 .select()
                 .single();
 
@@ -256,11 +257,12 @@ export function useDeleteSesion() {
 
     return useMutation({
         mutationFn: async (id: string) => {
-            await getAuthenticatedUserId();
+            const userId = await getAuthenticatedUserId();
             const { data, error } = await supabase
                 .from('sesiones')
                 .delete()
                 .eq('id', id)
+                .eq('coach_id', userId)
                 .select()
                 .single();
 

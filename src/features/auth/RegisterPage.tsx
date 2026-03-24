@@ -40,7 +40,21 @@ export default function RegisterPage() {
 
             if (signUpError) throw signUpError;
 
-            if (data.session || data.user) {
+            if (data.user && !data.session) {
+                // Email confirmation required
+                sessionStorage.setItem('pending_verification_email', email);
+                navigate('/verificar-email');
+            } else if (data.session) {
+                // Send welcome email (fire-and-forget)
+                fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/bienvenida-email`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${data.session.access_token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nombre: name }),
+                }).catch(() => {/* non-critical */});
                 toast.success('Registro completado con éxito');
                 navigate('/');
             }

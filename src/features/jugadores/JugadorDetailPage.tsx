@@ -18,7 +18,8 @@ import { useJugador } from '@/hooks/useJugadores';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { StorageAvatarImage } from '@/components/ui/storage-image';
 import { Separator } from '@/components/ui/separator';
 
 export default function JugadorDetailPage() {
@@ -48,7 +49,7 @@ export default function JugadorDetailPage() {
             {/* Header Profile Section */}
             <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 pb-4">
                 <Avatar className="h-32 w-32 border-4 border-zinc-900 shadow-2xl ring-2 ring-zinc-800">
-                    <AvatarImage src={j.url_foto || ''} className="object-cover" />
+                    <StorageAvatarImage path={j.url_foto} bucket="jugadores-fotos" className="object-cover" />
                     <AvatarFallback className="bg-card text-emerald-500 text-4xl font-bold">
                         {j.nombre[0]}
                     </AvatarFallback>

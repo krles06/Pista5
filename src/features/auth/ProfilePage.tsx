@@ -1,20 +1,36 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Mail, Shield, Tags, Trash2 } from 'lucide-react';
+import { User, Mail, Shield, Tags, Trash2, AlertTriangle } from 'lucide-react';
 import { useCategorias, useDeleteCategoria } from '@/hooks/useCategorias';
 import { Badge } from '@/components/ui/badge';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 export default function ProfilePage() {
-    const { user, coach, loading, updateProfile } = useAuth();
+    const { user, coach, loading, updateProfile, signOut } = useAuth();
+    const navigate = useNavigate();
 
     const [name, setName] = useState('');
     const [team, setTeam] = useState('');
     const [updating, setUpdating] = useState(false);
+    const [deletingAccount, setDeletingAccount] = useState(false);
+    const [sendingReset, setSendingReset] = useState(false);
 
     useEffect(() => {
         if (coach) {
@@ -25,23 +41,64 @@ export default function ProfilePage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         if (!name.trim()) {
             toast.error('El nombre no puede estar vacío');
             return;
         }
-
         try {
             setUpdating(true);
-            await updateProfile({
-                nombre: name,
-                equipo: team,
-            });
+            await updateProfile({ nombre: name, equipo: team });
             toast.success('Perfil actualizado correctamente');
         } catch (error: any) {
             toast.error(error.message || 'Error al actualizar el perfil');
         } finally {
             setUpdating(false);
+        }
+    };
+
+    const handlePasswordReset = async () => {
+        if (!user?.email) return;
+        try {
+            setSendingReset(true);
+            const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+                redirectTo: `${window.location.origin}/actualizar-password`,
+            });
+            if (error) throw error;
+            toast.success('Email de cambio de contraseña enviado. Revisa tu bandeja de entrada.');
+        } catch (error: any) {
+            toast.error(error.message || 'Error al enviar el email');
+        } finally {
+            setSendingReset(false);
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        try {
+            setDeletingAccount(true);
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error('No hay sesión activa');
+
+            const res = await fetch(
+                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/eliminar-cuenta`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${session.access_token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (!res.ok) throw new Error('Error al eliminar la cuenta');
+
+            await signOut();
+            toast.success('Cuenta eliminada correctamente');
+            navigate('/login');
+        } catch (error: any) {
+            toast.error(error.message || 'Error al eliminar la cuenta');
+        } finally {
+            setDeletingAccount(false);
         }
     };
 
@@ -70,13 +127,14 @@ export default function ProfilePage() {
                     {isMissingProfile ? 'Completar Perfil' : 'Mi Perfil'}
                 </h1>
                 <p className="text-muted-foreground">
-                    {isMissingProfile 
-                        ? 'Parece que aún no has completado tu información de entrenador.' 
+                    {isMissingProfile
+                        ? 'Parece que aún no has completado tu información de entrenador.'
                         : 'Gestiona tu información personal y configuración de cuenta.'}
                 </p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
+                {/* Información personal */}
                 <Card className="border-border bg-card shadow-xl md:col-span-2">
                     <form onSubmit={handleSubmit}>
                         <CardHeader>
@@ -113,7 +171,6 @@ export default function ProfilePage() {
                                     />
                                 </div>
                             </div>
-
                             <div className="space-y-2 pt-4 border-t border-border">
                                 <Label className="text-foreground flex items-center gap-2">
                                     <Mail className="h-4 w-4" />
@@ -139,6 +196,7 @@ export default function ProfilePage() {
                     </form>
                 </Card>
 
+                {/* Categorías */}
                 <Card className="border-border bg-card shadow-xl md:col-span-2">
                     <CardHeader>
                         <CardTitle className="text-xl flex items-center gap-2 text-foreground">
@@ -154,6 +212,7 @@ export default function ProfilePage() {
                     </CardContent>
                 </Card>
 
+                {/* Seguridad */}
                 <Card className="border-border bg-card shadow-xl md:col-span-2">
                     <CardHeader>
                         <CardTitle className="text-xl flex items-center gap-2 text-foreground">
@@ -165,16 +224,65 @@ export default function ProfilePage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Button variant="outline" className="border-border bg-muted text-foreground hover:bg-muted/80 hover:text-foreground">
-                            Cambiar contraseña
+                        <Button
+                            variant="outline"
+                            className="border-border bg-muted text-foreground hover:bg-muted/80 hover:text-foreground"
+                            onClick={handlePasswordReset}
+                            disabled={sendingReset}
+                        >
+                            {sendingReset ? 'Enviando...' : 'Cambiar contraseña'}
                         </Button>
                         <p className="mt-2 text-xs text-muted-foreground">Se enviará un enlace de recuperación a tu email.</p>
+                    </CardContent>
+                </Card>
+
+                {/* Zona de peligro */}
+                <Card className="border-red-900/30 bg-card shadow-xl md:col-span-2">
+                    <CardHeader>
+                        <CardTitle className="text-xl flex items-center gap-2 text-red-500">
+                            <AlertTriangle className="h-5 w-5" />
+                            Zona de peligro
+                        </CardTitle>
+                        <CardDescription className="text-muted-foreground">
+                            Acciones irreversibles sobre tu cuenta.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                        <p className="text-sm text-muted-foreground">
+                            Al eliminar tu cuenta se borrarán permanentemente todos tus datos: ejercicios, sesiones, jugadores, temporadas y partidos. Esta acción no se puede deshacer.
+                        </p>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant="destructive" className="border border-red-900/30" disabled={deletingAccount}>
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    {deletingAccount ? 'Eliminando...' : 'Eliminar mi cuenta'}
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-card border-border">
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle className="text-foreground">¿Eliminar cuenta definitivamente?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        Se eliminarán todos tus datos de forma permanente e irreversible. Esta acción no se puede deshacer.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel className="border-border">Cancelar</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                        onClick={handleDeleteAccount}
+                                    >
+                                        Sí, eliminar mi cuenta
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </CardContent>
                 </Card>
             </div>
         </div>
     );
 }
+
 function CategoriesManager() {
     const { data: allCategories, isLoading } = useCategorias();
     const deleteMutation = useDeleteCategoria();
@@ -189,7 +297,6 @@ function CategoriesManager() {
         );
     }
 
-    // Group by campo
     const grouped = allCategories.reduce((acc, cat) => {
         if (!acc[cat.campo]) acc[cat.campo] = [];
         acc[cat.campo].push(cat);
@@ -218,8 +325,8 @@ function CategoriesManager() {
                     </h3>
                     <div className="flex flex-wrap gap-2">
                         {cats.map((cat) => (
-                            <div 
-                                key={cat.id} 
+                            <div
+                                key={cat.id}
                                 className="group flex items-center gap-1.5 px-3 py-1.5 bg-card hover:bg-muted border border-border rounded-lg transition-all hover:scale-105"
                             >
                                 <span className="text-sm font-medium text-foreground">{cat.valor}</span>
