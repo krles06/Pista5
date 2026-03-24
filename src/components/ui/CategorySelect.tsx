@@ -39,7 +39,6 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
             setIsAdding(false);
             toast.success('Categoría añadida');
         } catch (error) {
-            console.error(error);
             toast.error('Error al añadir categoría');
         }
     };
@@ -53,7 +52,6 @@ export function CategorySelect({ campo, value, onChange, staticOptions, placehol
             }
             toast.success('Categoría eliminada');
         } catch (error) {
-            console.error(error);
             toast.error('Error al eliminar');
         }
     };

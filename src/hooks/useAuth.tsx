@@ -37,7 +37,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 .maybeSingle();
 
             if (error) {
-                console.error('Error fetching coach profile:', error);
                 setLoading(false);
             } else if (!data && !isRetry) {
                 // Retry once after 1.5s if profile not found (race condition with trigger)
