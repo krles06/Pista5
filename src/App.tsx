@@ -14,6 +14,7 @@ import RegisterPage from '@/features/auth/RegisterPage';
 import ForgotPasswordPage from '@/features/auth/ForgotPasswordPage';
 import ProfilePage from '@/features/auth/ProfilePage';
 import VerificacionEmailPage from '@/features/auth/VerificacionEmailPage';
+import ActualizarPasswordPage from '@/features/auth/ActualizarPasswordPage';
 
 // Temporadas Pages
 import TemporadasPage from '@/features/temporadas/TemporadasPage';
@@ -81,6 +82,7 @@ function App() {
             <Route path="/registro" element={<RegisterPage />} />
             <Route path="/recuperar-password" element={<ForgotPasswordPage />} />
             <Route path="/verificar-email" element={<VerificacionEmailPage />} />
+            <Route path="/actualizar-password" element={<ActualizarPasswordPage />} />
             <Route path="/contacto" element={<ContactoPage />} />
             <Route path="/terminos" element={<TerminosPage />} />
             <Route path="/privacidad" element={<PrivacidadPage />} />
