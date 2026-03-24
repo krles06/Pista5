@@ -63,7 +63,6 @@ export default function SesionDetailPage() {
             const url = URL.createObjectURL(blob);
             window.open(url, '_blank');
         } catch (error: any) {
-            console.error(error);
             toast.error(error.message || 'No se pudo generar el PDF. Inténtalo de nuevo.');
         } finally {
             setExportingPDF(false);
