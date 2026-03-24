@@ -241,35 +241,17 @@ export function useActiveMicrociclo() {
             const now = new Date();
             const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
             
-            console.log('--- DEBUG DASHBOARD DATA ---');
-            console.log('Today:', today);
-
-            // 1. Check all Microcycles for the coach
+            
+            // Check all Microcycles for the coach
             const { data: allMicros } = await supabase
                 .from('microciclos')
                 .select('*')
                 .eq('coach_id', userId);
-            console.log('Microcycles in DB for this coach:', allMicros);
-
-            // 2. Check all Seasons for the coach
-            const { data: allSeasons } = await supabase
-                .from('temporadas')
-                .select('*')
-                .eq('coach_id', userId);
-            console.log('Seasons in DB for this coach:', allSeasons);
-
-            // 3. Check for ANY sessions this week
-            const { data: weekSessions } = await supabase
-                .from('sesiones')
-                .select('*')
-                .eq('coach_id', userId)
-                .gte('fecha', '2026-03-16')
-                .lte('fecha', '2026-03-22');
-            console.log('Sessions this week (Mar 16-22):', weekSessions);
 
             // Original logic for active micro
             const active = allMicros?.find(m => m.fecha_inicio <= today && m.fecha_fin >= today);
-            console.log('Active Micro Found:', active);
+
+            return active as any;
 
             return active as any;
         },
