@@ -80,116 +80,176 @@ serve(async (req) => {
         const macro = meso?.macrociclo;
         const temp = macro?.temporada;
 
+        // Helper: escape HTML special chars
+        const h = (v: any) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        // Derived values
+        const fecha = new Date(sesion.fecha);
+        const formattedDate = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: '2-digit' });
+        const diaSemana = fecha.toLocaleDateString('es-ES', { weekday: 'long' });
+        const sortedEjercicios = [...sesion.ejercicios].sort((a: any, b: any) => a.orden - b.orden);
+        const totalMinutos = sortedEjercicios.reduce((acc: number, se: any) => acc + (se.minutos || se.ejercicio?.duracion_minutos || 0), 0);
+        const sessionLabel = micro?.nombre ? h(micro.nombre) : 'S1';
+
+        const exerciseRows = sortedEjercicios.map((se: any, idx: number) => {
+            const ex = se.ejercicio;
+            const titulo = h(ex.titulo || '');
+            const notas = se.notas_sesion ? ` - ${h(se.notas_sesion)}` : '';
+            const descripcion = h(ex.descripcion || '');
+            const minutos = se.minutos || ex.duracion_minutos || '';
+            return `
+            <tr>
+                <td style="font-weight:bold; white-space:nowrap">${h(`E${se.orden || idx + 1}`)}</td>
+                <td>${h(ex.trabajo || '')}</td>
+                <td>${h(ex.tipo_tarea || '')}</td>
+                <td>${h(ex.componente_juego || '')}</td>
+                <td style="text-align:center">${h(ex.trabajo_fisico_integrado || '')}</td>
+                <td style="text-align:center">${h(ex.sistema_juego || '')}</td>
+                <td style="text-align:center">${h(ex.dificultad || '')}</td>
+                <td style="text-align:center">${h(ex.etapa_sesion || '')}</td>
+                <td style="text-align:center">${h(se.numero_jugadores || ex.n_jugadores || '')}</td>
+            </tr>
+            <tr>
+                <td colspan="9" style="padding:8px 10px; border-top:none">
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px">
+                        <strong style="font-size:10px">${titulo}${notas}</strong>
+                        <span style="font-size:9px; white-space:nowrap; margin-left:12px">${minutos ? minutos + ' Minutos' : ''}</span>
+                    </div>
+                    <div style="font-size:9px; line-height:1.5; margin-bottom:6px">${descripcion}</div>
+                    <div style="min-height:65px"></div>
+                    <div style="border-top:1px solid #555; width:45%; margin-top:4px"></div>
+                </td>
+            </tr>`;
+        }).join('');
+
         const html = `
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Sesión - ${sesion.objetivos || 'Fútbol Sala'}</title>
+    <title>Sesión de Entrenamiento</title>
     <style>
-        body { font-family: 'Helvetica', 'Arial', sans-serif; background-color: #09090b; color: #fafafa; margin: 0; padding: 40px; }
-        .container { max-width: 1000px; margin: 0 auto; background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 40px; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #10b981; padding-bottom: 20px; margin-bottom: 30px; }
-        .logo { font-size: 24px; font-weight: 900; color: #10b981; font-style: italic; }
-        .title { font-size: 32px; font-weight: 800; margin-top: 10px; }
-        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-        .info-item { display: flex; flex-direction: column; }
-        .info-label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #71717a; letter-spacing: 0.05em; }
-        .info-value { font-size: 14px; font-weight: 600; }
-        .section-title { font-size: 12px; font-weight: 900; text-transform: uppercase; color: #10b981; margin: 30px 0 10px 0; border-bottom: 1px solid #27272a; padding-bottom: 5px; }
-        .general-data { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 11px; }
-        th { text-align: left; padding: 12px 8px; background: #27272a; color: #fafafa; border: 1px solid #3f3f46; font-weight: 700; text-transform: uppercase; font-size: 9px; }
-        td { padding: 10px 8px; border: 1px solid #27272a; border-bottom: 1px solid #3f3f46; }
-        .badge { background: #14532d; color: #4ade80; padding: 2px 6px; border-radius: 4px; font-weight: 800; font-size: 9px; }
-        .footer { margin-top: 50px; text-align: center; font-size: 10px; color: #71717a; }
-        @media print {
-            body { background: white; color: black; padding: 0; }
-            .container { border: none; padding: 20px; border-radius: 0; background: white; }
-            th { background: #f4f4f5; color: black; border: 1px solid #e4e4e7; }
-            td { border: 1px solid #e4e4e7; }
-            .logo, .title, .section-title { color: #059669; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: white;
+            color: #111;
+            font-size: 10px;
         }
+        @media screen { body { padding: 20px; max-width: 960px; margin: 0 auto; } }
+        @media print {
+            body { padding: 0; }
+            @page { size: A4; margin: 12mm; }
+        }
+
+        /* HEADER TABLE */
+        .hdr { width:100%; border-collapse:collapse; border:1px solid #333; }
+        .hdr td { border:1px solid #333; padding:4px 8px; vertical-align:middle; }
+        .logo-cell {
+            text-align:center; padding:10px 14px; min-width:110px;
+            font-size:0; line-height:1;
+        }
+        .logo-line1 { display:block; font-size:10px; font-weight:900; letter-spacing:1px; }
+        .logo-dot   { display:block; font-size:20px; font-weight:900; letter-spacing:-1px; margin-top:2px; }
+        .hdr-main-title { font-weight:bold; font-size:13px; letter-spacing:0.3px; }
+        .session-num-cell {
+            text-align:center; font-size:28px; font-weight:900;
+            padding:6px 14px; white-space:nowrap;
+        }
+        .lbl { font-size:9px; color:#444; }
+
+        /* SECTION TITLE */
+        .sec-title { font-weight:bold; font-size:11px; margin:10px 0 0; padding-bottom:2px; }
+
+        /* MAIN TABLE */
+        .tbl { width:100%; border-collapse:collapse; table-layout:fixed; }
+        .tbl th {
+            border:1px solid #333; padding:4px 4px;
+            font-size:9px; font-weight:bold; text-align:left; background:white;
+        }
+        .tbl td { border:1px solid #333; padding:3px 4px; font-size:9px; vertical-align:middle; }
+        /* Remove top border from content rows so info+content look like one block */
+        .tbl tr.content-row td { border-top:none; }
+
+        /* PORTEROS */
+        .porteros { background:#000; color:#fff; text-align:center; font-weight:bold; font-size:12px; padding:7px; margin-top:4px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div>
-                <div class="logo">PISTA5</div>
-                <div class="title">${sesion.objetivos || 'Plan de Entrenamiento'}</div>
-            </div>
-            <div style="text-align: right">
-                <div style="font-weight: 800; font-size: 18px;">${new Date(sesion.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
-                <div style="color: #71717a">${sesion.lugar || ''}</div>
-            </div>
-        </div>
 
-        <div class="info-grid">
-            <div class="info-item"><span class="info-label">Temporada</span><span class="info-value">${temp?.temporada || '--'}</span></div>
-            <div class="info-item"><span class="info-label">Macrociclo</span><span class="info-value">${macro?.nombre || '--'}</span></div>
-            <div class="info-item"><span class="info-label">Mesociclo</span><span class="info-value">${meso?.nombre || '--'}</span></div>
-            <div class="info-item"><span class="info-label">Microciclo</span><span class="info-value">${micro?.nombre || '--'}</span></div>
-        </div>
+<!-- ===== HEADER ===== -->
+<table class="hdr">
+    <tr>
+        <td rowspan="3" class="logo-cell">
+            <span class="logo-line1">PISTA5</span>
+            <span class="logo-dot">&#9679;</span>
+        </td>
+        <td class="hdr-main-title" style="width:200px">SESIÓN DE ENTRENAMIENTO</td>
+        <td colspan="2">TEMPORADA &nbsp;<strong>${h(temp?.temporada || '--')}</strong></td>
+        <td><span class="lbl">Hora</span> <strong>--</strong></td>
+        <td rowspan="3" class="session-num-cell">${sessionLabel}</td>
+    </tr>
+    <tr>
+        <td>${h(temp?.equipo || sesion.coach?.equipo || '--')}</td>
+        <td><span class="lbl">Macrociclo</span></td>
+        <td><strong>${h(macro?.nombre || '--')}</strong></td>
+        <td><span class="lbl">Fecha</span> <strong>${h(formattedDate)}</strong></td>
+    </tr>
+    <tr>
+        <td>${h(sesion.lugar || '--')}</td>
+        <td><span class="lbl">Microciclo</span></td>
+        <td><strong>${h(meso?.nombre || '--')}</strong></td>
+        <td>
+            <span class="lbl">Día</span> <strong>${h(diaSemana)}</strong>
+            &nbsp;&nbsp;
+            <span class="lbl">Minutos</span> <strong>${totalMinutos}'</strong>
+        </td>
+    </tr>
+</table>
 
-        <div class="general-data">
-            <div>
-                <div class="section-title">Objetivos y Contenidos</div>
-                <div style="font-size: 14px; line-height: 1.6">${sesion.feedback_tactico || sesion.objetivos || 'Sin descripción detallada.'}</div>
-            </div>
-            <div style="background: #09090b; padding: 20px; border-radius: 8px; border: 1px solid #27272a;">
-                <div class="info-item" style="margin-bottom: 20px;"><span class="info-label">Equipo / Pista</span><span class="info-value" style="color: #10b981">${temp?.equipo || sesion.coach?.equipo || '--'}</span></div>
-                <div class="info-item" style="margin-bottom: 20px;"><span class="info-label">Material</span><span class="info-value">${sesion.material || 'Estándar'}</span></div>
-                <div class="info-item"><span class="info-label">Entrenador</span><span class="info-value">${sesion.coach?.nombre || '--'}</span></div>
-            </div>
-        </div>
+<!-- ===== CONTENIDOS ===== -->
+<div class="sec-title">CONTENIDOS DE LA SESIÓN</div>
 
-        <div class="section-title">Ejercicios de la Sesión</div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 20px">Nº</th>
-                    <th style="width: 180px">Ejercicio</th>
-                    <th>Trabajo</th>
-                    <th>Tipo</th>
-                    <th>Compo.</th>
-                    <th>Físico</th>
-                    <th>Sist.</th>
-                    <th style="width: 25px">Dif.</th>
-                    <th style="width: 25px">Min.</th>
-                    <th style="width: 25px">Jug.</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${sesion.ejercicios.sort((a: any, b: any) => a.orden - b.orden).map((se: any, idx: number) => `
-                    <tr>
-                        <td style="font-weight: 800">${se.orden || (idx + 1)}</td>
-                        <td>
-                            <div style="font-weight: 700; color: #10b981">${se.ejercicio.titulo}</div>
-                            ${se.notas_sesion ? `<div style="font-size: 9px; color: #71717a; margin-top: 4px; font-style: italic">${se.notas_sesion}</div>` : ''}
-                        </td>
-                        <td>${se.ejercicio.trabajo || '--'}</td>
-                        <td><span class="badge">${se.ejercicio.tipo_tarea || '--'}</span></td>
-                        <td>${se.ejercicio.componente_juego || '--'}</td>
-                        <td>${se.ejercicio.trabajo_fisico_integrado || '--'}</td>
-                        <td>${se.ejercicio.sistema_juego || '--'}</td>
-                        <td style="text-align: center">${se.ejercicio.dificultad || '--'}</td>
-                        <td style="text-align: center; font-weight: 800">${se.minutos || se.ejercicio.duracion_minutos || '--'}</td>
-                        <td style="text-align: center">${se.numero_jugadores || se.ejercicio.n_jugadores || '--'}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
+<!-- ===== EXERCISES TABLE ===== -->
+<table class="tbl">
+    <colgroup>
+        <col style="width:42px">
+        <col style="width:88px">
+        <col style="width:108px">
+        <col>
+        <col style="width:68px">
+        <col style="width:68px">
+        <col style="width:44px">
+        <col style="width:44px">
+        <col style="width:36px">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Nº</th>
+            <th>Trabajo</th>
+            <th>Tipo de Trabajo</th>
+            <th>Procedimiento Táctico</th>
+            <th style="text-align:center">Físico Integrado</th>
+            <th style="text-align:center">Sistema de Juego</th>
+            <th style="text-align:center">Físico</th>
+            <th style="text-align:center">Dif.</th>
+            <th style="text-align:center">Jug.</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${exerciseRows}
+    </tbody>
+</table>
 
-        ${sesion.observaciones ? `
-            <div class="section-title">Anotaciones Adicionales</div>
-            <div style="font-size: 12px; color: #a1a1aa; white-space: pre-wrap;">${sesion.observaciones}</div>
-        ` : ''}
+${sesion.observaciones ? `
+<div style="margin-top:12px; font-size:9px">
+    <strong>Observaciones:</strong>
+    <span style="white-space:pre-wrap"> ${h(sesion.observaciones)}</span>
+</div>` : ''}
 
-        <div class="footer">
-            Generado automáticamente por Pista5 • El asistente del entrenador de fútbol sala
-        </div>
-    </div>
+<!-- ===== PORTEROS ===== -->
+<div class="porteros">EJERCICIOS PARA PORTEROS</div>
+
 </body>
 </html>
     `;
