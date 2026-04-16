@@ -15,6 +15,7 @@ import ForgotPasswordPage from '@/features/auth/ForgotPasswordPage';
 import ProfilePage from '@/features/auth/ProfilePage';
 import VerificacionEmailPage from '@/features/auth/VerificacionEmailPage';
 import ActualizarPasswordPage from '@/features/auth/ActualizarPasswordPage';
+import AuthCallbackPage from '@/features/auth/AuthCallbackPage';
 
 // Temporadas Pages
 import TemporadasPage from '@/features/temporadas/TemporadasPage';
@@ -83,6 +84,7 @@ function App() {
             <Route path="/recuperar-password" element={<ForgotPasswordPage />} />
             <Route path="/verificar-email" element={<VerificacionEmailPage />} />
             <Route path="/actualizar-password" element={<ActualizarPasswordPage />} />
+            <Route path="/auth/callback" element={<AuthCallbackPage />} />
             <Route path="/contacto" element={<ContactoPage />} />
             <Route path="/terminos" element={<TerminosPage />} />
             <Route path="/privacidad" element={<PrivacidadPage />} />
