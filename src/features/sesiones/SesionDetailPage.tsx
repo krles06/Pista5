@@ -35,10 +35,9 @@ export default function SesionDetailPage() {
 
         try {
             setExportingPDF(true);
-            const { data: { session } } = await supabase.auth.getSession();
-            // Refresh session first to ensure token is valid
-            const { data: { session: refreshed } } = await supabase.auth.refreshSession();
-            const token = refreshed?.access_token ?? session?.access_token;
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            if (sessionError || !session?.access_token) throw new Error('Sesión no válida. Por favor, inicia sesión de nuevo.');
+            const token = session.access_token;
 
             const response = await fetch(
                 `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generar-pdf-sesion`,
