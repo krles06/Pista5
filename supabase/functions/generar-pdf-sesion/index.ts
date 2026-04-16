@@ -4,9 +4,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGINS') ?? '').split(',').map(o => o.trim()).filter(Boolean);
 
 function getCorsHeaders(requestOrigin: string | null) {
-    const origin = requestOrigin && (ALLOWED_ORIGINS.length === 0 || ALLOWED_ORIGINS.includes(requestOrigin))
-        ? requestOrigin
-        : ALLOWED_ORIGINS[0] ?? '';
+    const isAllowed = requestOrigin && (
+        ALLOWED_ORIGINS.length === 0 ||
+        ALLOWED_ORIGINS.includes(requestOrigin) ||
+        /^https:\/\/[a-z0-9-]+-[a-z0-9-]+-[a-z0-9-]+\.vercel\.app$/.test(requestOrigin)
+    );
+    const origin = isAllowed ? requestOrigin! : (ALLOWED_ORIGINS[0] ?? '');
     return {
         'Access-Control-Allow-Origin': origin,
         'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
