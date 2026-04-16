@@ -15,12 +15,19 @@ export default function ActualizarPasswordPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Supabase puts the session in the URL hash after redirect
-        supabase.auth.onAuthStateChange((event) => {
-            if (event === 'PASSWORD_RECOVERY') {
+        // Check existing session immediately — PASSWORD_RECOVERY event may have
+        // fired before this component mounted (Supabase processes URL hash on init)
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session?.user) setReady(true);
+        });
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+            if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
                 setReady(true);
             }
         });
+
+        return () => subscription.unsubscribe();
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {

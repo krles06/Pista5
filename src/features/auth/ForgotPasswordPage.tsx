@@ -24,9 +24,10 @@ export default function ForgotPasswordPage() {
 
         try {
             setLoading(true);
+            // Strip www so the redirect URL matches Supabase's allowed list
+            const origin = window.location.origin.replace(/^(https?:\/\/)www\./, '$1');
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                // Redirige al dashboard o página de cambio de contraseña
-                redirectTo: `${window.location.origin}/actualizar-password`,
+                redirectTo: `${origin}/actualizar-password`,
             });
 
             if (error) throw error;
