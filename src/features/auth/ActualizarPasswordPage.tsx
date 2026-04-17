@@ -12,22 +12,43 @@ export default function ActualizarPasswordPage() {
     const [confirm, setConfirm] = useState('');
     const [loading, setLoading] = useState(false);
     const [ready, setReady] = useState(false);
+    const [expired, setExpired] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Check existing session immediately — PASSWORD_RECOVERY event may have
-        // fired before this component mounted (Supabase processes URL hash on init)
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session?.user) setReady(true);
-        });
+        let mounted = true;
 
+        // 1. Register listener FIRST so we don't miss late-firing events
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-            if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
+            if ((event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') && mounted) {
                 setReady(true);
             }
         });
 
-        return () => subscription.unsubscribe();
+        // 2. Explicit PKCE exchange: Supabase puts ?code=xxx in the URL for the
+        //    recovery link. detectSessionInUrl handles it, but the event may have
+        //    fired before this component mounted — so we exchange + check manually.
+        const init = async () => {
+            const code = new URLSearchParams(window.location.search).get('code');
+            if (code) {
+                await supabase.auth.exchangeCodeForSession(code);
+            }
+            if (!mounted) return;
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user && mounted) setReady(true);
+        };
+        init();
+
+        // 3. Timeout: if still not ready after 10 s the link is expired / invalid
+        const timer = setTimeout(() => {
+            if (mounted) setExpired(true);
+        }, 10_000);
+
+        return () => {
+            mounted = false;
+            clearTimeout(timer);
+            subscription.unsubscribe();
+        };
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -57,8 +78,19 @@ export default function ActualizarPasswordPage() {
         return (
             <div className="min-h-screen flex items-center justify-center bg-background p-4">
                 <div className="text-center space-y-4">
-                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent mx-auto" />
-                    <p className="text-muted-foreground">Verificando enlace...</p>
+                    {expired ? (
+                        <>
+                            <p className="text-destructive font-semibold">El enlace ha expirado o ya fue usado.</p>
+                            <a href="/recuperar-password" className="text-emerald-500 hover:underline text-sm">
+                                Solicitar un nuevo enlace
+                            </a>
+                        </>
+                    ) : (
+                        <>
+                            <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent mx-auto" />
+                            <p className="text-muted-foreground">Verificando enlace...</p>
+                        </>
+                    )}
                 </div>
             </div>
         );
