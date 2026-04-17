@@ -1,7 +1,9 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { Toaster } from 'sonner';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/lib/supabase';
 
 // Layouts and Auth
 import AppLayout from '@/components/layout/AppLayout';
@@ -58,9 +60,22 @@ import PrivacidadPage from '@/features/privacidad/PrivacidadPage';
 import LandingPage from '@/features/landing/LandingPage';
 import NotFoundPage from '@/features/errors/NotFoundPage';
 
-// Landing route: shows landing if not logged in, dashboard if logged in
+// Landing route: shows landing if not logged in, dashboard if logged in.
+// Also handles password-recovery tokens that land on / when Supabase's
+// redirectTo URL is not configured in the allowed list.
 function HomeRoute() {
   const { session, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        navigate('/actualizar-password', { replace: true });
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
   if (loading) return (
     <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
