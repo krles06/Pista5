@@ -12,22 +12,28 @@ export default function ActualizarPasswordPage() {
     const [confirm, setConfirm] = useState('');
     const [loading, setLoading] = useState(false);
     const [ready, setReady] = useState(false);
+    const [linkError, setLinkError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-    // Check if recovery session already exists (token processed before listener registered)
-    supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) setReady(true);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-        if (event === 'PASSWORD_RECOVERY') {
-            setReady(true);
+        const hash = new URLSearchParams(window.location.hash.slice(1));
+        if (hash.get('error')) {
+            setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
+            return;
         }
-    });
 
-    return () => subscription.unsubscribe();
-}, []);
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) setReady(true);
+        });
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+            if (event === 'PASSWORD_RECOVERY') {
+                setReady(true);
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -51,6 +57,19 @@ export default function ActualizarPasswordPage() {
             setLoading(false);
         }
     };
+
+    if (linkError) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-background p-4">
+                <div className="text-center space-y-4 max-w-sm">
+                    <p className="text-destructive font-semibold">{linkError}</p>
+                    <Button variant="outline" onClick={() => navigate('/forgot-password')}>
+                        Solicitar nuevo enlace
+                    </Button>
+                </div>
+            </div>
+        );
+    }
 
     if (!ready) {
         return (
