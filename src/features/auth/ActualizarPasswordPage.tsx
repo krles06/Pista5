@@ -16,60 +16,47 @@ export default function ActualizarPasswordPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const hash = new URLSearchParams(window.location.hash.slice(1));
+        const params = new URLSearchParams(window.location.search);
+        const hash = new URLSearchParams(window.location.hash.slice(1));
 
-    if (params.get('error') || hash.get('error')) {
-        setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
-        return;
-    }
+        if (params.get('error') || hash.get('error')) {
+            setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
+            return;
+        }
 
-    const tokenHash = params.get('token_hash');
-    if (tokenHash) {
-        window.history.replaceState({}, '', '/actualizar-password');
+        const tokenHash = params.get('token_hash');
+        if (tokenHash) {
+            window.history.replaceState({}, '', '/actualizar-password');
+
+            supabase.auth.getSession().then(({ data: { session } }) => {
+                if (session) {
+                    setReady(true);
+                    return;
+                }
+                supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
+                    .then(({ error }) => {
+                        if (error) {
+                            setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
+                        } else {
+                            setReady(true);
+                        }
+                    });
+            });
+            return;
+        }
 
         supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) {
-                setReady(true);
-                return;
-            }
-            supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
-                .then(({ error }) => {
-                    if (error) {
-                        setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
-                    } else {
-                        setReady(true);
-                    }
-                });
+            if (session) setReady(true);
         });
-        return;
-    }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) setReady(true);
-    });
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+            if (event === 'PASSWORD_RECOVERY') {
+                setReady(true);
+            }
+        });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-        if (event === 'PASSWORD_RECOVERY') {
-            setReady(true);
-        }
-    });
-
-    return () => subscription.unsubscribe();
-}, []);
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) setReady(true);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-        if (event === 'PASSWORD_RECOVERY') {
-            setReady(true);
-        }
-    });
-
-    return () => subscription.unsubscribe();
-}, []);
+        return () => subscription.unsubscribe();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
