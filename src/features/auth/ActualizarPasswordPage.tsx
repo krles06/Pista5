@@ -16,24 +16,40 @@ export default function ActualizarPasswordPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const hash = new URLSearchParams(window.location.hash.slice(1));
-        if (hash.get('error')) {
-            setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
-            return;
+    const params = new URLSearchParams(window.location.search);
+    const hash = new URLSearchParams(window.location.hash.slice(1));
+
+    if (params.get('error') || hash.get('error')) {
+        setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
+        return;
+    }
+
+    const tokenHash = params.get('token_hash');
+    const type = params.get('type');
+    if (tokenHash && type === 'recovery') {
+        supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
+            .then(({ error }) => {
+                if (error) {
+                    setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
+                } else {
+                    setReady(true);
+                }
+            });
+        return;
+    }
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) setReady(true);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+        if (event === 'PASSWORD_RECOVERY') {
+            setReady(true);
         }
+    });
 
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) setReady(true);
-        });
-
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-            if (event === 'PASSWORD_RECOVERY') {
-                setReady(true);
-            }
-        });
-
-        return () => subscription.unsubscribe();
-    }, []);
+    return () => subscription.unsubscribe();
+}, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
