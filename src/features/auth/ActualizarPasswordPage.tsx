@@ -26,22 +26,37 @@ export default function ActualizarPasswordPage() {
 
     const tokenHash = params.get('token_hash');
     if (tokenHash) {
+        window.history.replaceState({}, '', '/actualizar-password');
+
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) {
                 setReady(true);
-            } else {
-                supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
-                    .then(({ error }) => {
-                        if (error) {
-                            setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
-                        } else {
-                            setReady(true);
-                        }
-                    });
+                return;
             }
+            supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
+                .then(({ error }) => {
+                    if (error) {
+                        setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
+                    } else {
+                        setReady(true);
+                    }
+                });
         });
         return;
     }
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) setReady(true);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+        if (event === 'PASSWORD_RECOVERY') {
+            setReady(true);
+        }
+    });
+
+    return () => subscription.unsubscribe();
+}, []);
 
     supabase.auth.getSession().then(({ data: { session } }) => {
         if (session) setReady(true);
