@@ -26,14 +26,20 @@ export default function ActualizarPasswordPage() {
 
     const tokenHash = params.get('token_hash');
     if (tokenHash) {
-        supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
-            .then(({ error }) => {
-                if (error) {
-                    setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
-                } else {
-                    setReady(true);
-                }
-            });
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                setReady(true);
+            } else {
+                supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
+                    .then(({ error }) => {
+                        if (error) {
+                            setLinkError('El enlace ha expirado o ya fue usado. Solicita uno nuevo.');
+                        } else {
+                            setReady(true);
+                        }
+                    });
+            }
+        });
         return;
     }
 
