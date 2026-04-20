@@ -25,8 +25,7 @@ export default function ActualizarPasswordPage() {
     }
 
     const tokenHash = params.get('token_hash');
-    const type = params.get('type');
-    if (tokenHash && type === 'recovery') {
+    if (tokenHash) {
         supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
             .then(({ error }) => {
                 if (error) {
